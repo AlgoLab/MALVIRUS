@@ -139,7 +139,7 @@ rule kmc:
     run:
         shell("mkdir -p {params.kmc_tmp}")
         cmdstr = f"~/covid/software/malva/KMC/bin/kmc -t{threads} \
--m4 -k43 -ci5 -cs750 -fq {input} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
+-m4 -k43 -ci5 -cs750 -fm {input} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
