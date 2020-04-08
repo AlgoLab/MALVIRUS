@@ -80,7 +80,7 @@ Date: Wed, 08 Apr 2020 10:10:10 GMT
 
 # Endpoint /malva
 
-## GET /vcf 
+## GET /malva
 Get the full list of jobs executed / in progress?
 
 ### Request example
@@ -100,8 +100,8 @@ Date: Wed, 08 Apr 2020 10:20:29 GMT
 }
 ```
 
-# GET /vcf/:id
-Get the details of the specified VCF
+# GET /malva/:id
+Get the details of the specified job
 
 ### Request example
 ```bash
