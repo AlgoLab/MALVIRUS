@@ -9,7 +9,7 @@ import re
 pjoin = os.path.join
 
 references_path = config["paths"]["multifa"]
-sample_path = config["paths"]["sample"]
+sample_path_config = config["paths"]["sample"]
 
 working_dir = config["workdir"]
 logs_dir = pjoin(working_dir, "logs")
@@ -17,16 +17,23 @@ logs_dir = pjoin(working_dir, "logs")
 def nowf():
     return str(datetime.datetime.today().replace(microsecond=0))
 
-def format_json(cmd, result, returncode, inp, out, parameters=""):
+def format_json(cmd, result, returncode, inp, out, parameters = None):
     configs = config
     d = {}
     d['command'] = cmd
     d['result'] = result
     d['return_code'] = returncode
     d['config'] = configs
-    d['input'] = inp
-    d['out'] = out
-    d['params'] = parameters
+    d['input'] = {}
+    for name, value in inp.items():
+        d['input'][name] = value
+    d['output'] = {}
+    for name, value in out.items():
+        d['output'][name] = value
+    d['params'] = {}
+    if parameters is not None:
+        for name, value in parameters.items():
+            d['params'][name] = value
     d['time'] = nowf()
     return json.dumps(d)
 
@@ -46,14 +53,13 @@ rule multi_align:
         time = pjoin(logs_dir, "mafft.time"),
         json = pjoin(logs_dir, "mafft.json")
     run:
-        cmdstr = f"~/covid/software/mafft-7.453-with-extensions/scripts/mafft\
-        --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
+        cmdstr = f"~/covid/software/mafft-7.453-with-extensions/scripts/mafft --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input.fa, output.msa))
+                jf.write(format_json(cmdstr, "Success", 0, input, output))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input.fa, output.msa))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
                 raise e
 
 # Create vcf from multi alignment
@@ -75,24 +81,24 @@ rule vcf_build:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input.msa, {"reference" : output.ref, "vcf" : output.snps}, {"prefix" : params.prefix}))
+                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input.msa, {"reference" : output.ref, "vcf" : output.snps}, {"prefix" : params.prefix}))
+                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
                 raise e
 
 # Clean VCF header fixing repeated sample ids (maybe useless. But it was common with GISAID)
 rule vcf_clean_header:
     input:
-        pjoin(working_dir, "run.vcf")
+        base_vcf = pjoin(working_dir, "run.vcf")
     output:
-        temp(pjoin(working_dir, "run.1.vcf"))
+        clean_vcf = temp(pjoin(working_dir, "run.1.vcf"))
     threads: 1
     log:
         out = pjoin(logs_dir, "vcf_clean.1.log"),
         time = pjoin(logs_dir, "vcf_clean.1.time"),
         json = pjoin(logs_dir, "vcf_clean.1.json")
     run:
-        cmdstr = f"python3 ~/covid/software/format_vcf.py clean {input} > {output} 2> {log.out}"
+        cmdstr = f"python3 ~/covid/software/format_vcf.py clean {input.base_vcf} > {output.clean_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -104,16 +110,16 @@ rule vcf_clean_header:
 # Computes a priori frequencies
 rule vcf_add_freqs:
     input:
-        pjoin(working_dir, "run.1.vcf")
+        clean_vcf = pjoin(working_dir, "run.1.vcf")
     output:
-        pjoin(working_dir, "run.cleaned.vcf")
+        freq_vcf = pjoin(working_dir, "run.cleaned.vcf")
     threads: 1
     log:
         out = pjoin(logs_dir, "vcf_clean.2.log"),
         time = pjoin(logs_dir, "vcf_clean.2.time"),
         json = pjoin(logs_dir, "vcf_clean.2.json")
     run:
-        cmdstr = f"python3 ~/covid/software/format_vcf.py freq {input} > {output} 2> {log.out}"
+        cmdstr = f"python3 ~/covid/software/format_vcf.py freq {input.clean_vcf} > {output.freq_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -125,9 +131,9 @@ rule vcf_add_freqs:
 # Run KMC
 rule kmc:
     input:
-        sample_path
+        sample_path = sample_path_config
     output:
-        pjoin(working_dir, "KMC", "kmers.kmc_pre")
+        kmc_out = pjoin(working_dir, "KMC", "kmers.kmc_pre")
     params:
         kmc_prefix = pjoin(working_dir, "KMC", "kmers"),
         kmc_tmp = pjoin(working_dir, "KMC", "tmp")
@@ -138,15 +144,14 @@ rule kmc:
         json = pjoin(logs_dir, "kmc.json")
     run:
         shell("mkdir -p {params.kmc_tmp}")
-        cmdstr = f"~/covid/software/malva/KMC/bin/kmc -t{threads} \
--m4 -k43 -ci5 -cs750 -fm {input} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
+        cmdstr = f"~/covid/software/malva/KMC/bin/kmc -t{threads} -m4 -k43 -ci5 -cs750 -fm {input.sample_path} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output, {"kmc_prefix" : params.kmc_prefix, "kmc_tmp" : params.kmc_tmp}))
+                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, {"kmc_prefix" : params.kmc_prefix, "kmc_tmp" : params.kmc_tmp}))
+                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
                 raise e
 
@@ -171,11 +176,7 @@ rule malva:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0,
-                                     {"reference" : input.ref, "vcf" : input.vcf, "kmc_out" : input.kmc},
-                                     output.vcf, {"kmc_prefix" : params.kmc_prefix}))
+                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode,
-                                     {"reference" : input.ref, "vcf" : input.vcf, "kmc_out" : input.kmc},
-                                     output.vcf, {"kmc_prefix" : params.kmc_prefix}))
+                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
                 raise e
