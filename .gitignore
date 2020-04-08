@@ -1,3 +1,4 @@
 *~
-example/workdir
-.snakemake
+./snakemake/example/workdir
+./snakemake/.snakemake
+__pycache__/
