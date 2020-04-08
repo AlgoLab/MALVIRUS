@@ -1,3 +1,5 @@
+# Endpoint /vcf
+
 ## GET /vcf 
 Get the full list of VCFs available for MALVIRUS
 
@@ -9,13 +11,12 @@ curl -i http://localhost:5000/vcf
 ```
 HTTP/1.0 200 OK
 Content-Type: application/json
-Content-Length: 36
+Content-Length: 32
 Server: Werkzeug/1.0.1 Python/3.6.9
-Date: Wed, 08 Apr 2020 08:34:29 GMT
+Date: Wed, 08 Apr 2020 10:19:52 GMT
 
 {
-  "content": "test", 
-  "id": 1
+  "content": "list of vcfs"
 }
 ```
 
@@ -74,5 +75,48 @@ Date: Wed, 08 Apr 2020 10:10:10 GMT
 
 {
   "message": "Illegal or missing filetype"
+}
+```
+
+# Endpoint /malva
+
+## GET /vcf 
+Get the full list of jobs executed / in progress?
+
+### Request example
+```bash
+curl -i http://localhost:5000/malva
+```
+### Return example
+```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 38
+Server: Werkzeug/1.0.1 Python/3.6.9
+Date: Wed, 08 Apr 2020 10:20:29 GMT
+
+{
+  "content": "list of malva jobs"
+}
+```
+
+# GET /vcf/:id
+Get the details of the specified VCF
+
+### Request example
+```bash
+curl -i http://localhost:5000/malva/312das
+```
+### Return example
+```
+HTTP/1.0 200 OK
+Content-Type: application/json
+Content-Length: 50
+Server: Werkzeug/1.0.1 Python/3.6.9
+Date: Wed, 08 Apr 2020 10:20:52 GMT
+
+{
+  "content": "job details", 
+  "id": "312das"
 }
 ```
