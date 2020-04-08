@@ -7,6 +7,65 @@ Step:
 4. kmer counting con KMC
 5. genotipizzazione con MALVA
 
+## Container Docker per flask+conda
+
+### Prerequisiti
+
+* **Docker**  
+  Installazione su Ubuntu
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+# Opzionale: Per usare Docker senza essere root
+# (ATTENZIONE: utenti nel gruppo docker hanno essenzialmente le capabilities di root!!!)
+sudo usermod -aG docker $USER
+newgrp docker  # o logout+login
+# Fine parte opzionale
+
+docker run hello-world
+```
+
+### Esecuzione del backend
+```
+./run-backend.sh
+```
+Il backend è accessibile a `http://localhost:56733/`
+
+### Struttura delle directory
+
+```
+.
+├── flask         # Applicazione flask. Montata su /app nel container
+│   ├── app
+│   │   ├── templates
+│   │   │   └── home.html
+│   │   ├── __init__.py
+│   │   └── views.py
+│   ├── main.py
+│   └── uwsgi.ini
+├── snakemake     # Directory per snakemake. Montata su /snakemake nel container
+│   ├── example
+│   │   ├── references.fa
+│   │   └── sample.fq
+│   ├── config.yaml
+│   └── Snakefile
+├── static        # Directory per asset statici. Montata su /app/static nel container.
+│   │             # Accessibile con /static nel webserver
+│   └── index.html
+├── api_doc.md
+├── Dockerfile
+├── environment.yml       # Dipendenze dell'environment conda. Dopo modifiche a questo file si deve `docker rm backend + ./run-backend.sh`
+├── README.md             # This file ;-)
+├── autoreload-flask.sh   # Esegue il reload dell'applicazione flask quando un file viene aggiunto/modificato/cancellato nella cartella flask
+└── run-backend.sh        # Mette in esecuzione in backend tramite Docker.
+```
+
+
 ## Snakefile
 #### HowTo
 Impostare in config.yaml i path:
