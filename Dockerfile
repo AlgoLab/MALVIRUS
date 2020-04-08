@@ -22,7 +22,7 @@ RUN conda env create -f environment.yml
 RUN echo "conda activate malva-env" >> ~/.profile
 
 ENV STATIC_URL /static
-ENV STATIC_PATH /app/app/static
+ENV STATIC_PATH /app/static
 ENV UWSGI_CHEAPER 1
 
 
