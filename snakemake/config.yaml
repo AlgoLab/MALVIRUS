@@ -1,4 +1,3 @@
 workdir: example/workdir
-paths:
-  multifa: example/references.fa
-  sample: example/sample.fq
+multifa: example/references.fa
+sample: example/sample.fq

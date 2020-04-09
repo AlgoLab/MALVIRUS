@@ -8,8 +8,8 @@ import re
 
 pjoin = os.path.join
 
-references_path = config["paths"]["multifa"]
-sample_path_config = config["paths"]["sample"]
+references_path = config["multifa"]
+sample_path_config = config["sample"]
 
 working_dir = config["workdir"]
 logs_dir = pjoin(working_dir, "logs")
