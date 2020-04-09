@@ -32,12 +32,6 @@ def snakemake():
 @app.route('/<path:route>')
 def not_found(route):
     return 'Route ' + route + ' not found!', 404
-    p = subprocess.run(
-        ["/bin/bash", "-c", "-l", "snakemake -v"],
-        capture_output=True,
-        text=True
-    )
-    return p.stdout
 
 
 @app.route('/vcf', methods=['GET'])
@@ -102,14 +96,12 @@ def post_vcf():
 
         # return p.stdout
 
-        p = subprocess.run(
-            ["/bin/bash", "-c", "-l", "snakemake -s",
-             "/snakemake/Snakefile.vcf"
-             ],
-            capture_output=True,
-            text=True
-        )
-        return p.stdout
+        # p = Popen(
+        #     ["/bin/bash", "-c", "-l",
+        #      "snakemake -v"]
+        # )
+
+        return 'str(p.poll())'
 
     elif request.form.get('filetype') == 'vcf':
         return 'TODO: upload VCF'
