@@ -83,7 +83,7 @@ rule multi_align:
     run:
         update_status("Running")
         step_name = "mafft"
-        cmdstr = f"~/covid/software/mafft-7.453-with-extensions/scripts/mafft --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
+        cmdstr = f"mafft --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -108,7 +108,7 @@ rule vcf_build:
         json = pjoin(snpsites_dir, "snpsites.json")
     run:
         step_name = "snpsites"
-        cmdstr = f"~/covid/software/snp-sites/src/snp-sites -rmcv -o {params.prefix} {input.msa} &> {log.out}"
+        cmdstr = f"snp-sites -rmcv -o {params.prefix} {input.msa} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -130,7 +130,7 @@ rule vcf_clean_header:
         json = pjoin(clean_vcf_dir, "vcf_clean.1.json")
     run:
         step_name = "vcf_clean_header"
-        cmdstr = f"python3 ~/covid/software/format_vcf.py clean {input.base_vcf} > {output.clean_vcf} 2> {log.out}"
+        cmdstr = f"format_vcf.py clean {input.base_vcf} > {output.clean_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -152,7 +152,7 @@ rule vcf_add_freqs:
         json = pjoin(clean_vcf_dir, "vcf_clean.2.json")
     run:
         step_name = "vcf_add_freqs"
-        cmdstr = f"python3 ~/covid/software/format_vcf.py freq {input.clean_vcf} > {output.freq_vcf} 2> {log.out}"
+        cmdstr = f"format_vcf.py freq {input.clean_vcf} > {output.freq_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)

@@ -88,7 +88,7 @@ rule kmc:
         update_status("Running")
         step_name = "KMC"
         shell("mkdir -p {params.kmc_tmp}")
-        cmdstr = f"~/covid/software/malva/KMC/bin/kmc -t{threads} -m4 -k43 -ci5 -cs750 -fm {input.sample} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
+        cmdstr = f"kmc -t{threads} -m4 -k43 -ci5 -cs750 -fm {input.sample} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -116,8 +116,7 @@ rule malva:
         json = pjoin(malva_dir, "malva.json")
     run:
         step_name = "malva"
-        cmdstr = f"~/covid/software/malva/malva-geno -k 35 \
--r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        cmdstr = f"malva-geno -k 35 -r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
