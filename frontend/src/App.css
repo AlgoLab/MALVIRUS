@@ -1,0 +1,13 @@
+.site-layout-content {
+  background: #fff;
+  padding: 24px;
+  min-height: 280px;
+}
+
+.logo {
+  height: 100%;
+  line-height: 1;
+  background: rgba(255, 255, 255, 1);
+  margin: 0;
+  float: left;
+}

@@ -1,3 +1,12 @@
+FROM node:12.16.1-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY frontend/package.json ./
+COPY frontend/yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY frontend ./
+RUN yarn run build
+
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh -O ~/miniconda.sh && \
@@ -21,8 +30,5 @@ RUN conda env create -f environment.yml
 
 RUN echo "conda activate malva-env" >> ~/.profile
 
-ENV STATIC_URL /static
-ENV STATIC_PATH /app/static
-ENV UWSGI_CHEAPER 1
-
+COPY --from=build /app/build /static
 

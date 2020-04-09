@@ -14,3 +14,7 @@ def snakemake():
       text=True
    )
    return p.stdout
+
+@app.route('/<path:route>')
+def not_found(route):
+    return 'Route ' + route + ' not found!', 404
