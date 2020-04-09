@@ -5,7 +5,7 @@ Get the full list of VCFs available for MALVIRUS
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/vcf
+curl -i http://localhost:56733/api/vcf
 ```
 ### Return example
 ```
@@ -25,7 +25,7 @@ Get the details of the specified VCF
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/vcf/312das
+curl -i http://localhost:56733/api/vcf/312das
 ```
 ### Return example
 ```
@@ -49,9 +49,9 @@ The form should submit the file and an value `filetype=vcf/fasta`. A missing or 
 
 ### Request example
 ```bash
-curl -i -F 'filetype=fasta' -F "file=@test.fa" http://localhost:56733/vcf
+curl -i -F 'filetype=fasta' -F "file=@test.fa" http://localhost:56733/api/vcf
 
-curl -i -F 'filetype=vcf' -F "file=@test.vcf" http://localhost:56733/vcf
+curl -i -F 'filetype=vcf' -F "file=@test.vcf" http://localhost:56733/api/vcf
 ```
 ### Return example
 Good:
@@ -85,7 +85,7 @@ Get the full list of jobs executed / in progress?
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/malva
+curl -i http://localhost:56733/api/malva
 ```
 ### Return example
 ```
@@ -105,7 +105,7 @@ Get the details of the specified job
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/malva/312das
+curl -i http://localhost:56733/api/malva/312das
 ```
 ### Return example
 ```
@@ -145,7 +145,7 @@ curl -i \
 -F 'lenkmers=35' \
 -F 'maxmem=4' \
 -F 'threads=4' \
-http://localhost:56733/malva
+http://localhost:56733/api/malva
 ```
 ### Return example
 Good:

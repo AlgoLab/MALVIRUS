@@ -1,4 +1,5 @@
 import subprocess
+from subprocess import Popen
 from flask import render_template, jsonify, request, abort, make_response
 from app import app
 from werkzeug.utils import secure_filename
@@ -8,6 +9,8 @@ from pathlib import Path
 from os import getcwd
 
 from uuid import uuid4
+import json
+from time import sleep
 
 
 def mkdirp(path):
@@ -82,26 +85,25 @@ def post_vcf():
         fasta.save(multifa)
         with open(config, 'w+') as conf:
             conf.write(
-                f'wordkir: {workdir}\n' +
+                f'workdir: {workdir}\n' +
                 f'multifa: {multifa}\n'
             )
 
-        # p = subprocess.run(
-        #     [
-        #         "/bin/bash", "-c", "-l ",
-        #         # f'snakemake -s {app.config["SK_VCF"]} --configfile {config}',
-        #         "snakemake -v"
-        #     ], capture_output=True,
-        #     text=True)
+        p = Popen(
+            ["/bin/bash", "-c", "-l",
+             f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores 5'],
+            cwd='/snakemake',
+            stdin=None, stdout=None, stderr=None,
+            close_fds=True
+        )
 
-        # return p.stdout
+        sleep(1)
 
-        # p = Popen(
-        #     ["/bin/bash", "-c", "-l",
-        #      "snakemake -v"]
-        # )
+        with open(pjoin(workdir, 'status.json'), 'r') as f:
+            log = json.load(f)
+        log['id'] = uuid
 
-        return 'str(p.poll())'
+        return jsonify(log)
 
     elif request.form.get('filetype') == 'vcf':
         return 'TODO: upload VCF'
