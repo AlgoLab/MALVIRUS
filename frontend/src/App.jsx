@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 
 import { Layout, Menu } from 'antd';
 import { BarsOutlined, DiffFilled } from '@ant-design/icons';
@@ -63,11 +63,11 @@ function App() {
             <Route path="index/:id" element={<Index />} />
             <Route path="calls" element={<CallList />} />
             <Route path="calls/:id" element={<Call />} />
-            <Route path="*" to="calls" />
+            <Route path="*" element={<Navigate to="calls" />} />
           </Routes>
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>MALVA ©2018 - Bio-AlgoLab</Footer>
+      <Footer style={{ textAlign: 'center' }}>MALVA ©2020 - BIAS Lab</Footer>
     </Layout>
   );
 }
