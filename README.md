@@ -68,14 +68,30 @@ Il backend è accessibile a `http://localhost:56733/`
 
 ## Snakefile
 #### HowTo
-Impostare in config.yaml i path:
-* `workdir`: directory dove si vogliono tutti i file (intermedi e di output)
-* `multifa`: references da cui creare il vcf
-* `sample`: il sample
+Le pipeline è divisa in due snakefile: `Snakefile.vcf` per la creazione del vcf e dello pseudo reference e `Snakefile.malva` per lanciare KMC e malva.
 
-Poi basta:
-```
-snakemake
+Ogni snakefile ha il suo file di configurazione.
+
+Prima di lanciare `Snakefile.vcf` settare in `config.vcf.yaml' le seguenti variabili:
+* `workdir`: directory dove si vogliono tutti i file.  Idealmente questo valore è il jobid, quindi dovrebbe essere univoco per ogni run.
+* `multifa`: references da cui creare il vcf
+
+Prima di lanciare `Snakefile.malva` settare in `config.malva.yaml` le seguenti variabili:
+* `workdir`: directory dove si vogliono tutti i file.  Anche questo valore dovrebbe essere univoco su tutte le run.
+* `refrence`: path allo pseudoreference da usare in malva.
+* `vcf`: path al vcf da usare in malva.
+* `sample`: path al file contenente le read da usare.
+
+Una volta settate le variabili si può lanciare la pipeline che si vuole con
+```bash
+snakemake --snakefile=<nome_snakefile>
+
+# Se non fosse chiaro, per lanciare la creazione di ref e vcf usare
+snakemake --snakefile=Snakefile.vcf
+
+# Mentre per lanciare kmc e malva usare
+snakemake --snakefile=Snakfile.malva
+
 ```
 
 Ho caricato dei file di esempio.
