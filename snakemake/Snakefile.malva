@@ -12,13 +12,37 @@ ref_config = config["reference"]
 vcf_config = config["vcf"]
 sample_config = config["sample"]
 
-working_dir = config["workdir"]
-logs_dir = pjoin(working_dir, "logs")
+root_dir = config["workdir"]
+kmc_dir = pjoin(root_dir, "KMC")
+malva_dir = pjoin(root_dir, "malva")
+
+status_json_fn = pjoin(root_dir, "status.json")
+
+def update_status(new_status, step_name = None, new_json = None):
+    # Load JSON
+    try:
+        with open(status_json_fn) as json_file:
+            data = json.load(json_file)
+    except FileNotFoundError as e:
+        data = {}
+
+    # Update status and steps
+    data["status"] = new_status
+    data["last_time"] = nowf()
+    if new_json:
+        if "steps" not in data:
+            data["steps"] = {}
+        data["steps"][step_name] = new_json
+
+    # Dump JSON back
+    with open(status_json_fn, "w") as json_file:
+        json.dump(data, json_file)
+
 
 def nowf():
     return str(datetime.datetime.today().replace(microsecond=0))
 
-def format_json(cmd, result, returncode, inp, out, parameters = None):
+def format_dict(cmd, result, returncode, inp, out, parameters = None):
     configs = config
     d = {}
     d['command'] = cmd
@@ -36,37 +60,44 @@ def format_json(cmd, result, returncode, inp, out, parameters = None):
         for name, value in parameters.items():
             d['params'][name] = value
     d['time'] = nowf()
-    return json.dumps(d)
+    return d
+
+def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, par=None):
+    json_dict = format_dict(cmdstr, result, returncode, inp, out, par)
+    json.dump(json_dict, json_file)
+    update_status(status, step_name, json_dict)
 
 rule run:
     input:
-        pjoin(working_dir, "malva.vcf")
+        pjoin(malva_dir, "malva.vcf")
         
 # Run KMC
 rule kmc:
     input:
         sample = sample_config
     output:
-        kmc_out = pjoin(working_dir, "KMC", "kmers.kmc_pre")
+        kmc_out = pjoin(kmc_dir, "kmers.kmc_pre")
     params:
-        kmc_prefix = pjoin(working_dir, "KMC", "kmers"),
-        kmc_tmp = pjoin(working_dir, "KMC", "tmp")
+        kmc_prefix = pjoin(kmc_dir, "kmers"),
+        kmc_tmp = pjoin(kmc_dir, "tmp")
     threads: 4
     log:
-        out = pjoin(logs_dir, "kmc.log"),
-        time = pjoin(logs_dir, "kmc.time"),
-        json = pjoin(logs_dir, "kmc.json")
+        out = pjoin(kmc_dir, "kmc.log"),
+        json = pjoin(kmc_dir, "kmc.json")
     run:
+        update_status("Running")
+        step_name = "KMC"
         shell("mkdir -p {params.kmc_tmp}")
         cmdstr = f"~/covid/software/malva/KMC/bin/kmc -t{threads} -m4 -k43 -ci5 -cs750 -fm {input.sample} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, params)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, params)
                 raise e
 
 # Run MALVA
@@ -74,23 +105,24 @@ rule malva:
     input:
         ref = ref_config,
         vcf = vcf_config,
-        kmc = pjoin(working_dir, "KMC", "kmers.kmc_pre")
+        kmc = pjoin(kmc_dir, "kmers.kmc_pre")
     params:
-        kmc_prefix = pjoin(working_dir, "KMC", "kmers")
+        kmc_prefix = pjoin(kmc_dir, "kmers")
     output:
-        vcf = pjoin(working_dir, "malva.vcf")
+        vcf = pjoin(malva_dir, "malva.vcf")
     threads: 1
     log:
-        out = pjoin(logs_dir, "malva.log"),
-        time = pjoin(logs_dir, "malva.time"),
-        json = pjoin(logs_dir, "malva.json")
+        out = pjoin(malva_dir, "malva.log"),
+        json = pjoin(malva_dir, "malva.json")
     run:
+        step_name = "malva"
         cmdstr = f"~/covid/software/malva/malva-geno -k 35 \
 -r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
+                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0, input, output, params)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, params)
                 raise e

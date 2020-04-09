@@ -10,13 +10,38 @@ pjoin = os.path.join
 
 references_path = config["multifa"]
 
-working_dir = config["workdir"]
-logs_dir = pjoin(working_dir, "logs")
+root_dir = config["workdir"]
+mafft_dir = pjoin(root_dir, "mafft")
+snpsites_dir = pjoin(root_dir, "snpsites")
+clean_vcf_dir = pjoin(root_dir, "vcf")
+
+status_json_fn = pjoin(root_dir, "status.json")
+
+def update_status(new_status, step_name = None, new_json = None):
+    # Load JSON
+    try:
+        with open(status_json_fn) as json_file:
+            data = json.load(json_file)
+    except FileNotFoundError as e:
+        data = {}
+
+    # Update status and steps
+    data["status"] = new_status
+    data["last_time"] = nowf()
+    if new_json:
+        if "steps" not in data:
+            data["steps"] = {}
+        data["steps"][step_name] = new_json
+
+    # Dump JSON back
+    with open(status_json_fn, "w") as json_file:
+        json.dump(data, json_file)
+
 
 def nowf():
     return str(datetime.datetime.today().replace(microsecond=0))
 
-def format_json(cmd, result, returncode, inp, out, parameters = None):
+def format_dict(cmd, result, returncode, inp, out, parameters = None):
     configs = config
     d = {}
     d['command'] = cmd
@@ -34,95 +59,106 @@ def format_json(cmd, result, returncode, inp, out, parameters = None):
         for name, value in parameters.items():
             d['params'][name] = value
     d['time'] = nowf()
-    return json.dumps(d)
+    return d
+
+def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, par=None):
+    json_dict = format_dict(cmdstr, result, returncode, inp, out, par)
+    json.dump(json_dict, json_file)
+    update_status(status, step_name, json_dict)
 
 rule run:
     input:
-        pjoin(working_dir, "run.cleaned.vcf")
+        pjoin(clean_vcf_dir, "run.cleaned.vcf")
         
 # Multi alignment with mafft
 rule multi_align:
     input:
         fa = references_path
     output:
-        msa = pjoin(working_dir, "multi_alignment.msa")
+        msa = pjoin(mafft_dir, "multi_alignment.msa")
     threads: 16
     log:
-        out = pjoin(logs_dir, "mafft.log"),
-        time = pjoin(logs_dir, "mafft.time"),
-        json = pjoin(logs_dir, "mafft.json")
+        out = pjoin(mafft_dir, "mafft.log"),
+        json = pjoin(mafft_dir, "mafft.json")
     run:
+        update_status("Running")
+        step_name = "mafft"
         cmdstr = f"~/covid/software/mafft-7.453-with-extensions/scripts/mafft --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output))
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, None)
                 raise e
 
 # Create vcf from multi alignment
 rule vcf_build:
     input:
-        msa = pjoin(working_dir, "multi_alignment.msa")
+        msa = pjoin(mafft_dir, "multi_alignment.msa")
     output:
-        ref = pjoin(working_dir, "run.pseudoreference.fa"),
-        snps = pjoin(working_dir, "run.vcf")
+        ref = pjoin(snpsites_dir, "run.pseudoreference.fa"),
+        snps = pjoin(snpsites_dir, "run.vcf")
     params:
-        prefix = pjoin(working_dir, "run")
+        prefix = pjoin(snpsites_dir, "run")
     threads: 1
     log:
-        out = pjoin(logs_dir, "snpsites.log"),
-        time = pjoin(logs_dir, "snpsites.time"),
-        json = pjoin(logs_dir, "snpsites.json")
+        out = pjoin(snpsites_dir, "snpsites.log"),
+        json = pjoin(snpsites_dir, "snpsites.json")
     run:
+        step_name = "snpsites"
         cmdstr = f"~/covid/software/snp-sites/src/snp-sites -rmcv -o {params.prefix} {input.msa} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output, params))
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, params)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, params)
                 raise e
 
 # Clean VCF header fixing repeated sample ids (maybe useless. But it was common with GISAID)
 rule vcf_clean_header:
     input:
-        base_vcf = pjoin(working_dir, "run.vcf")
+        base_vcf = pjoin(snpsites_dir, "run.vcf")
     output:
-        clean_vcf = temp(pjoin(working_dir, "run.1.vcf"))
+        clean_vcf = temp(pjoin(clean_vcf_dir, "run.1.vcf"))
     threads: 1
     log:
-        out = pjoin(logs_dir, "vcf_clean.1.log"),
-        time = pjoin(logs_dir, "vcf_clean.1.time"),
-        json = pjoin(logs_dir, "vcf_clean.1.json")
+        out = pjoin(clean_vcf_dir, "vcf_clean.1.log"),
+        json = pjoin(clean_vcf_dir, "vcf_clean.1.json")
     run:
+        step_name = "vcf_clean_header"
         cmdstr = f"python3 ~/covid/software/format_vcf.py clean {input.base_vcf} > {output.clean_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output))
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, None)
                 raise e
 
 # Computes a priori frequencies
 rule vcf_add_freqs:
     input:
-        clean_vcf = pjoin(working_dir, "run.1.vcf")
+        clean_vcf = pjoin(clean_vcf_dir, "run.1.vcf")
     output:
-        freq_vcf = pjoin(working_dir, "run.cleaned.vcf")
+        freq_vcf = pjoin(clean_vcf_dir, "run.cleaned.vcf")
     threads: 1
     log:
-        out = pjoin(logs_dir, "vcf_clean.2.log"),
-        time = pjoin(logs_dir, "vcf_clean.2.time"),
-        json = pjoin(logs_dir, "vcf_clean.2.json")
+        out = pjoin(clean_vcf_dir, "vcf_clean.2.log"),
+        json = pjoin(clean_vcf_dir, "vcf_clean.2.json")
     run:
+        step_name = "vcf_add_freqs"
         cmdstr = f"python3 ~/covid/software/format_vcf.py freq {input.clean_vcf} > {output.freq_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                jf.write(format_json(cmdstr, "Success", 0, input, output))
+                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0, input, output, None)
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
+                shell("rm -fr {params.kmc_tmp}")
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, None)
                 raise e
