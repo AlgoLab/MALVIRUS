@@ -2,6 +2,5 @@ name: malva-env
 channels:
     - defaults
     - bioconda
-    - conda-forge
 dependencies:
     - snakemake
