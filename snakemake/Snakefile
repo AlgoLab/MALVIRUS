@@ -83,7 +83,7 @@ rule vcf_build:
                 shell.check_output(cmdstr)
                 jf.write(format_json(cmdstr, "Success", 0, input, output, params))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
                 raise e
 
 # Clean VCF header fixing repeated sample ids (maybe useless. But it was common with GISAID)
@@ -104,7 +104,7 @@ rule vcf_clean_header:
                 shell.check_output(cmdstr)
                 jf.write(format_json(cmdstr, "Success", 0, input, output))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
                 raise e
 
 # Computes a priori frequencies
@@ -125,7 +125,7 @@ rule vcf_add_freqs:
                 shell.check_output(cmdstr)
                 jf.write(format_json(cmdstr, "Success", 0, input, output))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output))
                 raise e
 
 # Run KMC
@@ -151,7 +151,7 @@ rule kmc:
                 jf.write(format_json(cmdstr, "Success", 0, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
                 shell("rm -fr {params.kmc_tmp}")
                 raise e
 
@@ -178,5 +178,5 @@ rule malva:
                 shell.check_output(cmdstr)
                 jf.write(format_json(cmdstr, "Success", 0, input, output, params))
             except subprocess.CalledProcessError as e:
-                jf.write(format_json(cmdstr, "Success", e.returncode, input, output, params))
+                jf.write(format_json(cmdstr, "Failed", e.returncode, input, output, params))
                 raise e
