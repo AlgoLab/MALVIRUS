@@ -14,7 +14,7 @@ RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
 
 ENV PATH /opt/conda/bin:$PATH
 
-RUN conda update -n base conda
+RUN conda update --yes -n base conda
 
 COPY ./environment.yml environment.yml
 RUN conda env create -f environment.yml
