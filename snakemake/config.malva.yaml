@@ -1,5 +1,4 @@
 workdir: example/workdir/malva
-paths:
-  reference: example/workdir/vcf/run.pseudoreference.fa
-  vcf: example/workdir/vcf/run.cleaned.vcf
-  sample: example/sample.fq
+reference: example/workdir/vcf/run.pseudoreference.fa
+vcf: example/workdir/vcf/run.cleaned.vcf
+sample: example/sample.fq

@@ -8,9 +8,9 @@ import re
 
 pjoin = os.path.join
 
-ref_config = config["paths"]["reference"]
-vcf_config = config["paths"]["vcf"]
-sample_config = config["paths"]["sample"]
+ref_config = config["reference"]
+vcf_config = config["vcf"]
+sample_config = config["sample"]
 
 working_dir = config["workdir"]
 logs_dir = pjoin(working_dir, "logs")
