@@ -26,7 +26,7 @@ function App() {
         <div className="logo">
           <img
             src={logo}
-            alt="Bio-AlgoLab logo"
+            alt="BIAS Lab logo"
             style={{ height: '100%', verticalAlign: 'top' }}
           />
           <div
@@ -67,7 +67,9 @@ function App() {
           </Routes>
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>MALVA ©2020 - BIAS Lab</Footer>
+      <Footer style={{ textAlign: 'center' }}>
+        MALVA-Web ©2020 - BIAS Lab
+      </Footer>
     </Layout>
   );
 }
