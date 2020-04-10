@@ -44,7 +44,7 @@ Get the details of the specified VCF
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/api/vcf/312das
+curl -i http://localhost:56733/api/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0
 ```
 ### Return example
 ```
@@ -55,8 +55,92 @@ Server: Werkzeug/1.0.1 Python/3.6.9
 Date: Wed, 08 Apr 2020 08:53:42 GMT
 
 {
-  "content": "vcf file/csv/tsv?", 
-  "id": "312das"
+   "descritption":"description-fasta",
+   "filename":"references.fa",
+   "id":"7d4c97cc-75bd-48f6-9819-be7403cf72a0",
+   "log":{
+      "last_time":"2020-04-10 08:08:13",
+      "status":"Completed",
+      "steps":{
+         "mafft":{
+            "command":"mafft --auto --thread 5 /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/mafft.log",
+            "config":{
+               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
+               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+            },
+            "input":{
+               "fa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa"
+            },
+            "output":{
+               "msa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa"
+            },
+            "params":{
+
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 08:08:12"
+         },
+         "snpsites":{
+            "command":"snp-sites -rmcv -o /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa &> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/snpsites.log",
+            "config":{
+               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
+               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+            },
+            "input":{
+               "msa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa"
+            },
+            "output":{
+               "ref":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.pseudoreference.fa",
+               "snps":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf"
+            },
+            "params":{
+               "prefix":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run"
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 08:08:12"
+         },
+         "vcf_add_freqs":{
+            "command":"format_vcf.py freq /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.cleaned.vcf 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/vcf_clean.2.log",
+            "config":{
+               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
+               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+            },
+            "input":{
+               "clean_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf"
+            },
+            "output":{
+               "freq_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.cleaned.vcf"
+            },
+            "params":{
+
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 08:08:13"
+         },
+         "vcf_clean_header":{
+            "command":"format_vcf.py clean /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/vcf_clean.1.log",
+            "config":{
+               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
+               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+            },
+            "input":{
+               "base_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf"
+            },
+            "output":{
+               "clean_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf"
+            },
+            "params":{
+
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 08:08:12"
+         }
+      }
+   }
 }
 ```
 

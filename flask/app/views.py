@@ -59,11 +59,14 @@ def get_vcf_list():
 
 @app.route('/vcf/<vcf_id>', methods=['GET'])
 def get_vcf(vcf_id):
-    test = {
-        'id': vcf_id,
-        'content': 'vcf file/csv/tsv?'
-    }
-    return jsonify(test)
+
+    with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'status.json'), 'r') as f:
+        status = json.load(f)
+    with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'info.json'), 'r') as f:
+        info = json.load(f)
+    info['log'] = status
+
+    return jsonify(info)
 
 
 @app.route('/vcf', methods=['POST'])
