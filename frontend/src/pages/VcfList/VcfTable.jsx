@@ -22,17 +22,17 @@ const columns = [
   },
 ];
 
-function VcfTable({ vcf }) {
-  if (vcf.rejected) {
-    return <div>Errore: {JSON.stringify(vcf.reason)}</div>;
+function VcfTable({ vcfs }) {
+  if (vcfs.rejected) {
+    return <div>Errore: {JSON.stringify(vcfs.reason)}</div>;
   }
-  const data = vcf.fulfilled ? vcf.value.content : [];
+  const data = vcfs.fulfilled ? vcfs.value.content : [];
   return (
     <Table
       rowKey="id"
       columns={columns}
       dataSource={data}
-      loading={vcf.pending}
+      loading={vcfs.pending}
     ></Table>
   );
 }

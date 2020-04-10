@@ -9,6 +9,8 @@ import logo from './logo.png';
 
 import VcfList from './pages/VcfList';
 import Vcf from './pages/Vcf';
+import VcfNew from 'pages/VcfNew';
+import VcfUpload from 'pages/VcfUpload';
 import CallList from './pages/CallList';
 import Call from './pages/Call';
 
@@ -60,6 +62,8 @@ function App() {
         <div className="site-layout-content">
           <Routes>
             <Route path="vcf" element={<VcfList />} />
+            <Route path="vcf/new" element={<VcfNew />} />
+            <Route path="vcf/upload" element={<VcfUpload />} />
             <Route path="vcf/:id" element={<Vcf />} />
             <Route path="calls" element={<CallList />} />
             <Route path="calls/:id" element={<Call />} />

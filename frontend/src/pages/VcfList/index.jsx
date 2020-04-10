@@ -1,5 +1,5 @@
-import ajaxVcf from 'ajax/vcf';
+import ajaxVcfs from 'ajax/vcfs';
 
 import VcfList from './VcfList';
 
-export default ajaxVcf(VcfList);
+export default ajaxVcfs(VcfList);
