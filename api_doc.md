@@ -49,20 +49,28 @@ The form should submit the file and an value `filetype=vcf/fasta`. A missing or 
 
 ### Request example
 ```bash
-curl -i -F 'filetype=fasta' -F "file=@test.fa" http://localhost:56733/api/vcf
+curl -i -F 'filetype=fasta' -F 'description=description-fasta' -F "file=@snakemake/example/references.fa" http://localhost:56733/api/vcf
 
-curl -i -F 'filetype=vcf' -F "file=@test.vcf" http://localhost:56733/api/vcf
+
+curl -i -F 'filetype=vcf' -F 'description=description-vcf' -F "file=@test.vcf" http://localhost:56733/api/vcf
 ```
 ### Return example
 Good:
 ```
-HTTP/1.0 200 OK
-Content-Type: text/html; charset=utf-8
-Content-Length: 3
-Server: Werkzeug/1.0.1 Python/3.6.9
-Date: Wed, 08 Apr 2020 10:09:21 GMT
+HTTP/1.1 200 OK
+Server: nginx/1.15.8
+Date: Fri, 10 Apr 2020 08:12:27 GMT
+Content-Type: application/json
+Content-Length: 127
+Connection: keep-alive
 
-vcf
+{
+  "descritption":"description-fasta",
+  "filename":"references.fa",
+  "id":"53a7923c-224a-4ee0-b8b6-55ea86550c01",
+  "status":"Running"
+}
+
 ```
 
 Bad:

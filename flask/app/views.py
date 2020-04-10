@@ -7,10 +7,12 @@ from werkzeug.utils import secure_filename
 from os.path import join as pjoin
 from pathlib import Path
 from os import getcwd
+import os
 
 from uuid import uuid4
 import json
 from time import sleep
+import datetime
 
 
 def mkdirp(path):
@@ -62,27 +64,38 @@ def get_vcf(vcf_id):
 
 @app.route('/vcf', methods=['POST'])
 def post_vcf():
+
+    uuid = str(uuid4())
+    workdir = pjoin(
+        app.config['JOB_DIR'],
+        'vcf',
+        f'{uuid}'
+    )
+
+    if 'file' not in request.files:
+        abort(make_response(jsonify(message="Missing file"), 400))
+    rfile = request.files['file']
+
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if rfile.filename == '':
+        abort(make_response(jsonify(message="Missing filename"), 400))
+
+    mkdirp(workdir)
+    dfile = pjoin(workdir, secure_filename(rfile.filename))
+    rfile.save(dfile)
+
+    info = {
+        "filename": str(secure_filename(rfile.filename)),
+        "id": uuid,
+        "descritption": str(request.form.get('description'))
+    }
+    with open(pjoin(workdir, 'info.json'), 'w+') as f:
+        json.dump(info, f)
+
     if request.form.get('filetype') == 'fasta':
-        uuid = str(uuid4())
-        workdir = pjoin(
-            app.config['JOB_DIR'],
-            'vcf',
-            f'job_{uuid}'
-        )
-
-        if 'file' not in request.files:
-            abort(make_response(jsonify(message="Missign file"), 400))
-        fasta = request.files['file']
-
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if fasta.filename == '':
-            abort(make_response(jsonify(message="Missign filename"), 400))
-
-        mkdirp(workdir)
-        multifa = pjoin(workdir, secure_filename(fasta.filename))
+        multifa = dfile
         config = pjoin(workdir, 'config.vcf.yaml')
-        fasta.save(multifa)
         with open(config, 'w+') as conf:
             conf.write(
                 f'workdir: {workdir}\n' +
@@ -90,23 +103,38 @@ def post_vcf():
             )
 
         p = Popen(
-            ["/bin/bash", "-c", "-l",
-             f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores 5'],
-            cwd='/snakemake',
-            stdin=None, stdout=None, stderr=None,
-            close_fds=True
+            [
+                "nohup",
+                "/bin/bash", "-c", "-l",
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores 5'
+            ],
+            cwd=app.config["SK_CWD"],
+            stdout=open('/dev/null', 'w'),
+            stderr=open('/dev/null', 'w'),
+            # with this below p will also ignore SIGINT and SIGTERM
+            preexec_fn=os.setpgrp
         )
 
         sleep(1)
 
         with open(pjoin(workdir, 'status.json'), 'r') as f:
-            log = json.load(f)
-        log['id'] = uuid
+            status = json.load(f)
 
-        return jsonify(log)
+        info['status'] = status['status']
+
+        return jsonify(info)
 
     elif request.form.get('filetype') == 'vcf':
-        return 'TODO: upload VCF'
+        status = {
+            "status": "Uploaded",
+            "last_time": str(datetime.datetime.today().replace(microsecond=0))
+        }
+        with open(pjoin(workdir, 'status.json'), 'w+') as f:
+            json.dump(status, f)
+
+        info['status'] = status['status']
+
+        return jsonify(info)
     else:
         abort(make_response(jsonify(message="Illegal or missing filetype"), 400))
 
