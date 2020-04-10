@@ -2,7 +2,9 @@ name: malva-env
 channels:
     - defaults
     - bioconda
+    - conda-forge
 dependencies:
+    - snakemake-minimal
     - mafft
     - kmc
     - pysam
