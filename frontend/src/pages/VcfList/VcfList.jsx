@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Space } from 'antd';
 
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined, UploadOutlined, SyncOutlined } from '@ant-design/icons';
 
 import VcfTable from './VcfTable';
 
-function VcfList({ vcfs }) {
+function VcfList({ vcfs, reloadVcfs }) {
   const navigate = useNavigate();
   const onClickNew = useCallback(() => navigate('new'), [navigate]);
   const onClickUpload = useCallback(() => navigate('upload'), [navigate]);
@@ -29,6 +29,9 @@ function VcfList({ vcfs }) {
             onClick={onClickUpload}
           >
             Upload a new reference VCF
+          </Button>
+          <Button icon={<SyncOutlined />} size="large" onClick={reloadVcfs}>
+            Refresh
           </Button>
         </Space>
       </div>
