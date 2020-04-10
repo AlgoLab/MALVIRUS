@@ -6,7 +6,7 @@ export const api = {
   vcf: (idv) => {
     return `${wsBaseHref}/vcf${isNotNull(idv)}`;
   },
-  malva: (idm) => {
+  call: (idm) => {
     return `${wsBaseHref}/malva${isNotNull(idm)}`;
   },
 };

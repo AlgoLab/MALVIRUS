@@ -1,14 +1,16 @@
 import React from 'react';
+
 import { useParams } from 'react-router-dom';
 
-function Call() {
+import ajaxCall from 'ajax/call';
+
+import Call from './Call';
+
+const AjaxCall = ajaxCall(Call);
+
+function RoutedCall() {
   const { id } = useParams();
-  return (
-    <>
-      <h1>Call job {id}</h1>
-      <p>It displays the details of the call.</p>
-    </>
-  );
+  return <AjaxCall id={id} />;
 }
 
-export default Call;
+export default RoutedCall;
