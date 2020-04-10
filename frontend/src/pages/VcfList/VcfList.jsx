@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 import VcfTable from './VcfTable';
 
@@ -16,9 +16,14 @@ function VcfList({ vcf }) {
       <p>Click on a job ID to view the details.</p>
       <VcfTable vcf={vcf} />
       <div style={{ textAlign: 'center' }}>
-        <Button type="primary" icon={<PlusOutlined />} size="large">
-          Build a new index
-        </Button>
+        <Space>
+          <Button icon={<PlusOutlined />} size="large">
+            Build a new input VCF from genomes
+          </Button>
+          <Button icon={<UploadOutlined />} size="large">
+            Upload a new VCF
+          </Button>
+        </Space>
       </div>
     </>
   );
