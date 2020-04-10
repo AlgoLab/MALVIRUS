@@ -14,24 +14,21 @@ function VcfList({ vcfs }) {
   const onClickUpload = useCallback(() => navigate('upload'), [navigate]);
   return (
     <>
-      <h1>Index list</h1>
-      <p>
-        It displays the list of indexing jobs submitted to the system, along
-        with their status and, if finished, their results.
-      </p>
-      <p>Click on a job ID to view the details.</p>
+      <h1>Reference VCFs</h1>
+      <p>It displays the list of reference VCFs available on the system.</p>
+      <p>Click on a reference VCF ID to view the details.</p>
       <VcfTable vcfs={vcfs} />
       <div style={{ textAlign: 'center' }}>
         <Space>
           <Button icon={<PlusOutlined />} size="large" onClick={onClickNew}>
-            Build a new input VCF from genomes
+            Build a new reference VCF from genomes
           </Button>
           <Button
             icon={<UploadOutlined />}
             size="large"
             onClick={onClickUpload}
           >
-            Upload a new VCF
+            Upload a new reference VCF
           </Button>
         </Space>
       </div>

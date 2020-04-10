@@ -48,7 +48,7 @@ function App() {
         <Menu theme="dark" mode="horizontal" selectedKeys={[prefix]}>
           <Menu.Item key="/vcf">
             <Link to="/vcf">
-              <BarsOutlined /> Input VCF
+              <BarsOutlined /> Reference VCFs
             </Link>
           </Menu.Item>
           <Menu.Item key="/calls">

@@ -3,7 +3,7 @@ import React from 'react';
 function VcfNew() {
   return (
     <>
-      <h1>Create a new input VCF</h1>
+      <h1>Create a new reference VCF from genomic sequences</h1>
     </>
   );
 }
