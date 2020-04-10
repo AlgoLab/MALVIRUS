@@ -116,7 +116,7 @@ rule malva:
         json = pjoin(malva_dir, "malva.json")
     run:
         step_name = "malva"
-        cmdstr = f"malva-geno -k 35 -r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        cmdstr = f"malva-geno -1 -k 35 -r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
