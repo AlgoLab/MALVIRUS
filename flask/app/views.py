@@ -59,7 +59,6 @@ def get_vcf_list():
 
 @app.route('/vcf/<vcf_id>', methods=['GET'])
 def get_vcf(vcf_id):
-
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'status.json'), 'r') as f:
         status = json.load(f)
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'info.json'), 'r') as f:
@@ -72,7 +71,7 @@ def get_vcf(vcf_id):
 @app.route('/vcf', methods=['POST'])
 def post_vcf():
 
-    uuid = str(uuid4())
+    uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
     workdir = pjoin(
         app.config['JOB_DIR'],
         'vcf',
@@ -151,19 +150,30 @@ def post_vcf():
 
 @app.route('/malva', methods=['GET'])
 def get_malva_list():
-    test = {
-        'content': 'list of malva jobs'
+    malvas = list()
+    for folder in glob.glob(pjoin(app.config['JOB_DIR'], 'malva', '*')):
+        with open(pjoin(folder, 'status.json'), 'r') as f:
+            status = json.load(f)
+        with open(pjoin(folder, 'info.json'), 'r') as f:
+            info = json.load(f)
+        info['status'] = status['status']
+        malvas.append(info)
+
+    res = {
+        'content': malvas
     }
-    return jsonify(test)
+    return jsonify(res)
 
 
 @app.route('/malva/<malva_id>', methods=['GET'])
 def get_amlva(malva_id):
-    test = {
-        'id': malva_id,
-        'content': 'job details'
-    }
-    return jsonify(test)
+    with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'status.json'), 'r') as f:
+        status = json.load(f)
+    with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'info.json'), 'r') as f:
+        info = json.load(f)
+    info['log'] = status
+
+    return jsonify(info)
 
 
 @app.route('/malva', methods=['POST'])
@@ -175,15 +185,27 @@ def post_malva():
         lenkmers = request.form['lenkmers']
         maxmem = request.form['maxmem']
         cores = request.form['cores']
+        reference = pjoin(
+            app.config['JOB_DIR'],
+            'vcf',
+            vcf,
+            'snpsites', 'run.pseudoreference.fa'
+        )
+        vcfpath = pjoin(
+            app.config['JOB_DIR'],
+            'vcf',
+            vcf,
+            'vcf', 'run.cleaned.vcf'
+        )
 
-        uuid = str(uuid4())
+        uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
         workdir = pjoin(
             app.config['JOB_DIR'],
             'malva',
             f'{uuid}'
         )
 
-        if 'file' not in request.files:
+        if 'sample' not in request.files:
             abort(make_response(jsonify(message="Missing file"), 400))
         rfile = request.files['sample']
 
@@ -211,7 +233,41 @@ def post_malva():
         with open(pjoin(workdir, 'info.json'), 'w+') as f:
             json.dump(info, f)
 
-    except:
-        abort(make_response(jsonify(message="Illegal request"), 400))
+        config = pjoin(workdir, 'config.malva.yaml')
+        with open(config, 'w+') as conf:
+            conf.write(
+                f'workdir: {workdir}\n' +
+                f'reference: {reference}\n' +
+                f'vcf: {vcfpath}\n' +
+                f'sample: {dfile}\n'
+                f'minocc: {minocc}\n' +
+                f'maxocc: {maxocc}\n' +
+                f'lenkmers: {lenkmers}\n' +
+                f'maxmem: {maxmem}\n'
+            )
 
-    return str(request.form)
+        p = Popen(
+            [
+                "nohup",
+                "/bin/bash", "-c", "-l",
+                f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores}'
+            ],
+            cwd=app.config["SK_CWD"],
+            stdout=open('/dev/null', 'w'),
+            stderr=open('/dev/null', 'w'),
+            # with this below p will also ignore SIGINT and SIGTERM
+            preexec_fn=os.setpgrp
+        )
+
+        sleep(1)
+
+        with open(pjoin(workdir, 'status.json'), 'r') as f:
+            status = json.load(f)
+
+        info['status'] = status['status']
+
+        return jsonify(info)
+
+    except Exception as e:
+        print(e)
+        abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
