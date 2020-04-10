@@ -95,9 +95,3 @@ snakemake --snakefile=Snakfile.malva
 ```
 
 Ho caricato dei file di esempio.
-
-#### Fixme/Todo
-* tutti i path ai tool/script sono hardcoded per farlo funzionare su mendel (container scc)
-* la maggior parte dei tool sono disponibili su conda. Per snp-sites sto usando un mio fork con modifiche per far scrivere su file lo pseudoreference
-* è quasi tutto hardcoded (threads e parametri per KMC e malva). Potremmo lasciare l'utente libero di cambiare alcuni dei parametri tramite "interfaccia"
-* ~~per KMC il sample va indicato con `-f<a/q/m/bam>` sulla base del tipo~~
