@@ -16,6 +16,13 @@ root_dir = config["workdir"]
 kmc_dir = pjoin(root_dir, "KMC")
 malva_dir = pjoin(root_dir, "malva")
 
+minocc_config = config["minocc"] if "minocc" in config else 5
+maxocc_config = config["maxocc"] if "maxocc" in config else 750
+lenkmers_config = config["lenkmers"] if "lenkmers" in config else 43
+malvak_config = config["malvak"] if "malvak" in config else 35
+cores_config = config["cores"] if "cores" in config else 4
+maxmem_config = config["maxmem"] if "maxmem" in config else 4
+
 status_json_fn = pjoin(root_dir, "status.json")
 
 def update_status(new_status, step_name = None, new_json = None):
@@ -79,8 +86,12 @@ rule kmc:
         kmc_out = pjoin(kmc_dir, "kmers.kmc_pre")
     params:
         kmc_prefix = pjoin(kmc_dir, "kmers"),
-        kmc_tmp = pjoin(kmc_dir, "tmp")
-    threads: 4
+        kmc_tmp = pjoin(kmc_dir, "tmp"),
+        minocc = minocc_config,
+        maxocc = maxocc_config,
+        lenkmers = lenkmers_config,
+        maxmem = maxmem_config
+    threads: int(cores_config)
     log:
         out = pjoin(kmc_dir, "kmc.log"),
         json = pjoin(kmc_dir, "kmc.json")
@@ -88,7 +99,7 @@ rule kmc:
         update_status("Running")
         step_name = "KMC"
         shell("mkdir -p {params.kmc_tmp}")
-        cmdstr = f"kmc -t{threads} -m4 -k43 -ci5 -cs750 -fm {input.sample} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
+        cmdstr = f"kmc -t{threads} -m{params.maxmem} -k{params.lenkmers} -ci{params.minocc} -cs{params.maxocc} -fm {input.sample} {params.kmc_prefix} {params.kmc_tmp} &> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -107,7 +118,10 @@ rule malva:
         vcf = vcf_config,
         kmc = pjoin(kmc_dir, "kmers.kmc_pre")
     params:
-        kmc_prefix = pjoin(kmc_dir, "kmers")
+        kmc_prefix = pjoin(kmc_dir, "kmers"),
+        k = malvak_config,
+        r = lenkmers_config,
+        c = maxocc_config
     output:
         vcf = pjoin(malva_dir, "malva.vcf")
     threads: 1
@@ -116,7 +130,7 @@ rule malva:
         json = pjoin(malva_dir, "malva.json")
     run:
         step_name = "malva"
-        cmdstr = f"malva-geno -1 -k 35 -r 43 -c 750 -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        cmdstr = f"malva-geno -1 -k {params.k} -r {params.r} -c {params.c} -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
