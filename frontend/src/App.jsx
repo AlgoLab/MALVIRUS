@@ -7,8 +7,8 @@ import { BarsOutlined, DiffFilled } from '@ant-design/icons';
 
 import logo from './logo.png';
 
-import IndexList from './pages/IndexList';
-import Index from './pages/Index';
+import VcfList from './pages/VcfList';
+import Vcf from './pages/Vcf';
 import CallList from './pages/CallList';
 import Call from './pages/Call';
 
@@ -44,9 +44,9 @@ function App() {
           </div>
         </div>
         <Menu theme="dark" mode="horizontal" selectedKeys={[prefix]}>
-          <Menu.Item key="/index">
-            <Link to="/index">
-              <BarsOutlined /> Index
+          <Menu.Item key="/vcf">
+            <Link to="/vcf">
+              <BarsOutlined /> Input VCF
             </Link>
           </Menu.Item>
           <Menu.Item key="/calls">
@@ -59,8 +59,8 @@ function App() {
       <Content>
         <div className="site-layout-content">
           <Routes>
-            <Route path="index" element={<IndexList />} />
-            <Route path="index/:id" element={<Index />} />
+            <Route path="vcf" element={<VcfList />} />
+            <Route path="vcf/:id" element={<Vcf />} />
             <Route path="calls" element={<CallList />} />
             <Route path="calls/:id" element={<Call />} />
             <Route path="*" element={<Navigate to="calls" />} />
