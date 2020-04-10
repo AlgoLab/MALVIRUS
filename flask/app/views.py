@@ -59,6 +59,8 @@ def get_vcf_list():
 
 @app.route('/vcf/<vcf_id>', methods=['GET'])
 def get_vcf(vcf_id):
+    if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id)):
+        abort(make_response(jsonify(message="ID not found"), 404))
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'status.json'), 'r') as f:
         status = json.load(f)
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'info.json'), 'r') as f:
@@ -167,6 +169,8 @@ def get_malva_list():
 
 @app.route('/malva/<malva_id>', methods=['GET'])
 def get_amlva(malva_id):
+    if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'malva', malva_id)):
+        abort(make_response(jsonify(message="ID not found"), 404))
     with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'status.json'), 'r') as f:
         status = json.load(f)
     with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'info.json'), 'r') as f:
