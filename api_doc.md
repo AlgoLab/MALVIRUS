@@ -20,19 +20,19 @@ Date: Wed, 08 Apr 2020 10:19:52 GMT
       {
          "descritption":"description-fasta",
          "filename":"references.fa",
-         "id":"7d4c97cc-75bd-48f6-9819-be7403cf72a0",
+         "id":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f",
          "status":"Completed"
       },
       {
          "descritption":"description-vcf",
          "filename":"test.vcf",
-         "id":"70133574-18ae-47de-8f47-895a3a2ae5f6",
+         "id":"202004-1010-0328_d44ca6b0-8b31-4aee-a6e4-8a92903be135",
          "status":"Uploaded"
       },
       {
          "descritption":"description-fasta",
          "filename":"references.fa",
-         "id":"c0b6ffde-f674-43a7-ac72-f822931b2ffb",
+         "id":"202004-1010-0324_612c7336-f988-495c-b06c-c867ccc02b8c",
          "status":"Running"
       }
    ]
@@ -44,7 +44,7 @@ Get the details of the specified VCF
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/api/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0
+curl -i http://localhost:56733/api/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f
 ```
 ### Return example
 ```
@@ -57,87 +57,87 @@ Date: Wed, 08 Apr 2020 08:53:42 GMT
 {
    "descritption":"description-fasta",
    "filename":"references.fa",
-   "id":"7d4c97cc-75bd-48f6-9819-be7403cf72a0",
+   "id":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f",
    "log":{
-      "last_time":"2020-04-10 08:08:13",
+      "last_time":"2020-04-10 10:04:37",
       "status":"Completed",
       "steps":{
          "mafft":{
-            "command":"mafft --auto --thread 5 /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/mafft.log",
+            "command":"mafft --auto --thread 5 /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa > /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/mafft/multi_alignment.msa 2> /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/mafft/mafft.log",
             "config":{
-               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
-               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+               "multifa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa",
+               "workdir":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
             },
             "input":{
-               "fa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa"
+               "fa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa"
             },
             "output":{
-               "msa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa"
+               "msa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/mafft/multi_alignment.msa"
             },
             "params":{
 
             },
             "result":"Success",
             "return_code":0,
-            "time":"2020-04-10 08:08:12"
+            "time":"2020-04-10 10:04:36"
          },
          "snpsites":{
-            "command":"snp-sites -rmcv -o /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa &> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/snpsites.log",
+            "command":"snp-sites -rmcv -o /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/mafft/multi_alignment.msa &> /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/snpsites.log",
             "config":{
-               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
-               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+               "multifa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa",
+               "workdir":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
             },
             "input":{
-               "msa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/mafft/multi_alignment.msa"
+               "msa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/mafft/multi_alignment.msa"
             },
             "output":{
-               "ref":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.pseudoreference.fa",
-               "snps":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf"
+               "ref":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.pseudoreference.fa",
+               "snps":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.vcf"
             },
             "params":{
-               "prefix":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run"
+               "prefix":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run"
             },
             "result":"Success",
             "return_code":0,
-            "time":"2020-04-10 08:08:12"
+            "time":"2020-04-10 10:04:36"
          },
          "vcf_add_freqs":{
-            "command":"format_vcf.py freq /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.cleaned.vcf 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/vcf_clean.2.log",
+            "command":"format_vcf.py freq /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.1.vcf > /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf 2> /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/vcf_clean.2.log",
             "config":{
-               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
-               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+               "multifa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa",
+               "workdir":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
             },
             "input":{
-               "clean_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf"
+               "clean_vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.1.vcf"
             },
             "output":{
-               "freq_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.cleaned.vcf"
+               "freq_vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf"
             },
             "params":{
 
             },
             "result":"Success",
             "return_code":0,
-            "time":"2020-04-10 08:08:13"
+            "time":"2020-04-10 10:04:37"
          },
          "vcf_clean_header":{
-            "command":"format_vcf.py clean /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf > /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf 2> /jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/vcf_clean.1.log",
+            "command":"format_vcf.py clean /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.vcf > /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.1.vcf 2> /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/vcf_clean.1.log",
             "config":{
-               "multifa":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/references.fa",
-               "workdir":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0"
+               "multifa":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/references.fa",
+               "workdir":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
             },
             "input":{
-               "base_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/snpsites/run.vcf"
+               "base_vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.vcf"
             },
             "output":{
-               "clean_vcf":"/jobs/vcf/7d4c97cc-75bd-48f6-9819-be7403cf72a0/vcf/run.1.vcf"
+               "clean_vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.1.vcf"
             },
             "params":{
 
             },
             "result":"Success",
             "return_code":0,
-            "time":"2020-04-10 08:08:12"
+            "time":"2020-04-10 10:04:36"
          }
       }
    }
@@ -169,12 +169,11 @@ Content-Length: 127
 Connection: keep-alive
 
 {
-  "descritption":"description-fasta",
-  "filename":"references.fa",
-  "id":"53a7923c-224a-4ee0-b8b6-55ea86550c01",
-  "status":"Running"
+   "descritption":"description-fasta",
+   "filename":"references.fa",
+   "id":"202004-1010-0324_612c7336-f988-495c-b06c-c867ccc02b8c",
+   "status":"Running"
 }
-
 ```
 
 Bad:
@@ -239,7 +238,6 @@ Upload a new precompiled VCF or a FASTA of references to compute a VCF from.
 ### Request documentation
 The form should submit the arguments needed for configuration:
 
-- `multifa`: ???
 - `sample`: FASTQ sample to run MALVIRUS on
 - `minocc`: Minimum occurrence of kmers / alleles
 - `maxocc`: Maximum occurrence of kmers / alleles
@@ -251,7 +249,7 @@ The form should submit the arguments needed for configuration:
 ```bash
 curl -i \
 -F 'sample=@snakemake/example/sample.fq' \
--F 'vcf=7d4c97cc-75bd-48f6-9819-be7403cf72a0' \
+-F 'vcf=202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
@@ -262,23 +260,24 @@ http://localhost:56733/api/malva
 ### Return example
 Good:
 ```
-HTTP/1.0 200 OK
-Content-Type: text/html; charset=utf-8
-Content-Length: 3
-Server: Werkzeug/1.0.1 Python/3.6.9
-Date: Wed, 08 Apr 2020 10:09:21 GMT
-
-vcf
-```
-
-Bad:
-```
-HTTP/1.0 400 BAD REQUEST
+HTTP/1.1 200 OK
+Server: nginx/1.15.8
+Date: Fri, 10 Apr 2020 10:21:51 GMT
 Content-Type: application/json
-Content-Length: 47
-Server: Werkzeug/1.0.1 Python/3.6.9
-Date: Wed, 08 Apr 2020 10:10:10 GMT
+Content-Length: 249
+Connection: keep-alive
 
 {
-  "message": "Illegal or missing filetype"
+   "filename":"sample.fq",
+   "id":"202004-1010-2150_24d85dd7-b913-4549-aa11-63c8859c44b1",
+   "params":{
+      "cores":"4",
+      "lenkmers":"35",
+      "maxmem":"4",
+      "maxocc":"300",
+      "minocc":"100",
+      "vcf":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
+   },
+   "status":"Running"
 }
+```
