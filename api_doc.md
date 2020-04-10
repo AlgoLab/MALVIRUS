@@ -149,10 +149,11 @@ Upload a new precompiled VCF or a FASTA of references to compute a VCF from.
 
 ### Request documentation
 The form should submit the `file`, a value `filetype=vcf/fasta` and a `description`. A missing or illegal filetype will result in a 400.
+For a `typefile=fasta`, also a value cores must be submitted.
 
 ### Request example
 ```bash
-curl -i -F 'filetype=fasta' -F 'description=description-fasta' -F "file=@snakemake/example/references.fa" http://localhost:56733/api/vcf
+curl -i -F 'filetype=fasta' -F 'description=description-fasta' -F "file=@snakemake/example/references.fa" -F "cores=5" http://localhost:56733/api/vcf
 
 
 curl -i -F 'filetype=vcf' -F 'description=description-vcf' -F "file=@test.vcf" http://localhost:56733/api/vcf
@@ -244,18 +245,18 @@ The form should submit the arguments needed for configuration:
 - `maxocc`: Maximum occurrence of kmers / alleles
 - `lenkmers`: Dimension of k-mer
 - `maxmem`: Max memory for KMC (GB)
-- `threads`: Number of threads to use
+- `cores`: Number of cores to use
 
 ### Request example
 ```bash
 curl -i \
--F 'multifa=msa' \
--F 'sample=fq' \
+-F 'sample=@snakemake/example/sample.fq' \
+-F 'vcf=7d4c97cc-75bd-48f6-9819-be7403cf72a0' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
 -F 'maxmem=4' \
--F 'threads=4' \
+-F 'cores=4' \
 http://localhost:56733/api/malva
 ```
 ### Return example

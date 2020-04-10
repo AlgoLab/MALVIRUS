@@ -109,11 +109,12 @@ def post_vcf():
                 f'multifa: {multifa}\n'
             )
 
+        cores = request.form['cores']
         p = Popen(
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores 5'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores {cores}'
             ],
             cwd=app.config["SK_CWD"],
             stdout=open('/dev/null', 'w'),
@@ -168,7 +169,48 @@ def get_amlva(malva_id):
 @app.route('/malva', methods=['POST'])
 def post_malva():
     try:
-        request.form['cacca']
+        vcf = request.form['vcf']
+        minocc = request.form['minocc']
+        maxocc = request.form['maxocc']
+        lenkmers = request.form['lenkmers']
+        maxmem = request.form['maxmem']
+        cores = request.form['cores']
+
+        uuid = str(uuid4())
+        workdir = pjoin(
+            app.config['JOB_DIR'],
+            'malva',
+            f'{uuid}'
+        )
+
+        if 'file' not in request.files:
+            abort(make_response(jsonify(message="Missing file"), 400))
+        rfile = request.files['sample']
+
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if rfile.filename == '':
+            abort(make_response(jsonify(message="Missing filename"), 400))
+
+        mkdirp(workdir)
+        dfile = pjoin(workdir, secure_filename(rfile.filename))
+        rfile.save(dfile)
+
+        info = {
+            "filename": str(secure_filename(rfile.filename)),
+            "id": uuid,
+            "params": {
+                'vcf': vcf,
+                'minocc': minocc,
+                'maxocc': maxocc,
+                'lenkmers': lenkmers,
+                'maxmem': maxmem,
+                'cores': cores
+            }
+        }
+        with open(pjoin(workdir, 'info.json'), 'w+') as f:
+            json.dump(info, f)
+
     except:
         abort(make_response(jsonify(message="Illegal request"), 400))
 
