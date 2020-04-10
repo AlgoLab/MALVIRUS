@@ -95,7 +95,7 @@ def post_vcf():
     info = {
         "filename": str(secure_filename(rfile.filename)),
         "id": uuid,
-        "descritption": str(request.form.get('description'))
+        "description": str(request.form.get('description'))
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
