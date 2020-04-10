@@ -9,29 +9,40 @@ RUN yarn run build
 
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7 as build-software
-WORKDIR /software
-
-COPY ./software/format_vcf.py /software/format_vcf.py
+WORKDIR /software-build
 
 # Clone and install snps-site
 RUN git clone --depth 1 https://github.com/ldenti/snp-sites.git && \
     cd snp-sites && \
     autoreconf -i -f && \
-    ./configure && \
-    make
+    ./configure --prefix=/software && \
+    make -j4 && \
+    make install
 
 RUN apt-get update && apt-get install -y --no-install-recommends cmake
 
-RUN git clone --recursive --depth 1 --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git && \
-    cd malva && \
-    cd sdsl-lite/build && \
-    ./build.sh && \
-    cd ../../KMC && \
+RUN git clone --recursive --depth 1 --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git
+
+RUN cd malva/sdsl-lite && \
+    ./install.sh /software
+RUN cd malva/KMC && \
+    make -j4
+RUN cd malva/htslib && \
+    autoreconf -i -f && \
+    ./configure --disable-libcurl --disable-lzma --disable-bz2 --prefix=/software && \
     make -j4 && \
-    cd ../htslib && \
-    make -j4 && \
-    cd .. && \
-    make
+    make install
+
+COPY ./patches/malva/ /software-build/malva/
+RUN cd malva && \
+    make && \
+    cp malva-geno /software/bin
+
+COPY ./software/ /software/
+
+
+
+
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
@@ -53,8 +64,6 @@ COPY ./environment.yml environment.yml
 RUN conda env create -f environment.yml
 RUN echo "conda activate malva-env" >> ~/.profile
 
-ENV LD_LIBRARY_PATH /software/malva/htslib:$LD_LIBRARY_PATH
-
 COPY --from=build-frontend /app/build /static
 COPY --from=build-software /software /software
-RUN echo "PATH=/software:/software/snp-sites/src:/software/malva:$PATH" >> ~/.bashrc
+RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
