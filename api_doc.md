@@ -192,7 +192,7 @@ Date: Wed, 08 Apr 2020 10:10:10 GMT
 # Endpoint /malva
 
 ## GET /malva
-Get the full list of jobs executed / in progress?
+Get the full list of jobs executed / in progress
 
 ### Request example
 ```bash
@@ -207,7 +207,47 @@ Server: Werkzeug/1.0.1 Python/3.6.9
 Date: Wed, 08 Apr 2020 10:20:29 GMT
 
 {
-  "content": "list of malva jobs"
+   "content":[
+      {
+         "filename":"sample.fq",
+         "id":"202004-1010-1249_1d913074-f298-4aa1-9780-c5bb933413d9",
+         "params":{
+            "cores":"4",
+            "lenkmers":"35",
+            "maxmem":"4",
+            "maxocc":"300",
+            "minocc":"100",
+            "vcf":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
+         },
+         "status":"Failed"
+      },
+      {
+         "filename":"sample.fq",
+         "id":"202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4",
+         "params":{
+            "cores":"4",
+            "lenkmers":"35",
+            "maxmem":"4",
+            "maxocc":"300",
+            "minocc":"100",
+            "vcf":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
+         },
+         "status":"Completed"
+      },
+      {
+         "filename":"sample.fq",
+         "id":"202004-1010-2150_24d85dd7-b913-4549-aa11-63c8859c44b1",
+         "params":{
+            "cores":"4",
+            "lenkmers":"35",
+            "maxmem":"4",
+            "maxocc":"300",
+            "minocc":"100",
+            "vcf":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
+         },
+         "status":"Running"
+      }
+   ]
 }
 ```
 
@@ -216,7 +256,7 @@ Get the details of the specified job
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/api/malva/312das
+curl -i http://localhost:56733/api/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4
 ```
 ### Return example
 ```
@@ -227,8 +267,75 @@ Server: Werkzeug/1.0.1 Python/3.6.9
 Date: Wed, 08 Apr 2020 10:20:52 GMT
 
 {
-  "content": "job details", 
-  "id": "312das"
+   "filename":"sample.fq",
+   "id":"202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4",
+   "log":{
+      "last_time":"2020-04-10 10:17:51",
+      "status":"Completed",
+      "steps":{
+         "KMC":{
+            "command":"kmc -t4 -m4 -k43 -ci5 -cs750 -fm /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/sample.fq /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/tmp &> /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmc.log",
+            "config":{
+               "lenkmers":35,
+               "maxmem":4,
+               "maxocc":300,
+               "minocc":100,
+               "reference":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.pseudoreference.fa",
+               "sample":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/sample.fq",
+               "vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf",
+               "workdir":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4"
+            },
+            "input":{
+               "sample":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/sample.fq"
+            },
+            "output":{
+               "kmc_out":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers.kmc_pre"
+            },
+            "params":{
+               "kmc_prefix":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers",
+               "kmc_tmp":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/tmp"
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 10:17:49"
+         },
+         "malva":{
+            "command":"malva-geno -1 -k 35 -r 43 -c 750 -b 1 /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.pseudoreference.fa /jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers > /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/malva/malva.vcf 2> /jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/malva/malva.log",
+            "config":{
+               "lenkmers":35,
+               "maxmem":4,
+               "maxocc":300,
+               "minocc":100,
+               "reference":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.pseudoreference.fa",
+               "sample":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/sample.fq",
+               "vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf",
+               "workdir":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4"
+            },
+            "input":{
+               "kmc":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers.kmc_pre",
+               "ref":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/snpsites/run.pseudoreference.fa",
+               "vcf":"/jobs/vcf/202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f/vcf/run.cleaned.vcf"
+            },
+            "output":{
+               "vcf":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/malva/malva.vcf"
+            },
+            "params":{
+               "kmc_prefix":"/jobs/malva/202004-1010-1746_2f5ed8db-7029-4a7b-a0f6-60584020e8a4/KMC/kmers"
+            },
+            "result":"Success",
+            "return_code":0,
+            "time":"2020-04-10 10:17:51"
+         }
+      }
+   },
+   "params":{
+      "cores":"4",
+      "lenkmers":"35",
+      "maxmem":"4",
+      "maxocc":"300",
+      "minocc":"100",
+      "vcf":"202004-1010-0435_6fe0017f-2d0e-4023-b4c2-1fcfc0470b2f"
+   }
 }
 ```
 
