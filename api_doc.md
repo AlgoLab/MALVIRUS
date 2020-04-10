@@ -16,7 +16,26 @@ Server: Werkzeug/1.0.1 Python/3.6.9
 Date: Wed, 08 Apr 2020 10:19:52 GMT
 
 {
-  "content": "list of vcfs"
+   "content":[
+      {
+         "descritption":"description-fasta",
+         "filename":"references.fa",
+         "id":"7d4c97cc-75bd-48f6-9819-be7403cf72a0",
+         "status":"Completed"
+      },
+      {
+         "descritption":"description-vcf",
+         "filename":"test.vcf",
+         "id":"70133574-18ae-47de-8f47-895a3a2ae5f6",
+         "status":"Uploaded"
+      },
+      {
+         "descritption":"description-fasta",
+         "filename":"references.fa",
+         "id":"c0b6ffde-f674-43a7-ac72-f822931b2ffb",
+         "status":"Running"
+      }
+   ]
 }
 ```
 
@@ -45,7 +64,7 @@ Date: Wed, 08 Apr 2020 08:53:42 GMT
 Upload a new precompiled VCF or a FASTA of references to compute a VCF from.
 
 ### Request documentation
-The form should submit the file and an value `filetype=vcf/fasta`. A missing or illegal filetype will result in a 400.
+The form should submit the `file`, a value `filetype=vcf/fasta` and a `description`. A missing or illegal filetype will result in a 400.
 
 ### Request example
 ```bash

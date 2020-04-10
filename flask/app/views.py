@@ -13,6 +13,7 @@ from uuid import uuid4
 import json
 from time import sleep
 import datetime
+import glob
 
 
 def mkdirp(path):
@@ -41,16 +42,19 @@ def not_found(route):
 
 @app.route('/vcf', methods=['GET'])
 def get_vcf_list():
-    p = subprocess.run([
-        'ls', '-1'],
-        capture_output=True,
-        text=True
-    )
-    output = str(p.stdout).split()
-    test = {
-        'content': output
+    vcfs = list()
+    for folder in glob.glob(pjoin(app.config['JOB_DIR'], 'vcf', '*')):
+        with open(pjoin(folder, 'status.json'), 'r') as f:
+            status = json.load(f)
+        with open(pjoin(folder, 'info.json'), 'r') as f:
+            info = json.load(f)
+        info['status'] = status['status']
+        vcfs.append(info)
+
+    res = {
+        'content': vcfs
     }
-    return jsonify(test)
+    return jsonify(res)
 
 
 @app.route('/vcf/<vcf_id>', methods=['GET'])
