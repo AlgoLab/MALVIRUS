@@ -11,7 +11,7 @@ RUN yarn run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7 as build-software
 WORKDIR /software
 
-COPY ./format_vcf.py /software/format_vcf.py
+COPY ./software/format_vcf.py /software/format_vcf.py
 
 # Clone and install snps-site
 RUN git clone --depth 1 https://github.com/ldenti/snp-sites.git && \
@@ -35,7 +35,7 @@ RUN git clone --recursive --depth 1 --branch malvirus --shallow-submodules https
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
     /opt/conda/bin/conda clean -tipsy && \
