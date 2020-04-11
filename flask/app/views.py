@@ -14,6 +14,7 @@ import json
 from time import sleep
 import datetime
 import glob
+import shutil
 
 
 def mkdirp(path):
@@ -44,12 +45,16 @@ def not_found(route):
 def get_vcf_list():
     vcfs = list()
     for folder in glob.glob(pjoin(app.config['JOB_DIR'], 'vcf', '*')):
-        with open(pjoin(folder, 'status.json'), 'r') as f:
-            status = json.load(f)
-        with open(pjoin(folder, 'info.json'), 'r') as f:
-            info = json.load(f)
-        info['status'] = status['status']
-        vcfs.append(info)
+        try:
+            with open(pjoin(folder, 'status.json'), 'r') as f:
+                status = json.load(f)
+            with open(pjoin(folder, 'info.json'), 'r') as f:
+                info = json.load(f)
+            info['status'] = status['status']
+            vcfs.append(info)
+        except OSError:
+            # one of those json doesn't exist so we remove the folder
+            shutil.rmtree(folder)
 
     res = {
         'content': vcfs
@@ -61,17 +66,32 @@ def get_vcf_list():
 def get_vcf(vcf_id):
     if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id)):
         abort(make_response(jsonify(message="ID not found"), 404))
-    with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'status.json'), 'r') as f:
-        status = json.load(f)
-    with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'info.json'), 'r') as f:
-        info = json.load(f)
-    info['log'] = status
+    try:
+        with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'status.json'), 'r') as f:
+            status = json.load(f)
+        with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id, 'info.json'), 'r') as f:
+            info = json.load(f)
+        info['log'] = status
 
-    return jsonify(info)
+        return jsonify(info)
+    except OSError:
+        # one of those json doesn't exist so we remove the folder
+        shutil.rmtree(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id))
+        abort(make_response(jsonify(message="ID not valid"), 404))
 
 
 @app.route('/vcf', methods=['POST'])
 def post_vcf():
+    try:
+        filetype = request.form['filetype']
+        if filetype == 'fasta':
+            cores = request.form['cores']
+    except Exception:
+        abort(make_response(
+            jsonify(message="Illegal request: missing filetype or cores"), 400))
+
+    if filetype != 'fasta' and filetype != 'vcf':
+        abort(make_response(jsonify(message="Illegal or missing filetype"), 400))
 
     uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
     workdir = pjoin(
@@ -101,7 +121,7 @@ def post_vcf():
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
 
-    if request.form.get('filetype') == 'fasta':
+    if filetype == 'fasta':
         multifa = dfile
         config = pjoin(workdir, 'config.vcf.yaml')
         with open(config, 'w+') as conf:
@@ -110,7 +130,8 @@ def post_vcf():
                 f'multifa: {multifa}\n'
             )
 
-        cores = request.form['cores']
+        # TODO: (maybe) create a status.json with status "Not started"
+
         p = Popen(
             [
                 "nohup",
@@ -133,7 +154,7 @@ def post_vcf():
 
         return jsonify(info)
 
-    elif request.form.get('filetype') == 'vcf':
+    elif filetype == 'vcf':
         status = {
             "status": "Uploaded",
             "last_time": str(datetime.datetime.today().replace(microsecond=0))
@@ -144,22 +165,22 @@ def post_vcf():
         info['status'] = status['status']
 
         return jsonify(info)
-    else:
-        abort(make_response(jsonify(message="Illegal or missing filetype"), 400))
-
-    return str(request.form.get('filetype'))
 
 
 @app.route('/malva', methods=['GET'])
 def get_malva_list():
     malvas = list()
     for folder in glob.glob(pjoin(app.config['JOB_DIR'], 'malva', '*')):
-        with open(pjoin(folder, 'status.json'), 'r') as f:
-            status = json.load(f)
-        with open(pjoin(folder, 'info.json'), 'r') as f:
-            info = json.load(f)
-        info['status'] = status['status']
-        malvas.append(info)
+        try:
+            with open(pjoin(folder, 'status.json'), 'r') as f:
+                status = json.load(f)
+            with open(pjoin(folder, 'info.json'), 'r') as f:
+                info = json.load(f)
+            info['status'] = status['status']
+            malvas.append(info)
+        except OSError:
+            # one of those json doesn't exist so we remove the folder
+            shutil.rmtree(folder)
 
     res = {
         'content': malvas
@@ -171,13 +192,18 @@ def get_malva_list():
 def get_amlva(malva_id):
     if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'malva', malva_id)):
         abort(make_response(jsonify(message="ID not found"), 404))
-    with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'status.json'), 'r') as f:
-        status = json.load(f)
-    with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'info.json'), 'r') as f:
-        info = json.load(f)
-    info['log'] = status
+    try:
+        with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'status.json'), 'r') as f:
+            status = json.load(f)
+        with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'info.json'), 'r') as f:
+            info = json.load(f)
+        info['log'] = status
 
-    return jsonify(info)
+        return jsonify(info)
+    except OSError:
+        # one of those json doesn't exist so we remove the folder
+        shutil.rmtree(pjoin(app.config['JOB_DIR'], 'malva', malva_id))
+        abort(make_response(jsonify(message="ID not valid"), 404))
 
 
 @app.route('/malva', methods=['POST'])
@@ -189,89 +215,91 @@ def post_malva():
         lenkmers = request.form['lenkmers']
         maxmem = request.form['maxmem']
         cores = request.form['cores']
-        reference = pjoin(
-            app.config['JOB_DIR'],
-            'vcf',
-            vcf,
-            'snpsites', 'run.pseudoreference.fa'
-        )
-        vcfpath = pjoin(
-            app.config['JOB_DIR'],
-            'vcf',
-            vcf,
-            'vcf', 'run.cleaned.vcf'
-        )
-
-        uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
-        workdir = pjoin(
-            app.config['JOB_DIR'],
-            'malva',
-            f'{uuid}'
-        )
-
-        if 'sample' not in request.files:
-            abort(make_response(jsonify(message="Missing file"), 400))
-        rfile = request.files['sample']
-
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if rfile.filename == '':
-            abort(make_response(jsonify(message="Missing filename"), 400))
-
-        mkdirp(workdir)
-        dfile = pjoin(workdir, secure_filename(rfile.filename))
-        rfile.save(dfile)
-
-        info = {
-            "filename": str(secure_filename(rfile.filename)),
-            "id": uuid,
-            "params": {
-                'vcf': vcf,
-                'minocc': minocc,
-                'maxocc': maxocc,
-                'lenkmers': lenkmers,
-                'maxmem': maxmem,
-                'cores': cores
-            }
-        }
-        with open(pjoin(workdir, 'info.json'), 'w+') as f:
-            json.dump(info, f)
-
-        config = pjoin(workdir, 'config.malva.yaml')
-        with open(config, 'w+') as conf:
-            conf.write(
-                f'workdir: {workdir}\n' +
-                f'reference: {reference}\n' +
-                f'vcf: {vcfpath}\n' +
-                f'sample: {dfile}\n'
-                f'minocc: {minocc}\n' +
-                f'maxocc: {maxocc}\n' +
-                f'lenkmers: {lenkmers}\n' +
-                f'maxmem: {maxmem}\n'
-            )
-
-        p = Popen(
-            [
-                "nohup",
-                "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores}'
-            ],
-            cwd=app.config["SK_CWD"],
-            stdout=open('/dev/null', 'w'),
-            stderr=open('/dev/null', 'w'),
-            # with this below p will also ignore SIGINT and SIGTERM
-            preexec_fn=os.setpgrp
-        )
-
-        sleep(1)
-
-        with open(pjoin(workdir, 'status.json'), 'r') as f:
-            status = json.load(f)
-
-        info['status'] = status['status']
-
-        return jsonify(info)
 
     except Exception as e:
-        print(e)
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
+
+    reference = pjoin(
+        app.config['JOB_DIR'],
+        'vcf',
+        vcf,
+        'snpsites', 'run.pseudoreference.fa'
+    )
+    vcfpath = pjoin(
+        app.config['JOB_DIR'],
+        'vcf',
+        vcf,
+        'vcf', 'run.cleaned.vcf'
+    )
+
+    uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
+    workdir = pjoin(
+        app.config['JOB_DIR'],
+        'malva',
+        f'{uuid}'
+    )
+
+    if 'sample' not in request.files:
+        abort(make_response(jsonify(message="Missing file"), 400))
+    rfile = request.files['sample']
+
+    # if user does not select file, browser also
+    # submit an empty part without filename
+    if rfile.filename == '':
+        abort(make_response(jsonify(message="Missing filename"), 400))
+
+    mkdirp(workdir)
+    dfile = pjoin(workdir, secure_filename(rfile.filename))
+    rfile.save(dfile)
+
+    info = {
+        "filename": str(secure_filename(rfile.filename)),
+        "id": uuid,
+        "params": {
+            'vcf': vcf,
+            'minocc': minocc,
+            'maxocc': maxocc,
+            'lenkmers': lenkmers,
+            'maxmem': maxmem,
+            'cores': cores
+        }
+    }
+    with open(pjoin(workdir, 'info.json'), 'w+') as f:
+        json.dump(info, f)
+
+    config = pjoin(workdir, 'config.malva.yaml')
+    with open(config, 'w+') as conf:
+        conf.write(
+            f'workdir: {workdir}\n' +
+            f'reference: {reference}\n' +
+            f'vcf: {vcfpath}\n' +
+            f'sample: {dfile}\n'
+            f'minocc: {minocc}\n' +
+            f'maxocc: {maxocc}\n' +
+            f'lenkmers: {lenkmers}\n' +
+            f'maxmem: {maxmem}\n'
+        )
+
+    # TODO: (maybe) create a status.json with status "Not started"
+
+    p = Popen(
+        [
+            "nohup",
+            "/bin/bash", "-c", "-l",
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores}'
+        ],
+        cwd=app.config["SK_CWD"],
+        stdout=open('/dev/null', 'w'),
+        stderr=open('/dev/null', 'w'),
+        # with this below p will also ignore SIGINT and SIGTERM
+        preexec_fn=os.setpgrp
+    )
+
+    sleep(1)
+
+    with open(pjoin(workdir, 'status.json'), 'r') as f:
+        status = json.load(f)
+
+    info['status'] = status['status']
+
+    return jsonify(info)
