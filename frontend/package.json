@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "4.0.6",
-    "antd": "4.1.2",
+    "antd": "4.1.3",
     "dayjs": "1.8.24",
     "history": "^5.0.0-beta.7",
     "react": "^16.13.1",
