@@ -93,7 +93,7 @@ def post_vcf():
     if filetype != 'fasta' and filetype != 'vcf':
         abort(make_response(jsonify(message="Illegal or missing filetype"), 400))
 
-    uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
+    uuid = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S_') + str(uuid4())
     workdir = pjoin(
         app.config['JOB_DIR'],
         'vcf',
@@ -113,10 +113,16 @@ def post_vcf():
     dfile = pjoin(workdir, secure_filename(rfile.filename))
     rfile.save(dfile)
 
+    if 'alias' in request.form:
+        alias = request.form['alias']
+    else:
+        alias = uuid
+
     info = {
         "filename": str(secure_filename(rfile.filename)),
         "id": uuid,
-        "description": str(request.form.get('description'))
+        "description": str(request.form.get('description')),
+        "alias": alias
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
@@ -238,7 +244,7 @@ def post_malva():
         'vcf', 'run.cleaned.vcf'
     )
 
-    uuid = datetime.datetime.now().strftime('%Y%m-%d%H-%M%S_') + str(uuid4())
+    uuid = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S_') + str(uuid4())
     workdir = pjoin(
         app.config['JOB_DIR'],
         'malva',
@@ -258,6 +264,11 @@ def post_malva():
     dfile = pjoin(workdir, secure_filename(rfile.filename))
     rfile.save(dfile)
 
+    if 'alias' in request.form:
+        alias = request.form['alias']
+    else:
+        alias = uuid
+
     info = {
         "filename": str(secure_filename(rfile.filename)),
         "id": uuid,
@@ -268,7 +279,9 @@ def post_malva():
             'lenkmers': lenkmers,
             'maxmem': maxmem,
             'cores': cores
-        }
+        },
+        "description": str(request.form.get('description')),
+        "alias": alias
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
