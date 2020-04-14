@@ -130,7 +130,13 @@ def post_vcf():
                 f'multifa: {multifa}\n'
             )
 
-        # TODO: (maybe) create a status.json with status "Not started"
+        # Create a status.json with status "Pending"
+        status = {
+            "status": "Pending",
+            "last_time": str(datetime.datetime.today().replace(microsecond=0))
+        }
+        with open(pjoin(workdir, 'status.json'), 'w+') as f:
+            json.dump(status, f)
 
         p = Popen(
             [
@@ -280,7 +286,12 @@ def post_malva():
             f'maxmem: {maxmem}\n'
         )
 
-    # TODO: (maybe) create a status.json with status "Not started"
+    status = {
+        "status": "Pending",
+        "last_time": str(datetime.datetime.today().replace(microsecond=0))
+    }
+    with open(pjoin(workdir, 'status.json'), 'w+') as f:
+        json.dump(status, f)
 
     p = Popen(
         [
