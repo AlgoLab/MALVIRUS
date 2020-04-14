@@ -92,7 +92,7 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="EXPLAIN!"
+          extra="This is the VCF that malva will use to call variants."
         >
           <Select>
             {vcfs.value.content.map((vcf) => (
@@ -112,7 +112,7 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="EXPLAIN!"
+          extra="This is the lower threshold used to count kmers.  Kmers that appear less than this number of times will be removed from the input."
         >
           <InputNumber min={10} type="number" />
         </Form.Item>
@@ -126,7 +126,7 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="EXPLAIN!"
+          extra="This is the upper threshold used to count kmers.  Kmers that appear more than this number of times will be removed from the input."
         >
           <InputNumber min={1} type="number" />
         </Form.Item>
@@ -144,7 +144,7 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="EXPLAIN!"
+          extra="Length of the kmers that will be used by the tools.  A higher value will help to discern better between small repeated regions but will lower the occurrences of each kmer."
         >
           <InputNumber min={1} type="number" />
         </Form.Item>
@@ -158,7 +158,7 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="EXPLAIN!"
+          extra="Maximum GB of memory used by KMC.  This value must be smaller than the amount of RAM available on your machine."
         >
           <InputNumber min={1} type="number" />
         </Form.Item>
