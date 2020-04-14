@@ -14,3 +14,11 @@ export const api = {
 export const basepath = process.env.PUBLIC_URL
   ? `${process.env.PUBLIC_URL}/`
   : '/';
+
+export const defaultMalvaParams = {
+  minocc: 100,
+  maxocc: 300,
+  lenkmers: 35,
+  maxmem: 4,
+  cores: 4,
+};

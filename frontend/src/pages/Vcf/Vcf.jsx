@@ -1,16 +1,69 @@
 import React from 'react';
-import { Button } from 'antd';
+
+import { Button, Descriptions } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
+
+import { api } from 'app-config';
+
+import { ButtonPanel, Error, FName, Loading, StatusTag } from 'components';
+
+function BodyVcf({ vcf }) {
+  if (vcf.pending) return <Loading />;
+  if (vcf.rejected) return <Error reason={vcf.reason} />;
+  const { value } = vcf;
+  return (
+    <>
+      <Descriptions bordered column={2}>
+        <Descriptions.Item label="Alias" span={1}>
+          {value.alias}
+        </Descriptions.Item>
+        <Descriptions.Item label="ID" span={1}>
+          <code>{value.id}</code>
+        </Descriptions.Item>
+        <Descriptions.Item label="Description" span={2}>
+          {value.description}
+        </Descriptions.Item>
+        <Descriptions.Item label="Status" span={2}>
+          <StatusTag status={value.log.status} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Last modified time" span={2}>
+          {value.log.last_time}
+        </Descriptions.Item>
+        <Descriptions.Item label="Output files:" span={2}>
+          {value.log.output ? (
+            Object.keys(value.log.output).map((key) => (
+              <React.Fragment key={key}>
+                <FName href={value.log.output[key]} />
+                <br />
+              </React.Fragment>
+            ))
+          ) : (
+            <i>No output files available</i>
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item label="Detailed log" span={2}>
+          <a href={api.vcf(value.id)} target="_blank" rel="noopener noreferrer">
+            log.json
+          </a>
+        </Descriptions.Item>
+      </Descriptions>
+    </>
+  );
+}
 
 function Vcf({ id, vcf, reloadVcf }) {
   return (
     <>
-      <h1>Reference VCF {id}</h1>
-      <p>It displays the details of the reference VCF.</p>
-      <pre>{JSON.stringify(vcf, null, 2)}</pre>
-      <Button type="primary" icon={<SyncOutlined />} onClick={reloadVcf}>
-        Refresh
-      </Button>
+      <h1>
+        Reference VCF{' '}
+        <b>{(vcf && vcf.fulfilled && vcf.value && vcf.value.alias) || id}</b>
+      </h1>
+      <BodyVcf vcf={vcf} />
+      <ButtonPanel>
+        <Button type="primary" icon={<SyncOutlined />} onClick={reloadVcf}>
+          Refresh
+        </Button>
+      </ButtonPanel>
     </>
   );
 }

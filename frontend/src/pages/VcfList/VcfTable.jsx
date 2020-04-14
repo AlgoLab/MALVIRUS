@@ -1,30 +1,26 @@
 import React from 'react';
-import { Table, Tag } from 'antd';
+import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 
-import dayjs from 'dayjs';
+import { Error, StatusTag } from 'components';
 
 const columns = [
   {
-    title: 'Job ID',
-    dataIndex: 'id',
-    render: (value) => <Link to={`${value}`}>{value}</Link>,
+    title: 'Job alias',
+    dataIndex: 'alias',
+    render: (value, record) => <Link to={`${record.id}`}>{value}</Link>,
   },
   {
     title: 'Status',
     dataIndex: 'status',
-    render: (value) => <Tag>{value}</Tag>,
-  },
-  {
-    title: 'Timestamp',
-    dataIndex: 'timestamp',
-    render: (value) => (value ? dayjs(value).format() : '(sconosciuto)'),
+    render: (value) => <StatusTag status={value} />,
+    width: '14em',
   },
 ];
 
 function VcfTable({ vcfs }) {
   if (vcfs.rejected) {
-    return <div>Errore: {JSON.stringify(vcfs.reason)}</div>;
+    return <Error reason={vcfs.reason} />;
   }
   const data = vcfs.fulfilled ? vcfs.value.content : [];
   return (
