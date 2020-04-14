@@ -275,8 +275,8 @@ def post_malva():
         status = json.load(f)
 
     if status['status'] == 'Uploaded':
-        reference = status['path']['reference']
-        vcfpath = status['path']['vcf']
+        reference = status['output']['reference']
+        vcfpath = status['output']['vcf']
     else:
         reference = pjoin(
             app.config['JOB_DIR'],
