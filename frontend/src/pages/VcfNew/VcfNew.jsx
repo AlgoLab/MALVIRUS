@@ -8,6 +8,7 @@ import { UploadOutlined } from '@ant-design/icons';
 
 import { normFile, getFalse } from 'utils';
 import { ButtonPanel, showError } from 'components';
+import params from 'utils/call-params';
 
 function VcfNew({ createVcf }) {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ function VcfNew({ createVcf }) {
           ...values,
           filetype: 'fasta',
         };
-        createVcf(file[0], params, resolve, reject);
+        createVcf({ file }, params, resolve, reject);
       }).then(
         (vcf) => {
           setLoading(false);
@@ -87,7 +88,7 @@ function VcfNew({ createVcf }) {
         </Form.Item>
 
         <Form.Item
-          label="Number of cores"
+          label={params.cores.label}
           name="cores"
           rules={[
             {
@@ -95,7 +96,7 @@ function VcfNew({ createVcf }) {
               message: 'Please provide a valid number!',
             },
           ]}
-          extra="The number of cores that can be used during the construction of the reference VCF"
+          extra={params.cores.extra}
         >
           <InputNumber min={1} type="number" />
         </Form.Item>

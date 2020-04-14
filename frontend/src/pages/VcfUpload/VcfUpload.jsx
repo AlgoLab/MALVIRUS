@@ -13,14 +13,14 @@ function VcfUpload({ createVcf }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const onFinish = useCallback(
-    ({ file, ...values }) => {
+    ({ file, reference, ...values }) => {
       new Promise((resolve, reject) => {
         setLoading(true);
         const params = {
           ...values,
           filetype: 'vcf',
         };
-        createVcf(file[0], params, resolve, reject);
+        createVcf({ file, reference }, params, resolve, reject);
       }).then(
         (vcf) => {
           setLoading(false);
@@ -74,6 +74,19 @@ function VcfUpload({ createVcf }) {
           ]}
         >
           <Upload name="file" beforeUpload={getFalse}>
+            <Button icon={<UploadOutlined />}>Select file</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item
+          name="reference"
+          label="Reference sequence (FASTA)"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            { required: true, message: 'Please select a reference sequence!' },
+          ]}
+        >
+          <Upload name="reference" beforeUpload={getFalse}>
             <Button icon={<UploadOutlined />}>Select file</Button>
           </Upload>
         </Form.Item>

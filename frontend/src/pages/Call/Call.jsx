@@ -5,24 +5,15 @@ import { SyncOutlined } from '@ant-design/icons';
 
 import { api } from 'app-config';
 
-import { ButtonPanel, Error, FName, Loading, StatusTag } from 'components';
+import {
+  ButtonPanel,
+  Error,
+  FName,
+  JobParameters,
+  Loading,
+  StatusTag,
+} from 'components';
 import PARAMS from 'utils/call-params';
-
-function JobParameters({ params }) {
-  return (
-    <ul style={{ margin: 0 }}>
-      {Object.keys(params).map((key) => (
-        <li key={key}>
-          <b>{(PARAMS[key] && PARAMS[key].label) || key}:</b>{' '}
-          {(PARAMS[key] &&
-            PARAMS[key].render &&
-            PARAMS[key].render(params[key])) ||
-            params[key]}
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 function BodyCall({ call }) {
   if (call.pending) return <Loading />;
@@ -71,7 +62,7 @@ function BodyCall({ call }) {
           )}
         </Descriptions.Item>
         <Descriptions.Item label="Parameters" span={2}>
-          <JobParameters params={value.params} />
+          <JobParameters params={value.params} PARAMS={PARAMS} />
         </Descriptions.Item>
         <Descriptions.Item label="Detailed log" span={2}>
           <a

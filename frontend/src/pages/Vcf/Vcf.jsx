@@ -5,7 +5,15 @@ import { SyncOutlined } from '@ant-design/icons';
 
 import { api } from 'app-config';
 
-import { ButtonPanel, Error, FName, Loading, StatusTag } from 'components';
+import {
+  ButtonPanel,
+  Error,
+  FName,
+  JobParameters,
+  Loading,
+  StatusTag,
+} from 'components';
+import PARAMS from 'utils/vcf-params';
 
 function BodyVcf({ vcf }) {
   if (vcf.pending) return <Loading />;
@@ -29,6 +37,13 @@ function BodyVcf({ vcf }) {
         <Descriptions.Item label="Last modified time" span={2}>
           {value.log.last_time}
         </Descriptions.Item>
+        <Descriptions.Item label="Input file:" span={2}>
+          {value.filename ? (
+            <FName href={value.filename} />
+          ) : (
+            <i>No input files available</i>
+          )}
+        </Descriptions.Item>
         <Descriptions.Item label="Output files:" span={2}>
           {value.log.output ? (
             Object.keys(value.log.output).map((key) => (
@@ -41,6 +56,11 @@ function BodyVcf({ vcf }) {
             <i>No output files available</i>
           )}
         </Descriptions.Item>
+        {value.params && (
+          <Descriptions.Item label="Parameters" span={2}>
+            <JobParameters params={value.params} PARAMS={PARAMS} />
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="Detailed log" span={2}>
           <a href={api.vcf(value.id)} target="_blank" rel="noopener noreferrer">
             log.json
