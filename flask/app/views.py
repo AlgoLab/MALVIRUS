@@ -95,7 +95,7 @@ def post_vcf():
     if filetype != 'fasta' and filetype != 'vcf':
         abort(make_response(jsonify(message="Illegal or missing filetype"), 400))
 
-    uuid = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S_') + str(uuid4())
+    uuid = datetime.datetime.now().strftime('%Y%m%d-%H%M%S_') + str(uuid4())
     workdir = pjoin(
         app.config['JOB_DIR'],
         'vcf',
@@ -192,10 +192,10 @@ def post_vcf():
         status = {
             "status": "Uploaded",
             "last_time": str(datetime.datetime.today().replace(microsecond=0)),
-            "path": {
+            "output": {
                 'vcf': dfile,
                 'reference': refpath
-            }
+            },
         }
 
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
@@ -291,7 +291,7 @@ def post_malva():
             'vcf', 'run.cleaned.vcf'
         )
 
-    uuid = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S_') + str(uuid4())
+    uuid = datetime.datetime.now().strftime('%Y%m%d-%H%M%S_') + str(uuid4())
     workdir = pjoin(
         app.config['JOB_DIR'],
         'malva',
