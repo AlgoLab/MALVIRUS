@@ -86,6 +86,8 @@ def post_vcf():
         filetype = request.form['filetype']
         if filetype == 'fasta':
             cores = request.form['cores']
+        if filetype == 'vcf':
+            reference = request.files['reference']
     except Exception:
         abort(make_response(
             jsonify(message="Illegal request: missing filetype or cores"), 400))
@@ -118,15 +120,6 @@ def post_vcf():
     else:
         alias = uuid
 
-    info = {
-        "filename": str(secure_filename(rfile.filename)),
-        "id": uuid,
-        "description": str(request.form.get('description')),
-        "alias": alias
-    }
-    with open(pjoin(workdir, 'info.json'), 'w+') as f:
-        json.dump(info, f)
-
     if filetype == 'fasta':
         multifa = dfile
         config = pjoin(workdir, 'config.vcf.yaml')
@@ -143,6 +136,18 @@ def post_vcf():
         }
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
             json.dump(status, f)
+
+        info = {
+            "filename": dfile,
+            "id": uuid,
+            "description": str(request.form.get('description')),
+            "alias": alias,
+            "params": {
+                "cores": cores
+            }
+        }
+        with open(pjoin(workdir, 'info.json'), 'w+') as f:
+            json.dump(info, f)
 
         p = Popen(
             [
@@ -167,10 +172,32 @@ def post_vcf():
         return jsonify(info)
 
     elif filetype == 'vcf':
+        # save reference
+        if reference.filename == '':
+            abort(make_response(jsonify(message="Missing filename"), 400))
+
+        refpath = pjoin(workdir, secure_filename(reference.filename))
+        reference.save(refpath)
+
+        info = {
+            "filename": dfile,
+            "id": uuid,
+            "description": str(request.form.get('description')),
+            "alias": alias,
+            "reference": refpath
+        }
+        with open(pjoin(workdir, 'info.json'), 'w+') as f:
+            json.dump(info, f)
+
         status = {
             "status": "Uploaded",
-            "last_time": str(datetime.datetime.today().replace(microsecond=0))
+            "last_time": str(datetime.datetime.today().replace(microsecond=0)),
+            "path": {
+                'vcf': dfile,
+                'reference': refpath
+            }
         }
+
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
             json.dump(status, f)
 
@@ -211,6 +238,18 @@ def get_amlva(malva_id):
             info = json.load(f)
         info['log'] = status
 
+        # sklog = pjoin(app.config['JOB_DIR'], '.snakemake', 'log', '*')
+        sklog = pjoin(app.config['JOB_DIR'], 'malva', malva_id)
+
+        p = subprocess.run(
+            ["/bin/bash", "-c", "-l",
+             f'ls {sklog} -lph'],
+            capture_output=True,
+            text=True
+        )
+
+        info['snakemake'] = p.stdout
+
         return jsonify(info)
     except OSError:
         # one of those json doesn't exist so we remove the folder
@@ -231,18 +270,26 @@ def post_malva():
     except Exception as e:
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
 
-    reference = pjoin(
-        app.config['JOB_DIR'],
-        'vcf',
-        vcf,
-        'snpsites', 'run.pseudoreference.fa'
-    )
-    vcfpath = pjoin(
-        app.config['JOB_DIR'],
-        'vcf',
-        vcf,
-        'vcf', 'run.cleaned.vcf'
-    )
+    # TODO: after checking that new vcf works, modify to change if status is uploaded
+    with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf, 'status.json'), 'r') as f:
+        status = json.load(f)
+
+    if status['status'] == 'Uploaded':
+        reference = status['path']['reference']
+        vcfpath = status['path']['vcf']
+    else:
+        reference = pjoin(
+            app.config['JOB_DIR'],
+            'vcf',
+            vcf,
+            'snpsites', 'run.pseudoreference.fa'
+        )
+        vcfpath = pjoin(
+            app.config['JOB_DIR'],
+            'vcf',
+            vcf,
+            'vcf', 'run.cleaned.vcf'
+        )
 
     uuid = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S_') + str(uuid4())
     workdir = pjoin(
@@ -270,7 +317,7 @@ def post_malva():
         alias = uuid
 
     info = {
-        "filename": str(secure_filename(rfile.filename)),
+        "filename": dfile,
         "id": uuid,
         "params": {
             'vcf': vcf,
@@ -281,7 +328,11 @@ def post_malva():
             'cores': cores
         },
         "description": str(request.form.get('description')),
-        "alias": alias
+        "alias": alias,
+        "input": {
+            "vcf": vcfpath,
+            "reference": reference
+        }
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
