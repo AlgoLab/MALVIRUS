@@ -25,7 +25,7 @@ maxmem_config = config["maxmem"] if "maxmem" in config else 4
 
 status_json_fn = pjoin(root_dir, "status.json")
 
-def update_status(new_status, step_name = None, new_json = None):
+def update_status(new_status, step_name = None, new_json = None, last_step = False):
     # Load JSON
     try:
         with open(status_json_fn) as json_file:
@@ -41,6 +41,9 @@ def update_status(new_status, step_name = None, new_json = None):
             data["steps"] = {}
         data["steps"][step_name] = new_json
 
+    if last_step:
+        data["output"] = new_json["output"]
+        
     # Dump JSON back
     with open(status_json_fn, "w") as json_file:
         json.dump(data, json_file)
@@ -69,10 +72,10 @@ def format_dict(cmd, result, returncode, inp, out, parameters = None):
     d['time'] = nowf()
     return d
 
-def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, par=None):
+def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, par=None, last_step = False):
     json_dict = format_dict(cmdstr, result, returncode, inp, out, par)
     json.dump(json_dict, json_file)
-    update_status(status, step_name, json_dict)
+    update_status(status, step_name, json_dict, last_step)
 
 rule run:
     input:
@@ -104,7 +107,8 @@ rule kmc:
             try:
                 shell.check_output(cmdstr)
                 shell("rm -fr {params.kmc_tmp}")
-                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, params)
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0,
+                                              input, output, params)
             except subprocess.CalledProcessError as e:
                 shell("rm -fr {params.kmc_tmp}")
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
@@ -134,7 +138,8 @@ rule malva:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0, input, output, params)
+                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                                              input, output, params, True)
             except subprocess.CalledProcessError as e:
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
                                               input, output, params)
