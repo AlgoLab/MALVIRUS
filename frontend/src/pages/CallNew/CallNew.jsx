@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import {
   Form,
@@ -11,6 +11,7 @@ import {
   Select,
   Input,
   Collapse,
+  Alert,
 } from 'antd';
 
 import { UploadOutlined } from '@ant-design/icons';
@@ -44,11 +45,35 @@ function CallNew({ createCall, vcfs }) {
   );
 
   const onClickCancel = useCallback(() => navigate(-1), [navigate]);
+
   if (vcfs.rejected) {
     return <Error reason={vcfs.reason} />;
   }
   if (!vcfs.fulfilled) {
     return <Loading />;
+  }
+  const okVcfs = vcfs.value.content.filter(
+    ({ status }) => status === 'Completed' || status === 'Uploaded'
+  );
+  if (okVcfs.length === 0) {
+    return (
+      <>
+        <h1>Perform a new variant call</h1>
+        <Alert
+          type="warning"
+          message="No reference VCF is available"
+          description={
+            <p>
+              Please upload a reference VCF or build a new one in the{' '}
+              <Link to="/vcf">Reference VCF</Link> section or wait for the
+              completion of the running job if it has already been submitted.
+            </p>
+          }
+          showIcon
+          style={{ margin: '1em auto', maxWidth: '60em' }}
+        />
+      </>
+    );
   }
   return (
     <>
@@ -110,7 +135,7 @@ function CallNew({ createCall, vcfs }) {
           extra={params.vcf.extra}
         >
           <Select>
-            {vcfs.value.content.map((vcf) => (
+            {okVcfs.map((vcf) => (
               <Select.Option key={vcf.id} value={vcf.id}>
                 {vcf.alias}
               </Select.Option>
