@@ -10,152 +10,147 @@ curl -i http://localhost:56733/api/vcf
 ### Return example
 ```json
 {
-   "content":[
+   "content": [
       {
-         "alias":"Fasta",
-         "description":"description-fasta",
-         "filename":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-         "id":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91",
-         "params":{
-            "cores":"5"
+         "alias": "Fasta",
+         "description": "description-fasta",
+         "filename": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+         "id": "20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4",
+         "params": {
+            "cores": "5"
          },
-         "status":"Completed"
+         "status": "Completed"
       },
       {
-         "alias":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-         "description":"description-vcf",
-         "filename":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf",
-         "id":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-         "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-         "status":"Uploaded"
+         "alias": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+         "description": "description-vcf",
+         "filename": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf",
+         "id": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+         "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+         "status": "Uploaded"
       }
    ]
-}
-```
+}```
 
 # GET /vcf/:id
 Get the details of the specified VCF
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/api/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91
+curl -i http://localhost:56733/api/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4
 
-curl -i http://localhost:56733/api/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db
+curl -i http://localhost:56733/api/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3
 ```
 ### Return example
 ```json
 {
-   "alias":"Fasta",
-   "description":"description-fasta",
-   "filename":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-   "id":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91",
-   "log":{
-      "last_time":"2020-04-14 15:29:16",
-      "output":{
-         "freq_vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+   "alias": "Fasta",
+   "description": "description-fasta",
+   "filename": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+   "id": "20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4",
+   "log": {
+      "last_time": "2020-04-15 07:34:14",
+      "output": {
+         "freq_vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
       },
-      "status":"Completed",
-      "steps":{
-         "mafft":{
-            "command":"mafft --auto --thread 5 /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa > /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/mafft/multi_alignment.msa 2> /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/mafft/mafft.log",
-            "config":{
-               "multifa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-               "workdir":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+      "status": "Completed",
+      "steps": {
+         "mafft": {
+            "command": "mafft --auto --thread 5 /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa > /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/mafft/multi_alignment.msa 2> /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/mafft/mafft.log",
+            "config": {
+               "multifa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+               "workdir": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
             },
-            "input":{
-               "fa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa"
+            "input": {
+               "fa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa"
             },
-            "output":{
-               "msa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/mafft/multi_alignment.msa"
+            "output": {
+               "msa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/mafft/multi_alignment.msa"
             },
-            "params":{
-
-            },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:29:15"
+            "params": {},
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:34:13"
          },
-         "snpsites":{
-            "command":"snp-sites -rmcv -o /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/mafft/multi_alignment.msa &> /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/snpsites.log",
-            "config":{
-               "multifa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-               "workdir":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+         "snpsites": {
+            "command": "snp-sites -rmcv -o /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/mafft/multi_alignment.msa &> /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/snpsites.log",
+            "config": {
+               "multifa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+               "workdir": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
             },
-            "input":{
-               "msa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/mafft/multi_alignment.msa"
+            "input": {
+               "msa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/mafft/multi_alignment.msa"
             },
-            "output":{
-               "ref":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-               "snps":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.vcf"
+            "output": {
+               "ref": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+               "snps": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.vcf"
             },
-            "params":{
-               "prefix":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run"
+            "params": {
+               "prefix": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run"
             },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:29:16"
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:34:13"
          },
-         "vcf_add_freqs":{
-            "command":"format_vcf.py freq /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.1.vcf > /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf 2> /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/vcf_clean.2.log",
-            "config":{
-               "multifa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-               "workdir":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+         "vcf_add_freqs": {
+            "command": "format_vcf.py freq /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.1.vcf > /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf 2> /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/vcf_clean.2.log",
+            "config": {
+               "multifa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+               "workdir": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
             },
-            "input":{
-               "clean_vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.1.vcf"
+            "input": {
+               "clean_vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.1.vcf"
             },
-            "output":{
-               "freq_vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+            "output": {
+               "freq_vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
             },
-            "params":{
-
-            },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:29:16"
+            "params": {},
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:34:14"
          },
-         "vcf_clean_header":{
-            "command":"format_vcf.py clean /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.vcf > /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.1.vcf 2> /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/vcf_clean.1.log",
-            "config":{
-               "multifa":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-               "workdir":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+         "vcf_clean_header": {
+            "command": "format_vcf.py clean /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.vcf > /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.1.vcf 2> /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/vcf_clean.1.log",
+            "config": {
+               "multifa": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+               "workdir": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
             },
-            "input":{
-               "base_vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.vcf"
+            "input": {
+               "base_vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.vcf"
             },
-            "output":{
-               "clean_vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.1.vcf"
+            "output": {
+               "clean_vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.1.vcf"
             },
-            "params":{
-
-            },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:29:16"
+            "params": {},
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:34:13"
          }
       }
    },
-   "params":{
-      "cores":"5"
-   }
+   "params": {
+      "cores": "5"
+   },
+   "snakemake": "==> /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/.snakemake/log/2020-04-15T073412.345533.snakemake.log <==\n\n[Wed Apr 15 07:34:14 2020]\nlocalrule run:\n    input: /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf\n    jobid: 0\n\n[Wed Apr 15 07:34:14 2020]\nFinished job 0.\n5 of 5 steps (100%) done\nComplete log: /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/.snakemake/log/2020-04-15T073412.345533.snakemake.log\n"
 }
 ```
 
 ```json
 {
-   "alias":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-   "description":"description-vcf",
-   "filename":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf",
-   "id":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-   "log":{
-      "last_time":"2020-04-14 15:28:25",
-      "path":{
-         "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-         "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf"
+   "alias": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+   "description": "description-vcf",
+   "filename": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf",
+   "id": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+   "log": {
+      "last_time": "2020-04-15 07:34:51",
+      "output": {
+         "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+         "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf"
       },
-      "status":"Uploaded"
+      "status": "Uploaded"
    },
-   "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta"
+   "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+   "snakemake": ""
 }
 ```
 
@@ -178,24 +173,24 @@ curl -i -F 'filetype=vcf' -F 'description=description-vcf' -F "file=@test.vcf" -
 Good:
 ```json
 {
-   "alias":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-   "description":"description-vcf",
-   "filename":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf",
-   "id":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db",
-   "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-   "status":"Uploaded"
-}
-```
-```json
-{
    "alias":"Fasta",
    "description":"description-fasta",
-   "filename":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/references.fa",
-   "id":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91",
+   "filename":"/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/references.fa",
+   "id":"20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4",
    "params":{
       "cores":"5"
    },
    "status":"Running"
+}
+```
+```json
+{
+   "alias":"20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+   "description":"description-vcf",
+   "filename":"/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf",
+   "id":"20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3",
+   "reference":"/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+   "status":"Uploaded"
 }
 ```
 
@@ -224,44 +219,44 @@ curl -i http://localhost:56733/api/malva
 ### Return example
 ```json
 {
-   "content":[
+   "content": [
       {
-         "alias":"job-malva",
-         "description":"None",
-         "filename":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq",
-         "id":"2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc",
-         "input":{
-            "reference":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-            "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+         "alias": "job-malva-upload",
+         "description": "this will fail",
+         "filename": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq",
+         "id": "20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95",
+         "input": {
+            "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+            "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf"
          },
-         "params":{
-            "cores":"4",
-            "lenkmers":"35",
-            "maxmem":"4",
-            "maxocc":"300",
-            "minocc":"100",
-            "vcf":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+         "params": {
+            "cores": "4",
+            "lenkmers": "35",
+            "maxmem": "4",
+            "maxocc": "300",
+            "minocc": "100",
+            "vcf": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3"
          },
-         "status":"Completed"
+         "status": "Failed"
       },
       {
-         "alias":"job-malva-upload",
-         "description":"this will fail",
-         "filename":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq",
-         "id":"2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347",
-         "input":{
-            "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-            "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf"
+         "alias": "job-malva",
+         "description": "None",
+         "filename": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq",
+         "id": "20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb",
+         "input": {
+            "reference": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+            "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
          },
-         "params":{
-            "cores":"4",
-            "lenkmers":"35",
-            "maxmem":"4",
-            "maxocc":"300",
-            "minocc":"100",
-            "vcf":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db"
+         "params": {
+            "cores": "4",
+            "lenkmers": "35",
+            "maxmem": "4",
+            "maxocc": "300",
+            "minocc": "100",
+            "vcf": "20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
          },
-         "status":"Failed"
+         "status": "Completed"
       }
    ]
 }
@@ -272,195 +267,188 @@ Get the details of the specified job
 
 ### Request example
 ```bash
-curl -i http://localhost:56733/api/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc
+curl -i http://localhost:56733/api/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb
 
-curl -i http://localhost:56733/api/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347
+curl -i http://localhost:56733/api/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95
 ```
 ### Return example
 ```json
 {
-   "alias":"job-malva",
-   "description":"None",
-   "filename":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq",
-   "id":"2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc",
-   "input":{
-      "reference":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-      "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+   "alias": "job-malva",
+   "description": "None",
+   "filename": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq",
+   "id": "20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb",
+   "input": {
+      "reference": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+      "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
    },
-   "log":{
-      "last_time":"2020-04-14 15:36:48",
-      "output":{
-         "vcf":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/malva/malva.vcf"
+   "log": {
+      "last_time": "2020-04-15 07:42:30",
+      "output": {
+         "vcf": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/malva/malva.vcf"
       },
-      "status":"Completed",
-      "steps":{
-         "KMC":{
-            "command":"kmc -t4 -m4 -k35 -ci100 -cs300 -fm /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/tmp &> /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmc.log",
-            "config":{
-               "cores":4,
-               "lenkmers":35,
-               "malvak":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100,
-               "reference":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-               "sample":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq",
-               "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf",
-               "workdir":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc"
+      "status": "Completed",
+      "steps": {
+         "KMC": {
+            "command": "kmc -t4 -m4 -k35 -ci100 -cs300 -fm /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/tmp &> /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmc.log",
+            "config": {
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100,
+               "reference": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+               "sample": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq",
+               "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf",
+               "workdir": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb"
             },
-            "input":{
-               "sample":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq"
+            "input": {
+               "sample": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq"
             },
-            "output":{
-               "kmc_out":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers.kmc_pre"
+            "output": {
+               "kmc_out": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers.kmc_pre"
             },
-            "params":{
-               "kmc_prefix":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers",
-               "kmc_tmp":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/tmp",
-               "lenkmers":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100
+            "params": {
+               "kmc_prefix": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers",
+               "kmc_tmp": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/tmp",
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100
             },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:36:45"
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:42:28"
          },
-         "malva":{
-            "command":"malva-geno -1 -k 35 -r 35 -c 300 -b 1 /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa /jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers > /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/malva/malva.vcf 2> /jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/malva/malva.log",
-            "config":{
-               "cores":4,
-               "lenkmers":35,
-               "malvak":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100,
-               "reference":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-               "sample":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq",
-               "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf",
-               "workdir":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc"
+         "malva": {
+            "command": "malva-geno -1 -k 35 -r 35 -c 300 -b 1 /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa /jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers > /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/malva/malva.vcf 2> /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/malva/malva.log",
+            "config": {
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100,
+               "reference": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+               "sample": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq",
+               "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf",
+               "workdir": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb"
             },
-            "input":{
-               "kmc":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers.kmc_pre",
-               "ref":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-               "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+            "input": {
+               "kmc": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers.kmc_pre",
+               "ref": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+               "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
             },
-            "output":{
-               "vcf":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/malva/malva.vcf"
+            "output": {
+               "vcf": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/malva/malva.vcf"
             },
-            "params":{
-               "c":300,
-               "k":35,
-               "kmc_prefix":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/KMC/kmers",
-               "r":35
+            "params": {
+               "c": 300,
+               "k": 35,
+               "kmc_prefix": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/KMC/kmers",
+               "r": 35
             },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:36:48"
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:42:30"
          }
       }
    },
-   "params":{
-      "cores":"4",
-      "lenkmers":"35",
-      "maxmem":"4",
-      "maxocc":"300",
-      "minocc":"100",
-      "vcf":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
-   }
+   "params": {
+      "cores": "4",
+      "lenkmers": "35",
+      "maxmem": "4",
+      "maxocc": "300",
+      "minocc": "100",
+      "vcf": "20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
+   },
+   "snakemake": "==> /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/.snakemake/log/2020-04-15T074226.557704.snakemake.log <==\n\n[Wed Apr 15 07:42:30 2020]\nlocalrule run:\n    input: /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/malva/malva.vcf\n    jobid: 0\n\n[Wed Apr 15 07:42:30 2020]\nFinished job 0.\n3 of 3 steps (100%) done\nComplete log: /jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/.snakemake/log/2020-04-15T074226.557704.snakemake.log\n"
 }
 ```
 
 ```json
 {
-   "alias":"job-malva-upload",
-   "description":"this will fail",
-   "filename":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq",
-   "id":"2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347",
-   "input":{
-      "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-      "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf"
+   "alias": "job-malva-upload",
+   "description": "this will fail",
+   "filename": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq",
+   "id": "20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95",
+   "input": {
+      "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+      "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf"
    },
-   "log":{
-      "last_time":"2020-04-14 15:38:49",
-      "status":"Failed",
-      "steps":{
-         "KMC":{
-            "command":"kmc -t4 -m4 -k35 -ci100 -cs300 -fm /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/tmp &> /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmc.log",
-            "config":{
-               "cores":4,
-               "lenkmers":35,
-               "malvak":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100,
-               "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-               "sample":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq",
-               "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf",
-               "workdir":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347"
+   "log": {
+      "last_time": "2020-04-15 07:43:49",
+      "status": "Failed",
+      "steps": {
+         "KMC": {
+            "command": "kmc -t4 -m4 -k35 -ci100 -cs300 -fm /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/tmp &> /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmc.log",
+            "config": {
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100,
+               "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+               "sample": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq",
+               "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf",
+               "workdir": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95"
             },
-            "input":{
-               "sample":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq"
+            "input": {
+               "sample": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq"
             },
-            "output":{
-               "kmc_out":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers.kmc_pre"
+            "output": {
+               "kmc_out": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers.kmc_pre"
             },
-            "params":{
-               "kmc_prefix":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers",
-               "kmc_tmp":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/tmp",
-               "lenkmers":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100
+            "params": {
+               "kmc_prefix": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers",
+               "kmc_tmp": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/tmp",
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100
             },
-            "result":"Success",
-            "return_code":0,
-            "time":"2020-04-14 15:38:45"
+            "result": "Success",
+            "return_code": 0,
+            "time": "2020-04-15 07:43:45"
          },
-         "malva":{
-            "command":"malva-geno -1 -k 35 -r 35 -c 300 -b 1 /jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta /jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers > /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/malva/malva.vcf 2> /jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/malva/malva.log",
-            "config":{
-               "cores":4,
-               "lenkmers":35,
-               "malvak":35,
-               "maxmem":4,
-               "maxocc":300,
-               "minocc":100,
-               "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-               "sample":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq",
-               "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf",
-               "workdir":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347"
+         "malva": {
+            "command": "malva-geno -1 -k 35 -r 35 -c 300 -b 1 /jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta /jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers > /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.vcf 2> /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.log",
+            "config": {
+               "lenkmers": 35,
+               "maxmem": 4,
+               "maxocc": 300,
+               "minocc": 100,
+               "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+               "sample": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq",
+               "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf",
+               "workdir": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95"
             },
-            "input":{
-               "kmc":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers.kmc_pre",
-               "ref":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-               "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf"
+            "input": {
+               "kmc": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers.kmc_pre",
+               "ref": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+               "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf"
             },
-            "output":{
-               "vcf":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/malva/malva.vcf"
+            "output": {
+               "vcf": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.vcf"
             },
-            "params":{
-               "c":300,
-               "k":35,
-               "kmc_prefix":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/KMC/kmers",
-               "r":35
+            "params": {
+               "c": 300,
+               "k": 35,
+               "kmc_prefix": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers",
+               "r": 35
             },
-            "result":"Failed",
-            "return_code":134,
-            "time":"2020-04-14 15:38:49"
+            "result": "Failed",
+            "return_code": 134,
+            "time": "2020-04-15 07:43:49"
          }
       }
    },
-   "params":{
-      "cores":"4",
-      "lenkmers":"35",
-      "maxmem":"4",
-      "maxocc":"300",
-      "minocc":"100",
-      "vcf":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db"
-   }
+   "params": {
+      "cores": "4",
+      "lenkmers": "35",
+      "maxmem": "4",
+      "maxocc": "300",
+      "minocc": "100",
+      "vcf": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3"
+   },
+   "snakemake": "==> /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/.snakemake/log/2020-04-15T074343.722124.snakemake.log <==\n[Wed Apr 15 07:43:45 2020]\nrule malva:\n    input: /jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta, /jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf, /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/KMC/kmers.kmc_pre\n    output: /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.vcf\n    log: /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.log, /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/malva/malva.json\n    jobid: 1\n\nShutting down, this might take some time.\nExiting because a job execution failed. Look above for error message\nComplete log: /jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/.snakemake/log/2020-04-15T074343.722124.snakemake.log\n"
 }
-
 ```
 # POST /malva
 Upload a new precompiled VCF or a FASTA of references to compute a VCF from.
@@ -481,7 +469,7 @@ It is possible to submit an `alias` for display, otherwise a the id will be set 
 ```bash
 curl -i \
 -F 'sample=@snakemake/example/sample.fq' \
--F 'vcf=2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91' \
+-F 'vcf=20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
@@ -493,7 +481,7 @@ http://localhost:56733/api/malva
 
 curl -i \
 -F 'sample=@snakemake/example/sample.fq' \
--F 'vcf=2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db' \
+-F 'vcf=20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
@@ -507,44 +495,44 @@ http://localhost:56733/api/malva
 
 ```json
 {
-   "alias":"job-malva",
-   "description":"None",
-   "filename":"/jobs/malva/2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc/sample.fq",
-   "id":"2020-04-14-15-36-43_d3b467ab-78a0-4644-9725-b7f5fb6da8dc",
-   "input":{
-      "reference":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/snpsites/run.pseudoreference.fa",
-      "vcf":"/jobs/vcf/2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91/vcf/run.cleaned.vcf"
+   "alias": "job-malva",
+   "description": "None",
+   "filename": "/jobs/malva/20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb/sample.fq",
+   "id": "20200415-074226_3b01e54f-63b6-4f84-9003-30c480777dcb",
+   "input": {
+      "reference": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/snpsites/run.pseudoreference.fa",
+      "vcf": "/jobs/vcf/20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4/vcf/run.cleaned.vcf"
    },
-   "params":{
-      "cores":"4",
-      "lenkmers":"35",
-      "maxmem":"4",
-      "maxocc":"300",
-      "minocc":"100",
-      "vcf":"2020-04-14-15-29-14_9c0554dd-1b54-45f2-b987-183f93bd4e91"
+   "params": {
+      "cores": "4",
+      "lenkmers": "35",
+      "maxmem": "4",
+      "maxocc": "300",
+      "minocc": "100",
+      "vcf": "20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4"
    },
-   "status":"Running"
+   "status": "Running"
 }
 ```
 
 ```json
 {
-   "alias":"job-malva-upload",
-   "description":"this will fail",
-   "filename":"/jobs/malva/2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347/sample.fq",
-   "id":"2020-04-14-15-38-43_21d81631-04c0-4dd2-80fd-b317220ec347",
-   "input":{
-      "reference":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.fasta",
-      "vcf":"/jobs/vcf/2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db/test.vcf"
+   "alias": "job-malva-upload",
+   "description": "this will fail",
+   "filename": "/jobs/malva/20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95/sample.fq",
+   "id": "20200415-074343_7bfa34ef-67bd-4183-a267-d99dd02b4e95",
+   "input": {
+      "reference": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.fasta",
+      "vcf": "/jobs/vcf/20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3/test.vcf"
    },
-   "params":{
-      "cores":"4",
-      "lenkmers":"35",
-      "maxmem":"4",
-      "maxocc":"300",
-      "minocc":"100",
-      "vcf":"2020-04-14-15-28-25_2afbc84b-9fa9-4c8f-9ec7-9b76656f29db"
+   "params": {
+      "cores": "4",
+      "lenkmers": "35",
+      "maxmem": "4",
+      "maxocc": "300",
+      "minocc": "100",
+      "vcf": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3"
    },
-   "status":"Running"
+   "status": "Running"
 }
 ```

@@ -73,6 +73,18 @@ def get_vcf(vcf_id):
             info = json.load(f)
         info['log'] = status
 
+        sklog = pjoin(app.config['JOB_DIR'], 'vcf',
+                      vcf_id, '.snakemake', 'log', '*')
+
+        p = subprocess.run(
+            ["/bin/bash", "-c", "-l",
+             f'tail -v {sklog}'],
+            capture_output=True,
+            text=True
+        )
+
+        info['snakemake'] = p.stdout
+
         return jsonify(info)
     except OSError:
         # one of those json doesn't exist so we remove the folder
@@ -153,7 +165,7 @@ def post_vcf():
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores {cores}'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores {cores} -d {workdir}'
             ],
             cwd=app.config["SK_CWD"],
             stdout=open('/dev/null', 'w'),
@@ -238,12 +250,12 @@ def get_amlva(malva_id):
             info = json.load(f)
         info['log'] = status
 
-        # sklog = pjoin(app.config['JOB_DIR'], '.snakemake', 'log', '*')
-        sklog = pjoin(app.config['JOB_DIR'], 'malva', malva_id)
+        sklog = pjoin(app.config['JOB_DIR'], 'malva',
+                      malva_id, '.snakemake', 'log', '*')
 
         p = subprocess.run(
             ["/bin/bash", "-c", "-l",
-             f'ls {sklog} -lph'],
+             f'tail -v {sklog}'],
             capture_output=True,
             text=True
         )
@@ -270,7 +282,9 @@ def post_malva():
     except Exception as e:
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
 
-    # TODO: after checking that new vcf works, modify to change if status is uploaded
+    if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'vcf', vcf)):
+        abort(make_response(jsonify(message="VCF ID not found"), 404))
+
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf, 'status.json'), 'r') as f:
         status = json.load(f)
 
@@ -361,7 +375,7 @@ def post_malva():
         [
             "nohup",
             "/bin/bash", "-c", "-l",
-            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores}'
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores} -d {workdir}'
         ],
         cwd=app.config["SK_CWD"],
         stdout=open('/dev/null', 'w'),
