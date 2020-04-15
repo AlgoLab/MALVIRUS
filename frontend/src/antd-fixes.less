@@ -1,0 +1,33 @@
+@import '~antd/es/style/themes/default.less';
+
+@menu-prefix-cls: ~'@{ant-prefix}-menu';
+
+// This fixes the main navigation topbar overflow, since it has a transparent background
+.@{menu-prefix-cls}-dark.@{menu-prefix-cls}-submenu-popup {
+  background-color: @layout-header-background !important;
+}
+
+.@{ant-prefix}-tag.@{ant-prefix}-tag-processing {
+  color: @blue-8;
+  border-color: @blue-8;
+}
+
+.@{ant-prefix}-tag.@{ant-prefix}-tag-success {
+  color: @green-8;
+  border-color: @green-8;
+}
+
+.@{ant-prefix}-tag.@{ant-prefix}-tag-error {
+  color: @red-7;
+  border-color: @red-7;
+}
+
+.@{ant-prefix}-tag.@{ant-prefix}-tag-warning {
+  color: @orange-8;
+  border-color: @orange-8;
+}
+
+.@{ant-prefix}-form-item.@{ant-prefix}-form-item-with-help {
+  margin-bottom: @form-item-margin-bottom;
+}
+

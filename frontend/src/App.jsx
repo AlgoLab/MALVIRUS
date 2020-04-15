@@ -27,11 +27,7 @@ function App() {
     <Layout className="layout">
       <Header>
         <div className="logo">
-          <img
-            src={logo}
-            alt="BIAS Lab logo"
-            style={{ height: '100%', verticalAlign: 'top' }}
-          />
+          <img className="logo-img" src={logo} alt="BIAS Lab logo" />
           <div
             style={{
               padding: '0 1em',

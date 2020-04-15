@@ -1,7 +1,9 @@
 .site-layout-content {
   background: #fff;
   padding: 24px;
-  min-height: 280px;
+  min-height: 20em;
+  max-width: 80em;
+  margin: 0 auto;
 }
 
 .logo {
@@ -11,3 +13,21 @@
   margin: 0;
   float: left;
 }
+
+.logo-img, .logo {
+  display: none;
+}
+
+@media screen and (min-width: 50em) {
+  .logo-img {
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+  }
+}
+@media screen and (min-width: 35em) {
+  .logo {
+    display: inline-block;
+  }
+}
+
