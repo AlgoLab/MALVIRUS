@@ -1,0 +1,24 @@
+##fileformat=VCFv4.1
+##FILTER=<ID=PASS,Description="All filters passed">
+##contig=<ID=1,length=29910>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	MT263381	MT263382	MT263383	MT263384	MT263386
+1	483	.	T	A	.	.	AF=0.2	GT	0	0	0	1	0
+1	2669	.	C	T	.	.	AF=0.2	GT	0	0	0	0	1
+1	3170	.	C	T	.	.	AF=0.2	GT	0	0	0	1	0
+1	9106	.	C	T	.	.	AF=0.2	GT	0	0	0	1	0
+1	17740	.	T	C	.	.	AF=0.4	GT	0	0	0	1	1
+1	17851	.	G	A	.	.	AF=0.4	GT	0	0	0	1	1
+1	18053	.	T	C	.	.	AF=0.4	GT	0	0	0	1	1
+1	18729	.	T	C	.	.	AF=0.2	GT	0	0	0	1	0
+1	21641	.	C	T	.	.	AF=0.2	GT	0	0	0	1	0
+1	22599	.	A	T	.	.	AF=0.2	GT	0	0	0	0	1
+1	24027	.	C	T	.	.	AF=0.2	GT	0	0	0	1	0
+1	26722	.	T	C	.	.	AF=0.2	GT	0	0	0	1	0
+1	27628	.	C	T	.	.	AF=0.2	GT	0	0	0	1	0
+1	28070	.	G	C	.	.	AF=0.2	GT	0	0	0	1	0
+1	28871	.	G	A	.	.	AF=0.2	GT	0	0	0	0	1
+1	29560	.	A	C	.	.	AF=0.2	GT	0	0	0	1	0
+1	29693	.	A	G	.	.	AF=0.2	GT	0	0	0	1	0
+1	29735	.	G	A	.	.	AF=0.2	GT	0	0	0	0	1
