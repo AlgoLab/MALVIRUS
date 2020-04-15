@@ -92,6 +92,19 @@ def get_vcf(vcf_id):
         abort(make_response(jsonify(message="ID not valid"), 404))
 
 
+@app.route('/vcf/<vcf_id>', methods=['DELETE'])
+def rm_vcf(vcf_id):
+    if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id)):
+        abort(make_response(jsonify(message="ID not found"), 404))
+
+    shutil.rmtree(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id))
+    info = {
+        "content": "Deleted successfully."
+    }
+
+    return jsonify(info)
+
+
 @app.route('/vcf', methods=['POST'])
 def post_vcf():
     try:
@@ -240,7 +253,7 @@ def get_malva_list():
 
 
 @app.route('/malva/<malva_id>', methods=['GET'])
-def get_amlva(malva_id):
+def get_malva(malva_id):
     if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'malva', malva_id)):
         abort(make_response(jsonify(message="ID not found"), 404))
     try:
@@ -267,6 +280,19 @@ def get_amlva(malva_id):
         # one of those json doesn't exist so we remove the folder
         shutil.rmtree(pjoin(app.config['JOB_DIR'], 'malva', malva_id))
         abort(make_response(jsonify(message="ID not valid"), 404))
+
+
+@app.route('/malva/<malva_id>', methods=['DELETE'])
+def rm_malva(malva_id):
+    if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'malva', malva_id)):
+        abort(make_response(jsonify(message="ID not found"), 404))
+
+    shutil.rmtree(pjoin(app.config['JOB_DIR'], 'malva', malva_id))
+    info = {
+        "content": "Deleted successfully."
+    }
+
+    return jsonify(info)
 
 
 @app.route('/malva', methods=['POST'])
