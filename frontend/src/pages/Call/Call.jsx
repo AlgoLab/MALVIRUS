@@ -24,23 +24,23 @@ function BodyCall({ call }) {
     <>
       <Descriptions bordered column={2}>
         <Descriptions.Item
-          label={value.id !== value.alias ? 'Alias' : 'Alias / ID'}
+          label={value.id !== value.alias ? 'Alias:' : 'Alias / ID:'}
           span={value.id !== value.alias ? 1 : 2}
         >
           {value.alias}
         </Descriptions.Item>
         {value.id !== value.alias && (
-          <Descriptions.Item label="ID" span={1}>
+          <Descriptions.Item label="ID:" span={1}>
             <code>{value.id}</code>
           </Descriptions.Item>
         )}
-        <Descriptions.Item label="Description" span={2}>
+        <Descriptions.Item label="Description:" span={2}>
           {value.description}
         </Descriptions.Item>
-        <Descriptions.Item label="Status" span={2}>
+        <Descriptions.Item label="Status:" span={2}>
           <StatusTag status={value.log.status} />
         </Descriptions.Item>
-        <Descriptions.Item label="Last modified time" span={2}>
+        <Descriptions.Item label="Last modified time:" span={2}>
           {value.log.last_time}
         </Descriptions.Item>
         <Descriptions.Item label="Input file:" span={2}>
@@ -62,7 +62,7 @@ function BodyCall({ call }) {
             <i>No output files available</i>
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="Parameters" span={2}>
+        <Descriptions.Item label="Parameters:" span={2}>
           <JobParameters params={value.params} PARAMS={PARAMS} />
         </Descriptions.Item>
         {value.snakemake && (
@@ -80,7 +80,7 @@ function BodyCall({ call }) {
             <SnakemakeLog log={value.snakemake} />
           </Descriptions.Item>
         )}
-        <Descriptions.Item label="Detailed log" span={2}>
+        <Descriptions.Item label="Detailed log:" span={2}>
           <a
             href={api.call(value.id)}
             target="_blank"

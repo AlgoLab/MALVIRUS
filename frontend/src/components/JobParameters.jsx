@@ -4,9 +4,9 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 
 function JobParameters({ params, PARAMS }) {
   return (
-    <ul style={{ margin: 0 }}>
+    <>
       {Object.keys(params).map((key) => (
-        <li key={key}>
+        <React.Fragment key={key}>
           <b>{(PARAMS[key] && PARAMS[key].label) || key}:</b>{' '}
           {(PARAMS[key] &&
             PARAMS[key].render &&
@@ -17,9 +17,10 @@ function JobParameters({ params, PARAMS }) {
               <QuestionCircleOutlined />
             </Tooltip>
           )}
-        </li>
+          <br />
+        </React.Fragment>
       ))}
-    </ul>
+    </>
   );
 }
 

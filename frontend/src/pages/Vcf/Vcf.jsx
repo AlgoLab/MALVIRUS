@@ -23,12 +23,17 @@ function BodyVcf({ vcf }) {
   return (
     <>
       <Descriptions bordered column={2}>
-        <Descriptions.Item label="Alias" span={1}>
+        <Descriptions.Item
+          label={value.id !== value.alias ? 'Alias:' : 'Alias / ID:'}
+          span={value.id !== value.alias ? 1 : 2}
+        >
           {value.alias}
         </Descriptions.Item>
-        <Descriptions.Item label="ID" span={1}>
-          <code>{value.id}</code>
-        </Descriptions.Item>
+        {value.id !== value.alias && (
+          <Descriptions.Item label="ID:" span={1}>
+            <code>{value.id}</code>
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="Description" span={2}>
           {value.description}
         </Descriptions.Item>
@@ -58,7 +63,7 @@ function BodyVcf({ vcf }) {
           )}
         </Descriptions.Item>
         {value.params && (
-          <Descriptions.Item label="Parameters" span={2}>
+          <Descriptions.Item label="Parameters:" span={2}>
             <JobParameters params={value.params} PARAMS={PARAMS} />
           </Descriptions.Item>
         )}
@@ -77,7 +82,7 @@ function BodyVcf({ vcf }) {
             <SnakemakeLog log={value.snakemake} />
           </Descriptions.Item>
         )}
-        <Descriptions.Item label="Detailed log" span={2}>
+        <Descriptions.Item label="Detailed log:" span={2}>
           <a href={api.vcf(value.id)} target="_blank" rel="noopener noreferrer">
             log.json
           </a>
