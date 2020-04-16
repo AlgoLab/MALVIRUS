@@ -6,7 +6,9 @@ const ajaxCreateCall = connect(() => ({
   createCall: (sample, params, resolve, reject) => {
     const body = new FormData();
     body.append('sample', sample.originFileObj);
-    Object.keys(params).forEach((key) => body.append(key, params[key]));
+    Object.keys(params).forEach((key) => {
+      if (params[key] != null) body.append(key, params[key]);
+    });
     return {
       call: {
         url: api.call(),
