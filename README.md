@@ -74,11 +74,12 @@ Ogni snakefile ha il suo file di configurazione.
 
 Prima di lanciare `Snakefile.vcf` settare in `config.vcf.yaml` le seguenti variabili:
 * `workdir`: directory dove si vogliono tutti i file.  Idealmente questo valore è il jobid, quindi dovrebbe essere univoco per ogni run.
-* `multifa`: references da cui creare il vcf
+* `reference`: sequenza reference in formato fasta.
+* `multifa`: sequenze da allineare al reference e da cui creare il vcf.
 
 Prima di lanciare `Snakefile.malva` settare in `config.malva.yaml` le seguenti variabili:
 * `workdir`: directory dove si vogliono tutti i file.  Anche questo valore dovrebbe essere univoco su tutte le run.
-* `refrence`: path allo pseudoreference da usare in malva.
+* `reference`: path allo pseudoreference da usare in malva.
 * `vcf`: path al vcf da usare in malva.
 * `sample`: path al file contenente le read da usare.
 I seguenti campi di `config.malva.yaml` sono opzionali:
@@ -88,6 +89,7 @@ I seguenti campi di `config.malva.yaml` sono opzionali:
 * `malvak`: lunghezza dei kmer da usare in malva. Default 35.
 * `cores`: numero di thread da usare in KMC. Default 4.
 * `maxmem`: memoria massima usata da KMC in GB. Default 4.
+* `gtf`: path al gtf contenente le annotazioni del reference.
 
 
 Una volta settate le variabili si può lanciare la pipeline che si vuole con

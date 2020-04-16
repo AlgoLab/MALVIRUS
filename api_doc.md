@@ -32,7 +32,7 @@ curl -i http://localhost:56733/api/vcf
    ]
 }```
 
-# GET /vcf/:id
+## GET /vcf/:id
 Get the details of the specified VCF
 
 ### Request example
@@ -204,6 +204,42 @@ Date: Wed, 08 Apr 2020 10:10:10 GMT
 
 {
   "message": "Illegal or missing filetype"
+}
+```
+
+## DELETE /vcf/
+Delete the specified list of VCFs.
+Note this will ignore non-existant IDs.
+
+### Request example
+```bash
+curl -i --header "Content-Type: application/json" \
+-X DELETE \
+--data '{"id": ["ID1","ID2"]}' \
+http://localhost:56733/api/vcf
+```
+### Return example
+```json
+```
+
+## DELETE /vcf/:id
+Delete the specified VCF
+
+### Request example
+```bash
+curl -i -X DELETE http://localhost:56733/api/vcf/20200415-151628_99994a9c-fc2c-4bc0-be8b-caa0c914d0b1
+
+curl -i -X DELETE http://localhost:56733/api/vcf/noexists
+```
+### Return example
+Good:
+```json
+```
+
+Bad:
+```json
+{
+   "message": "ID not found"
 }
 ```
 
@@ -534,5 +570,47 @@ http://localhost:56733/api/malva
       "vcf": "20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3"
    },
    "status": "Running"
+}
+```
+
+## DELETE /malva/
+Delte the specified list MALVA jobs
+Note this will ignore non-existant IDs.
+
+### Request example
+```bash
+curl -i --header "Content-Type: application/json" \
+-X DELETE \
+--data '{"id": ["20200416-075159_58bef383-5e88-4b5c-b042-5a20494c9149","20200416-075202_f5f48001-5d76-4daa-a9f0-74039272bedf"]}' \
+http://localhost:56733/api/malva
+```
+### Return example
+```json
+{
+   "Content": "Deleted successfully."
+}
+```
+
+## DELETE /malva/:id
+Delete the specified MALVA job
+
+### Request example
+```bash
+curl -i -X DELETE http://localhost:56733/api/malva/20200415-151728_c31df80e-1461-489a-b4c4-f7031748a265
+
+curl -i -X DELETE http://localhost:56733/api/malva/noexists
+```
+### Return example
+Good:
+```json
+{
+   "Content": "Deleted successfully."
+}
+```
+
+Bad:
+```json
+{
+   "message": "ID not found"
 }
 ```
