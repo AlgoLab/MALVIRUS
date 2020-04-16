@@ -8,12 +8,15 @@ import re
 
 pjoin = os.path.join
 
-references_path = config["multifa"]
+reference_path = config["reference"] # single sequence to be used as reference
+references_path = config["multifa"]  # all other sequences
 
 root_dir = config["workdir"]
 mafft_dir = pjoin(root_dir, "mafft")
 snpsites_dir = pjoin(root_dir, "snpsites")
 clean_vcf_dir = pjoin(root_dir, "vcf")
+
+cores_config = config["cores"] if "cores" in config else 4
 
 status_json_fn = pjoin(root_dir, "status.json")
 
@@ -76,17 +79,18 @@ rule run:
 # Multi alignment with mafft
 rule multi_align:
     input:
-        fa = references_path
+        fa = reference_path,
+        mfa = references_path
     output:
         msa = pjoin(mafft_dir, "multi_alignment.msa")
-    threads: 16
+    threads: int(cores_config)
     log:
         out = pjoin(mafft_dir, "mafft.log"),
         json = pjoin(mafft_dir, "mafft.json")
     run:
         update_status("Running")
         step_name = "mafft"
-        cmdstr = f"mafft --auto --thread {threads} {input.fa} > {output.msa} 2> {log.out}"
+        cmdstr = f"mafft --thread {threads} --auto --keeplength --addfragments {input.mfa} {input.fa} > {output.msa} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
