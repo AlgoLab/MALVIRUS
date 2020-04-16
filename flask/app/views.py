@@ -196,10 +196,16 @@ def post_vcf():
     if filetype == 'fasta':
         multifa = dfile
         config = pjoin(workdir, 'config.vcf.yaml')
+        reference = info["reference"]
+        gtf = info["gtf"]
+        n_cores = info['params']["cores"]
         with open(config, 'w+') as conf:
             conf.write(
                 f'workdir: {workdir}\n' +
-                f'multifa: {multifa}\n'
+                f'multifa: {multifa}\n' +
+                f'reference: {reference}\n' +
+                f'gtf: {gtf}\n' +
+                f'n_cores: {n_cores}'
             )
 
         # Create a status.json with status "Pending"
