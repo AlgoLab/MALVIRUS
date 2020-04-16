@@ -58,8 +58,10 @@ def main():
 
     args = parser.parse_args()
 
-    gtf = open_gtf(args.gtf_path)
-    cdss = extract_cdss(gtf)
+    with_anno = args.gtf_path != "None"
+    if with_anno:
+        gtf = open_gtf(args.gtf_path)
+        cdss = extract_cdss(gtf)
 
     vcf = VariantFile(args.vcf_path, 'r', drop_samples = False)
     
@@ -70,8 +72,9 @@ def main():
         gt = record.samples[0]['GT'][0]
         if gt == 0 and not args.all_flag:
             continue
-        gene_name = get_gene_name(cdss, record.pos)
-        record.info.__setitem__("GENE", gene_name)
+        if with_anno:
+            gene_name = get_gene_name(cdss, record.pos)
+            record.info.__setitem__("GENE", gene_name)
         print(record, end='')
 
 if __name__ == "__main__":
