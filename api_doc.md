@@ -30,7 +30,8 @@ curl -i http://localhost:56733/api/vcf
          "status": "Uploaded"
       }
    ]
-}```
+}
+```
 
 ## GET /vcf/:id
 Get the details of the specified VCF
