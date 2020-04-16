@@ -10,11 +10,13 @@ pjoin = os.path.join
 
 ref_config = config["reference"]
 vcf_config = config["vcf"]
+gtf_config = config["gtf"]
 sample_config = config["sample"]
 
 root_dir = config["workdir"]
 kmc_dir = pjoin(root_dir, "KMC")
 malva_dir = pjoin(root_dir, "malva")
+tagvcf_dir = pjoin(root_dir, "tagvcf")
 
 minocc_config = config["minocc"] if "minocc" in config else 5
 maxocc_config = config["maxocc"] if "maxocc" in config else 750
@@ -127,7 +129,7 @@ rule malva:
         r = lenkmers_config,
         c = maxocc_config
     output:
-        vcf = pjoin(malva_dir, "malva.vcf")
+        vcf = pjoin(malva_dir, "malva.non_tagged.vcf")
     threads: 1
     log:
         out = pjoin(malva_dir, "malva.log"),
@@ -135,6 +137,31 @@ rule malva:
     run:
         step_name = "malva"
         cmdstr = f"malva-geno -1 -k {params.k} -r {params.r} -c {params.c} -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        with open(log.json, "w") as jf:
+            try:
+                shell.check_output(cmdstr)
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0,
+                                              input, output, params, True)
+            except subprocess.CalledProcessError as e:
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, params)
+                raise e
+
+# Tag VCF
+rule tag_malva_vcf:
+    input:
+        vcf = pjoin(malva_dir, "malva.non_tagged.vcf")
+    output:
+        vcf = pjoin(malva_dir, "malva.vcf")
+    params:
+        gtf = gtf_config
+    threads: 1
+    log:
+        out = pjoin(tagvcf_dir, "tag_vcf.log"),
+        json = pjoin(tagvcf_dir, "tag_vcf.json")
+    run:
+        step_name = "tagvcf"
+        cmdstr = f"tag_vcf.py -a {input.vcf} {params.gtf} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)

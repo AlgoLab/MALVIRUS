@@ -9,4 +9,5 @@ dependencies:
     - kmc
     - samtools
     - pysam
+    - gffutils
     # - malva
