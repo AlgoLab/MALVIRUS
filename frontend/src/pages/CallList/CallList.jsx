@@ -9,7 +9,7 @@ import { ButtonPanel } from 'components';
 
 import CallTable from './CallTable';
 
-function CallList({ calls, reloadCalls }) {
+function CallList({ calls, reloadCalls, deleteCall }) {
   const navigate = useNavigate();
   const onClickNew = useCallback(() => navigate('new'), [navigate]);
   const buttons = (
@@ -31,7 +31,7 @@ function CallList({ calls, reloadCalls }) {
       </p>
       <p>Click on a job alias to view the details.</p>
       {buttons}
-      <CallTable calls={calls} />
+      <CallTable calls={calls} deleteCall={deleteCall} />
       {buttons}
     </>
   );

@@ -10,7 +10,7 @@ import { ButtonPanel } from 'components';
 
 import VcfTable from './VcfTable';
 
-function VcfList({ vcfs, reloadVcfs }) {
+function VcfList({ vcfs, reloadVcfs, deleteVcf }) {
   const navigate = useNavigate();
   const onClickNew = useCallback(() => navigate('new'), [navigate]);
   const onClickUpload = useCallback(() => navigate('upload'), [navigate]);
@@ -33,7 +33,7 @@ function VcfList({ vcfs, reloadVcfs }) {
       <p>It displays the list of reference VCFs available on the system.</p>
       <p>Click on a reference VCF alias to view the details.</p>
       {buttons}
-      <VcfTable vcfs={vcfs} />
+      <VcfTable vcfs={vcfs} deleteVcf={deleteVcf} />
       {buttons}
     </>
   );

@@ -13,6 +13,21 @@ const ajaxCalls = connect(() => ({
   reloadCalls: () => ({
     calls,
   }),
+  deleteCall: (id, resolve, reject) => ({
+    deletedCall: {
+      url: api.call(id),
+      method: 'DELETE',
+      andThen: () => ({
+        calls: {
+          ...calls,
+          then: resolve,
+          catch: reject,
+        },
+      }),
+      catch: reject,
+      force: true,
+    },
+  }),
 }));
 
 export default ajaxCalls;
