@@ -1,10 +1,16 @@
 import React from 'react';
+import { DownloadOutlined } from '@ant-design/icons';
 
-function FName({ href }) {
-  const v = String(href);
+function FName({ href, hideIcon = false }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer">
-      {v.slice(v.lastIndexOf('/') + 1)}
+      {href.slice(href.lastIndexOf('/') + 1)}
+      {!hideIcon && (
+        <>
+          {' '}
+          <DownloadOutlined />
+        </>
+      )}
     </a>
   );
 }

@@ -12,7 +12,8 @@ function SnakemakeLog({ log }) {
           <React.Fragment key={i}>
             {line.startsWith('==> /') ? (
               <b style={{ textDecoration: 'underline' }}>
-                ==&gt; <FName href={line.slice(4, line.length - 4)} /> &lt;==
+                ==&gt; <FName href={line.slice(4, line.length - 4)} hideIcon />{' '}
+                &lt;==
               </b>
             ) : (
               line
