@@ -207,8 +207,23 @@ Date: Wed, 08 Apr 2020 10:10:10 GMT
 }
 ```
 
+## DELETE /vcf/
+Delete the specified list of VCFs.
+Note this will ignore non-existant IDs.
+
+### Request example
+```bash
+curl -i --header "Content-Type: application/json" \
+-X DELETE \
+--data '{"id": ["ID1","ID2"]}' \
+http://localhost:56733/api/vcf
+```
+### Return example
+```json
+```
+
 ## DELETE /vcf/:id
-Get the details of the specified VCF
+Delete the specified VCF
 
 ### Request example
 ```bash
@@ -558,8 +573,26 @@ http://localhost:56733/api/malva
 }
 ```
 
+## DELETE /malva/
+Delte the specified list MALVA jobs
+Note this will ignore non-existant IDs.
+
+### Request example
+```bash
+curl -i --header "Content-Type: application/json" \
+-X DELETE \
+--data '{"id": ["20200416-075159_58bef383-5e88-4b5c-b042-5a20494c9149","20200416-075202_f5f48001-5d76-4daa-a9f0-74039272bedf"]}' \
+http://localhost:56733/api/malva
+```
+### Return example
+```json
+{
+   "Content": "Deleted successfully."
+}
+```
+
 ## DELETE /malva/:id
-Get the details of the specified VCF
+Delete the specified MALVA job
 
 ### Request example
 ```bash
