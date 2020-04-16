@@ -14,7 +14,7 @@ import {
   Alert,
 } from 'antd';
 
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { defaultMalvaParams } from 'app-config';
 import { ButtonPanel, Error, Loading, showError } from 'components';
@@ -45,6 +45,9 @@ function CallNew({ createCall, vcfs }) {
   );
 
   const onClickCancel = useCallback(() => navigate(-1), [navigate]);
+
+  const onClickNew = useCallback(() => navigate('/vcf/new'), [navigate]);
+  const onClickUpload = useCallback(() => navigate('/vcf/upload'), [navigate]);
 
   if (vcfs.rejected) {
     return <Error reason={vcfs.reason} />;
@@ -132,7 +135,20 @@ function CallNew({ createCall, vcfs }) {
               message: 'Please provide reference VCF!',
             },
           ]}
-          extra={params.vcf.extra}
+          extra={
+            <>
+              {params.vcf.extra} Use the buttons below to build or upload a new
+              reference VCF.
+              <ButtonPanel alignment="left">
+                <Button icon={<PlusOutlined />} onClick={onClickNew}>
+                  Build a new reference VCF from genomes
+                </Button>
+                <Button icon={<UploadOutlined />} onClick={onClickUpload}>
+                  Upload a new reference VCF
+                </Button>
+              </ButtonPanel>
+            </>
+          }
         >
           <Select>
             {okVcfs.map((vcf) => (
