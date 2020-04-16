@@ -14,6 +14,7 @@ references_path = config["multifa"]  # all other sequences
 root_dir = config["workdir"]
 mafft_dir = pjoin(root_dir, "mafft")
 snpsites_dir = pjoin(root_dir, "snpsites")
+fa_index_dir = pjoin(root_dir, "faindex")
 clean_vcf_dir = pjoin(root_dir, "vcf")
 
 cores_config = config["cores"] if "cores" in config else 4
@@ -137,7 +138,29 @@ rule vcf_clean_header:
         json = pjoin(clean_vcf_dir, "vcf_clean.1.json")
     run:
         step_name = "vcf_clean_header"
-        cmdstr = f"format_vcf.py clean {input.base_vcf} > {output.clean_vcf} 2> {log.out}"
+        cmdstr = f"format_vcf.py clean {input.base_vcf} | cut -f 1-9,11- > {output.clean_vcf} 2> {log.out}"
+        with open(log.json, "w") as jf:
+            try:
+                shell.check_output(cmdstr)
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
+            except subprocess.CalledProcessError as e:
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, None)
+                raise e
+
+# Index input reference
+rule index_reference:
+    input:
+        fa = reference_path
+    output:
+        fa_idx = reference_path + ".fai"
+    threads: 1
+    log:
+        out = pjoin(fa_index_dir, "fa_index.log"),
+        json = pjoin(fa_index_dir, "fa_index.json")
+    run:
+        step_name = "fa_index"
+        cmdstr = f"samtools faidx {input.fa} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
@@ -150,7 +173,8 @@ rule vcf_clean_header:
 # Computes a priori frequencies
 rule vcf_add_freqs:
     input:
-        clean_vcf = pjoin(clean_vcf_dir, "run.1.vcf")
+        clean_vcf = pjoin(clean_vcf_dir, "run.1.vcf"),
+        fa_idx = reference_path + ".fai"
     output:
         freq_vcf = pjoin(clean_vcf_dir, "run.cleaned.vcf")
     threads: 1
@@ -159,14 +183,13 @@ rule vcf_add_freqs:
         json = pjoin(clean_vcf_dir, "vcf_clean.2.json")
     run:
         step_name = "vcf_add_freqs"
-        cmdstr = f"format_vcf.py freq {input.clean_vcf} > {output.freq_vcf} 2> {log.out}"
+        cmdstr = f"format_vcf.py freq {input.clean_vcf} {input.fa_idx} > {output.freq_vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
                 update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
                                               input, output, None, True)
             except subprocess.CalledProcessError as e:
-                shell("rm -fr {params.kmc_tmp}")
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
                                               input, output, None)
                 raise e

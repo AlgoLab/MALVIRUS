@@ -5,9 +5,15 @@ from pysam import VariantFile
 
 def add_freqs():
     vcf_path = sys.argv[2]
+    fai_path = sys.argv[3]
+
     vcf = VariantFile(vcf_path, 'r', drop_samples = False)
 
-    vcf.header.add_line("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Estimated allele frequency in the range (0,1)\">") # taken from 1kg vcfs
+    ref_name, ref_len = open(fai_path).readlines()[0].strip('\n').split('\t')[0:2]
+    new_contig = f"##contig=<ID={ref_name},length={ref_len}>"
+
+    vcf.header.add_line(new_contig)
+    vcf.header.add_line("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Estimated allele frequency in the range (0,1)\">")
     print('\n'.join(str(vcf.header).split('\n')[:-1]))
 
     for record in vcf:
@@ -22,6 +28,7 @@ def add_freqs():
             n_gts[gt] = round(n_gts[gt], 5)
         freq_string = ','.join([str(n_gts[i]) for i in range(1,tot_alleles)])
         alt_freqs = [n_gts[i] for i in range(1,tot_alleles)]
+        record.chrom = ref_name
         record.info.__setitem__("AF", alt_freqs)
         print(record, end='')
 

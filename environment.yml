@@ -7,5 +7,6 @@ dependencies:
     - snakemake-minimal
     - mafft
     - kmc
+    - samtools
     - pysam
     # - malva
