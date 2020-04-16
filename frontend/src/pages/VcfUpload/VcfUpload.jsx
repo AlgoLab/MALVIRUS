@@ -13,14 +13,14 @@ function VcfUpload({ createVcf }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const onFinish = useCallback(
-    ({ file, reference, ...values }) => {
+    ({ file, reference, gtf, ...values }) => {
       new Promise((resolve, reject) => {
         setLoading(true);
         const params = {
           ...values,
           filetype: 'vcf',
         };
-        createVcf({ file, reference }, params, resolve, reject);
+        createVcf({ file, reference, gtf }, params, resolve, reject);
       }).then(
         (vcf) => {
           setLoading(false);
@@ -65,6 +65,36 @@ function VcfUpload({ createVcf }) {
         </Form.Item>
 
         <Form.Item
+          name="reference"
+          label="Reference genomic sequence (FASTA)"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message:
+                'Please select a FASTA file containing the reference genomic sequence!',
+            },
+          ]}
+        >
+          <Upload beforeUpload={getFalse}>
+            <Button icon={<UploadOutlined />}>Select file</Button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
+          name="gtf"
+          label="Gene annotation (GTF)"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          extra="A file containing the gene annotations for the given reference sequence. Used only for annotation and visualization of the final variant calls."
+        >
+          <Upload beforeUpload={getFalse}>
+            <Button icon={<UploadOutlined />}>Select file</Button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
           name="file"
           label="Reference VCF"
           valuePropName="fileList"
@@ -72,25 +102,12 @@ function VcfUpload({ createVcf }) {
           rules={[
             { required: true, message: 'Please select a reference VCF!' },
           ]}
+          extra="A file containing the positions of the reference genomic sequence on which variants will be called."
         >
-          <Upload name="file" beforeUpload={getFalse}>
+          <Upload beforeUpload={getFalse}>
             <Button icon={<UploadOutlined />}>Select file</Button>
           </Upload>
         </Form.Item>
-        <Form.Item
-          name="reference"
-          label="Reference sequence (FASTA)"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          rules={[
-            { required: true, message: 'Please select a reference sequence!' },
-          ]}
-        >
-          <Upload name="reference" beforeUpload={getFalse}>
-            <Button icon={<UploadOutlined />}>Select file</Button>
-          </Upload>
-        </Form.Item>
-
         <ButtonPanel>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit

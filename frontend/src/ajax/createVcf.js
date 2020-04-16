@@ -5,9 +5,9 @@ import { connect } from './utils';
 const ajaxCreateVcf = connect(() => ({
   createVcf: (files, params, resolve, reject) => {
     const body = new FormData();
-    Object.keys(files).forEach((key) =>
-      body.append(key, files[key][0].originFileObj)
-    );
+    Object.keys(files).forEach((key) => {
+      if (files[key] != null) body.append(key, files[key][0].originFileObj);
+    });
     Object.keys(params).forEach((key) => {
       if (params[key] != null) body.append(key, params[key]);
     });

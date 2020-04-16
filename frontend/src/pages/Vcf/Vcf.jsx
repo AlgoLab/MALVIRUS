@@ -43,11 +43,23 @@ function BodyVcf({ vcf }) {
         <Descriptions.Item label="Last modified time" span={2}>
           {value.log.last_time}
         </Descriptions.Item>
-        <Descriptions.Item label="Input file:" span={2}>
-          {value.filename ? (
-            <FName href={value.filename} />
+        <Descriptions.Item label="Input files:" span={2}>
+          <b className="sb">Reference genomic sequence:</b>{' '}
+          <FName href={value.reference} />
+          <br />
+          <b className="sb">Gene annotation:</b>{' '}
+          {value.gtf && value.gtf !== 'NULL' ? (
+            <FName href={value.gtf} />
           ) : (
-            <i>No input files available</i>
+            <i>no annotation given</i>
+          )}
+          <br />
+          {value.filename && (
+            <>
+              <b className="sb">Population genomic sequences:</b>{' '}
+              <FName href={value.filename} />
+              <br />
+            </>
           )}
         </Descriptions.Item>
         <Descriptions.Item label="Output files:" span={2}>
@@ -93,6 +105,13 @@ function BodyVcf({ vcf }) {
 }
 
 function Vcf({ id, vcf, reloadVcf }) {
+  const noRefresh =
+    vcf &&
+    vcf.fulfilled &&
+    vcf.value &&
+    vcf.value.log &&
+    (vcf.value.log.status === 'Completed' ||
+      vcf.value.log.status === 'Uploaded');
   return (
     <>
       <h1>
@@ -100,8 +119,19 @@ function Vcf({ id, vcf, reloadVcf }) {
         <b>{(vcf && vcf.fulfilled && vcf.value && vcf.value.alias) || id}</b>
       </h1>
       <BodyVcf vcf={vcf} />
+
       <ButtonPanel>
-        <Button type="primary" icon={<SyncOutlined />} onClick={reloadVcf}>
+        <Button
+          type="primary"
+          icon={<SyncOutlined />}
+          onClick={reloadVcf}
+          disabled={noRefresh}
+          title={
+            noRefresh
+              ? 'Results are final. Refresh is not necessary.'
+              : 'Refresh job status'
+          }
+        >
           Refresh
         </Button>
       </ButtonPanel>

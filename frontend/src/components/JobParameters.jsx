@@ -7,7 +7,7 @@ function JobParameters({ params, PARAMS }) {
     <>
       {Object.keys(params).map((key) => (
         <React.Fragment key={key}>
-          <b>{(PARAMS[key] && PARAMS[key].label) || key}:</b>{' '}
+          <b className="sb">{(PARAMS[key] && PARAMS[key].label) || key}:</b>{' '}
           {(PARAMS[key] &&
             PARAMS[key].render &&
             PARAMS[key].render(params[key])) ||

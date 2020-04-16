@@ -1,9 +1,9 @@
 import React from 'react';
+import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Table, Button, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { Error, StatusTag, showError } from 'components';
-import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 function VcfTable({ vcfs, deleteVcf }) {
   if (vcfs.rejected) {

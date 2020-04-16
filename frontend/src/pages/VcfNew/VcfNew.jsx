@@ -14,14 +14,14 @@ function VcfNew({ createVcf }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const onFinish = useCallback(
-    ({ file, ...values }) => {
+    ({ file, reference, gtf, ...values }) => {
       new Promise((resolve, reject) => {
         setLoading(true);
         const params = {
           ...values,
           filetype: 'fasta',
         };
-        createVcf({ file }, params, resolve, reject);
+        createVcf({ file, reference, gtf }, params, resolve, reject);
       }).then(
         (vcf) => {
           setLoading(false);
@@ -71,18 +71,49 @@ function VcfNew({ createVcf }) {
         </Form.Item>
 
         <Form.Item
-          name="file"
-          label="Genomic sequences (FASTA)"
+          name="reference"
+          label="Reference genomic sequence (FASTA)"
           valuePropName="fileList"
           getValueFromEvent={normFile}
           rules={[
             {
               required: true,
-              message: 'Please select a set of genomic sequences!',
+              message:
+                'Please select a FASTA file containing the reference genomic sequence!',
             },
           ]}
         >
-          <Upload name="file" beforeUpload={getFalse}>
+          <Upload beforeUpload={getFalse}>
+            <Button icon={<UploadOutlined />}>Select file</Button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
+          name="gtf"
+          label="Gene annotation (GTF)"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          extra="A file containing the gene annotations for the given reference sequence. Used only for annotation and visualization of the final variant calls."
+        >
+          <Upload beforeUpload={getFalse}>
+            <Button icon={<UploadOutlined />}>Select file</Button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
+          name="file"
+          label="Population genomic sequences (FASTA)"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message:
+                'Please select a FASTA file containing the population genomic sequences!',
+            },
+          ]}
+        >
+          <Upload beforeUpload={getFalse}>
             <Button icon={<UploadOutlined />}>Select file</Button>
           </Upload>
         </Form.Item>

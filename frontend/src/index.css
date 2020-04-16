@@ -18,3 +18,7 @@ body {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+.sb {
+  font-weight: 600;
+}
