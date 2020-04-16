@@ -158,16 +158,28 @@ curl -i http://localhost:56733/api/vcf/20200415-073451_dca8c691-4b79-405b-96a6-7
 Upload a new precompiled VCF or a FASTA of references to compute a VCF from.
 
 ### Request documentation
-The form should submit the `file`, a value `filetype=vcf/fasta` and a `description`. A missing or illegal filetype will result in a 400.
+The form should submit the `file`, a value `filetype=vcf/fasta`, a file `reference` and (optionally) a `description` and a `gtf`. A missing or illegal filetype will result in a 400.
 For a `typefile=fasta`, also a value `cores` must be submitted.
-For a `typefile=vcf`, also a file `reference` must be submitted.
 It is possible to submit an `alias` for display, otherwise a the id will be set as alias.
 
 ### Request example
 ```bash
-curl -i -F 'filetype=fasta' -F 'description=description-fasta' -F "file=@snakemake/example/references.fa" -F "cores=5" http://localhost:56733/api/vcf -F "alias=Fasta"
+curl -i \
+-F 'filetype=fasta' \
+-F 'description=description-fasta' \
+-F "file=@snakemake/example/references.fa" \
+-F "reference=@test.fasta" \
+-F "cores=5" \
+-F "alias=Fasta" \
+-F "gtf=@test.gtf" \
+http://localhost:56733/api/vcf
 
-curl -i -F 'filetype=vcf' -F 'description=description-vcf' -F "file=@test.vcf" -F "reference=@test.fasta" http://localhost:56733/api/vcf
+curl -i \
+-F 'filetype=vcf' \
+-F 'description=description-vcf' \
+-F "file=@test.vcf" \
+-F "reference=@test.fasta" \
+http://localhost:56733/api/vcf
 ```
 ### Return example
 Good:
@@ -505,7 +517,7 @@ It is possible to submit an `alias` for display, otherwise a the id will be set 
 ```bash
 curl -i \
 -F 'sample=@snakemake/example/sample.fq' \
--F 'vcf=20200415-073411_9fa3556d-80d4-4742-87c4-7a0bd0f484e4' \
+-F 'vcf=20200416-151902_44647d6f-8112-4462-844e-3d6ad9c200d9' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
@@ -517,7 +529,7 @@ http://localhost:56733/api/malva
 
 curl -i \
 -F 'sample=@snakemake/example/sample.fq' \
--F 'vcf=20200415-073451_dca8c691-4b79-405b-96a6-755d8adeebc3' \
+-F 'vcf=20200416-152305_e3e11ac4-a66b-46e6-b49e-fecbe9abbfcb' \
 -F 'minocc=100' \
 -F 'maxocc=300' \
 -F 'lenkmers=35' \
