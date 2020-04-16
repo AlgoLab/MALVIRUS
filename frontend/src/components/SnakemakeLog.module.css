@@ -1,0 +1,17 @@
+.cnt {
+  position: relative;
+  min-height: 12em;
+  margin: -16px -24px;
+}
+
+.pre {
+  font-size: 75%;
+  overflow: auto;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px 24px;
+  margin: 0;
+}

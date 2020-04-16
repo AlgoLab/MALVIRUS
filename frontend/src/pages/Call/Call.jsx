@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Button, Descriptions } from 'antd';
-import { SyncOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Tooltip } from 'antd';
+import { SyncOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 import { api } from 'app-config';
 
@@ -12,6 +12,7 @@ import {
   JobParameters,
   Loading,
   StatusTag,
+  SnakemakeLog,
 } from 'components';
 import PARAMS from 'utils/call-params';
 
@@ -64,6 +65,21 @@ function BodyCall({ call }) {
         <Descriptions.Item label="Parameters" span={2}>
           <JobParameters params={value.params} PARAMS={PARAMS} />
         </Descriptions.Item>
+        {value.snakemake && (
+          <Descriptions.Item
+            label={
+              <>
+                Job log:{' '}
+                <Tooltip title="Only the last lines are presented. Click on the filename for the full log.">
+                  <QuestionCircleOutlined />
+                </Tooltip>
+              </>
+            }
+            span={2}
+          >
+            <SnakemakeLog log={value.snakemake} />
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="Detailed log" span={2}>
           <a
             href={api.call(value.id)}
