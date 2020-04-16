@@ -27,3 +27,13 @@ export function stringifyError(error) {
   if (error.toString != null) return error.toString();
   return JSON.stringify(error, null, 2);
 }
+
+export function keyBy(arr, field, fn) {
+  return arr.reduce(
+    (obj, el) => ({
+      ...obj,
+      [el[field]]: fn ? fn(el) : el,
+    }),
+    {}
+  );
+}

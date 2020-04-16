@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Table, Button, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { Error, StatusTag, showError } from 'components';
+import { usePersistentState } from 'utils/hooks';
+import {
+  jobStatusFilters,
+  EmptyWithFilters,
+  EmptyWoFilters,
+} from 'utils/tables';
+
+const expandable = {
+  expandedRowRender: (record) => (
+    <p style={{ margin: 0 }}>
+      <b>ID:</b> {record.id}
+      <br />
+      <b>Description:</b> {record.description}
+    </p>
+  ),
+};
 
 function VcfTable({ vcfs, deleteVcf }) {
-  if (vcfs.rejected) {
-    return <Error reason={vcfs.reason} />;
-  }
+  const [state, setState] = usePersistentState('vcfjobtable', {});
+
   const deleteJob = (evt) => {
     const id = evt.currentTarget.id;
     Modal.confirm({
@@ -41,12 +56,20 @@ function VcfTable({ vcfs, deleteVcf }) {
       title: 'Job alias',
       dataIndex: 'alias',
       render: (value, record) => <Link to={`${record.id}`}>{value}</Link>,
+      sorter: (a, b) => a.alias.localeCompare(b.alias),
+      defaultSortOrder:
+        state.sorter && state.sorter.field === 'alias'
+          ? state.sorter.order
+          : undefined,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       render: (value) => <StatusTag status={value} />,
       width: '12em',
+      defaultFilteredValue:
+        (state.filters && state.filters.status) || undefined,
+      ...jobStatusFilters,
     },
     {
       title: 'Actions',
@@ -54,6 +77,7 @@ function VcfTable({ vcfs, deleteVcf }) {
       render: (value) => (
         <Button
           id={value}
+          ghost
           type="danger"
           size="small"
           icon={<DeleteOutlined />}
@@ -63,8 +87,14 @@ function VcfTable({ vcfs, deleteVcf }) {
         </Button>
       ),
       width: '10em',
+      align: 'center',
     },
   ];
+
+  const handleChange = useCallback(
+    (pagination, filters, sorter) => setState({ pagination, filters, sorter }),
+    [setState]
+  );
 
   return (
     <Table
@@ -72,8 +102,24 @@ function VcfTable({ vcfs, deleteVcf }) {
       columns={columns}
       dataSource={data}
       loading={vcfs.pending}
+      expandable={expandable}
+      onChange={handleChange}
+      pagination={state.pagination}
+      locale={{
+        emptyText:
+          state.filters && state.filters.status != null
+            ? EmptyWithFilters
+            : EmptyWoFilters,
+      }}
     ></Table>
   );
 }
 
-export default VcfTable;
+function AsyncVcfTable({ vcfs, ...props }) {
+  if (vcfs.rejected) {
+    return <Error reason={vcfs.reason} />;
+  }
+  return <VcfTable vcfs={vcfs} {...props} />;
+}
+
+export default AsyncVcfTable;

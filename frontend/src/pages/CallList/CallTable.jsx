@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Table, Button, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { Error, StatusTag, showError } from 'components';
+import { usePersistentState } from 'utils/hooks';
+import {
+  jobStatusFilters,
+  EmptyWithFilters,
+  EmptyWoFilters,
+} from 'utils/tables';
+
+const expandable = {
+  expandedRowRender: (record) => (
+    <p style={{ margin: 0 }}>
+      <b>ID:</b> {record.id}
+      <br />
+      <b>Description:</b> {record.description}
+    </p>
+  ),
+};
 
 function CallTable({ calls, deleteCall }) {
-  if (calls.rejected) {
-    return <Error reason={calls.reason} />;
-  }
+  const [state, setState] = usePersistentState('calljobtable', {});
+
   const deleteJob = (evt) => {
     const id = evt.currentTarget.id;
     Modal.confirm({
@@ -32,12 +47,20 @@ function CallTable({ calls, deleteCall }) {
       title: 'Job alias',
       dataIndex: 'alias',
       render: (value, record) => <Link to={`${record.id}`}>{value}</Link>,
+      sorter: (a, b) => a.alias.localeCompare(b.alias),
+      defaultSortOrder:
+        state.sorter && state.sorter.field === 'alias'
+          ? state.sorter.order
+          : undefined,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       render: (value) => <StatusTag status={value} />,
       width: '12em',
+      defaultFilteredValue:
+        (state.filters && state.filters.status) || undefined,
+      ...jobStatusFilters,
     },
     {
       title: 'Actions',
@@ -45,6 +68,7 @@ function CallTable({ calls, deleteCall }) {
       render: (value) => (
         <Button
           id={value}
+          ghost
           type="danger"
           size="small"
           icon={<DeleteOutlined />}
@@ -54,8 +78,14 @@ function CallTable({ calls, deleteCall }) {
         </Button>
       ),
       width: '10em',
+      align: 'center',
     },
   ];
+
+  const handleChange = useCallback(
+    (pagination, filters, sorter) => setState({ pagination, filters, sorter }),
+    [setState]
+  );
 
   return (
     <Table
@@ -63,8 +93,24 @@ function CallTable({ calls, deleteCall }) {
       columns={columns}
       dataSource={data}
       loading={calls.pending}
+      expandable={expandable}
+      onChange={handleChange}
+      pagination={state.pagination}
+      locale={{
+        emptyText:
+          state.filters && state.filters.status != null
+            ? EmptyWithFilters
+            : EmptyWoFilters,
+      }}
     ></Table>
   );
 }
 
-export default CallTable;
+function AsyncCallTable({ calls, ...props }) {
+  if (calls.rejected) {
+    return <Error reason={calls.reason} />;
+  }
+  return <CallTable calls={calls} {...props} />;
+}
+
+export default AsyncCallTable;

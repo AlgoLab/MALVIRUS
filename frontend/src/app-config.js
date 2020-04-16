@@ -22,3 +22,11 @@ export const defaultMalvaParams = {
   maxmem: 4,
   cores: 4,
 };
+
+export const JOB_STATUSES = [
+  { value: 'Completed', color: 'success' },
+  { value: 'Running', color: 'processing' },
+  { value: 'Failed', color: 'error' },
+  { value: 'Pending', color: 'warning' },
+  { value: 'Uploaded', color: 'success' },
+];
