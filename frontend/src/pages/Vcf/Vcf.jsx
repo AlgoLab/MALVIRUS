@@ -111,7 +111,8 @@ function Vcf({ id, vcf, reloadVcf }) {
     vcf.value &&
     vcf.value.log &&
     (vcf.value.log.status === 'Completed' ||
-      vcf.value.log.status === 'Uploaded');
+      vcf.value.log.status === 'Uploaded' ||
+      vcf.value.log.status === 'Failed');
   return (
     <>
       <h1>
@@ -119,7 +120,6 @@ function Vcf({ id, vcf, reloadVcf }) {
         <b>{(vcf && vcf.fulfilled && vcf.value && vcf.value.alias) || id}</b>
       </h1>
       <BodyVcf vcf={vcf} />
-
       <ButtonPanel>
         <Button
           type="primary"

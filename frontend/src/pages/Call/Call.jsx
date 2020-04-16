@@ -95,6 +95,13 @@ function BodyCall({ call }) {
 }
 
 function Call({ id, call, reloadCall }) {
+  const noRefresh =
+    call &&
+    call.fulfilled &&
+    call.value &&
+    call.value.log &&
+    (call.value.log.status === 'Completed' ||
+      call.value.log.status === 'Failed');
   return (
     <>
       <h1>
@@ -105,7 +112,17 @@ function Call({ id, call, reloadCall }) {
       </h1>
       <BodyCall call={call} />
       <ButtonPanel>
-        <Button type="primary" icon={<SyncOutlined />} onClick={reloadCall}>
+        <Button
+          type="primary"
+          icon={<SyncOutlined />}
+          onClick={reloadCall}
+          disabled={noRefresh}
+          title={
+            noRefresh
+              ? 'Results are final. Refresh is not necessary.'
+              : 'Refresh job status'
+          }
+        >
           Refresh
         </Button>
       </ButtonPanel>
