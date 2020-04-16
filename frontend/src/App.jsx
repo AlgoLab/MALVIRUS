@@ -43,14 +43,14 @@ function App() {
           </div>
         </div>
         <Menu theme="dark" mode="horizontal" selectedKeys={[prefix]}>
-          <Menu.Item key="/vcf">
-            <Link to="/vcf">
-              <BarsOutlined /> Reference VCFs
-            </Link>
-          </Menu.Item>
           <Menu.Item key="/calls">
             <Link to="/calls">
               <DiffFilled /> Variant calls
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/vcf">
+            <Link to="/vcf">
+              <BarsOutlined /> Reference VCFs
             </Link>
           </Menu.Item>
         </Menu>
