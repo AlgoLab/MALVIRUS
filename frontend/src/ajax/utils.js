@@ -9,12 +9,6 @@ export function composeThen(fn1, fn2) {
   };
 }
 
-function newError(cause) {
-  const e = new Error(parse(cause));
-  e.cause = cause;
-  return e;
-}
-
 function parse(cause) {
   const { error, message } = cause;
 
@@ -25,6 +19,12 @@ function parse(cause) {
   } else {
     return '';
   }
+}
+
+export function newError(cause) {
+  const e = new Error(parse(cause));
+  e.cause = cause;
+  return e;
 }
 
 export const connect = baseConnect.defaults({

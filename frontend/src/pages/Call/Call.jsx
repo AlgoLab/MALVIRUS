@@ -1,7 +1,13 @@
 import React from 'react';
 
 import { Button, Descriptions, Tooltip } from 'antd';
-import { SyncOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import {
+  SyncOutlined,
+  QuestionCircleOutlined,
+  TableOutlined,
+} from '@ant-design/icons';
+
+import { useNavigate } from 'react-router-dom';
 
 import { api } from 'app-config';
 
@@ -15,8 +21,11 @@ import {
   SnakemakeLog,
 } from 'components';
 import PARAMS from 'utils/call-params';
+import { useCallback } from 'react';
 
 function BodyCall({ call }) {
+  const navigate = useNavigate();
+  const goToReport = useCallback(() => navigate('report'), [navigate]);
   if (call.pending) return <Loading />;
   if (call.rejected) return <Error reason={call.reason} />;
   const { value } = call;
@@ -52,12 +61,22 @@ function BodyCall({ call }) {
         </Descriptions.Item>
         <Descriptions.Item label="Output files:" span={2}>
           {value.log.output ? (
-            Object.keys(value.log.output).map((key) => (
-              <React.Fragment key={key}>
-                <FName href={value.log.output[key]} />
-                <br />
-              </React.Fragment>
-            ))
+            <>
+              {Object.keys(value.log.output).map((key) => (
+                <React.Fragment key={key}>
+                  <FName href={value.log.output[key]} />{' '}
+                </React.Fragment>
+              ))}
+              <Button
+                type="primary"
+                size="small"
+                icon={<TableOutlined />}
+                onClick={goToReport}
+                ghost
+              >
+                Show in tabular form
+              </Button>
+            </>
           ) : (
             <i>No output files available</i>
           )}

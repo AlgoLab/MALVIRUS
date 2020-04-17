@@ -13,6 +13,7 @@ import VcfNew from 'pages/VcfNew';
 import VcfUpload from 'pages/VcfUpload';
 import CallList from './pages/CallList';
 import Call from './pages/Call';
+import CallReport from './pages/CallReport';
 import CallNew from './pages/CallNew';
 
 import './App.css';
@@ -65,6 +66,7 @@ function App() {
             <Route path="calls" element={<CallList />} />
             <Route path="calls/new" element={<CallNew />} />
             <Route path="calls/:id" element={<Call />} />
+            <Route path="calls/:id/report" element={<CallReport />} />
             <Route path="*" element={<Navigate to="calls" />} />
           </Routes>
         </div>
