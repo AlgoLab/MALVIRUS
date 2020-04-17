@@ -5070,9 +5070,9 @@ history@5.0.0-beta.4:
     "@babel/runtime" "^7.7.6"
 
 history@^5.0.0-beta.7:
-  version "5.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/history/-/history-5.0.0-beta.7.tgz#00f5b0b063082279045c65c3b79860cd46c480c2"
-  integrity sha512-lsrdjF6Ns9Svh5EBTAGCp6CXoyf5OlqXMFbf3gEyMHBUBm7fkxuQv4Dx4N+v/1n+LNXh5nA/0qZ3ZDNLdM0+lw==
+  version "5.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/history/-/history-5.0.0-beta.8.tgz#a6a282402cbd1e2b7f5c3b7297cf4d9b46643cd6"
+  integrity sha512-sTrcermL3tT+a7Vs3uDgeXAFvlX24OmOCPe34i1E6VpzDWVlAitpnoPFlYsgduwOJ4VmP9GD0eRnYRBXu/+l8A==
   dependencies:
     "@babel/runtime" "^7.7.6"
 
