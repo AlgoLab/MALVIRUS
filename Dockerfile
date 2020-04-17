@@ -54,15 +54,22 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
 
-RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda clean -afy
-
 ENV PATH /opt/conda/bin:$PATH
 
 COPY ./environment.yml environment.yml
 RUN conda env create -f environment.yml
 RUN echo "conda activate malva-env" >> ~/.profile
+
+# Clean conda packages
+RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    /opt/conda/bin/conda clean -afy
+
+# Remove unused packages
+RUN apt-get remove -y \
+     tcl x11-common g++ gcc gcc-6 cpp cpp-6 subversion mysql-common && \
+   apt-get autoremove -y
+
 
 COPY --from=build-frontend /app/build /static
 COPY --from=build-software /software /software
