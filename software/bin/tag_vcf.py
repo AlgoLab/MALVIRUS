@@ -5,6 +5,20 @@ import gffutils
 from pysam import VariantFile
 
 def open_gtf(gtf_path):
+    with_genes = False
+    with_transcripts = False
+    for line in open(gtf_path):
+        if line.startswith('#'):
+            continue
+        feat_type = line.split("\t")[2]
+        if feat_type == "gene":
+            with_genes = True
+        elif feat_type == "transcript":
+            with_transcripts = True
+        else:
+            # TODO maybe we can use a break. There are pros and cons
+            # The first feature is not always a gene.
+            continue
     try:
         gtf = gffutils.FeatureDB("{}.db".format(gtf_path),
                                  keep_order=True)
@@ -12,8 +26,8 @@ def open_gtf(gtf_path):
         gtf = gffutils.create_db(gtf_path,
                                  dbfn = "{}.db".format(gtf_path),
                                  force = True, keep_order = True,
-                                 disable_infer_genes = True,
-                                 disable_infer_transcripts = True,
+                                 disable_infer_genes = with_genes,
+                                 disable_infer_transcripts = with_transcripts,
                                  merge_strategy = "merge",
                                  sort_attribute_values = True)
     return gtf
