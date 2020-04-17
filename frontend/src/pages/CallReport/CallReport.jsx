@@ -5,6 +5,10 @@ import { Table } from 'antd';
 import { PromiseState } from 'react-refetch';
 import { Error, Loading } from 'components';
 
+import GenotypeCell from './GenotypeCell';
+
+import { reference, alternate } from './CallReport.module.css';
+
 const columns = [
   {
     title: 'Chrom',
@@ -31,15 +35,7 @@ const columns = [
   {
     title: 'Genotype',
     dataIndex: 'DONOR',
-    render: (value, record) => {
-      if (!value || value.indexOf(':') === -1) return value;
-      const [gt, gq] = value.split(':');
-      return (
-        <abbr title={value}>
-          {gt === 0 ? record.REF : record.ALT} ({gq})
-        </abbr>
-      );
-    },
+    render: (value, record) => <GenotypeCell value={value} record={record} />,
   },
 ];
 
@@ -73,6 +69,9 @@ function BodyCallReport({ call: value, vcf }) {
       size="small"
       pagination={pagination}
       bordered
+      rowClassName={(record) =>
+        record.DONOR.startsWith('1:') ? alternate : reference
+      }
     />
   );
 }
