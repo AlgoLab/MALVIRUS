@@ -8,7 +8,7 @@ import { UploadOutlined } from '@ant-design/icons';
 
 import { normFile, getFalse } from 'utils';
 import { ButtonPanel, showError } from 'components';
-import params from 'utils/call-params';
+import params from 'utils/vcf-params';
 
 function VcfNew({ createVcf }) {
   const [loading, setLoading] = useState(false);
