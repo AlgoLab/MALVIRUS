@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@2fd/ant-design-icons@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@2fd/ant-design-icons/-/ant-design-icons-2.0.0.tgz#af9827b97689690da21fdbbc1af346a5cbe0414e"
+  integrity sha512-EDhRZyXwliJC9Tzxb9rjq0VBBiTTv9J8NsGK01A6JJg0hCM3XrFBRXbyLOavj38RsChSIXGUZpKNJuomM98BYQ==
+  dependencies:
+    "@ant-design/icons" "^4.0.0"
+    react "^16.12.0"
+
 "@ant-design/colors@^3.1.0":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@ant-design/colors/-/colors-3.2.2.tgz#5ad43d619e911f3488ebac303d606e66a8423903"
@@ -9190,7 +9198,7 @@ react-scripts@3.4.1:
   optionalDependencies:
     fsevents "2.1.2"
 
-react@^16.13.1:
+react@^16.12.0, react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==

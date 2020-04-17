@@ -1,11 +1,8 @@
 import React from 'react';
 
 import { Button, Descriptions, Tooltip } from 'antd';
-import {
-  SyncOutlined,
-  QuestionCircleOutlined,
-  TableOutlined,
-} from '@ant-design/icons';
+import { SyncOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import TableIcon from '@2fd/ant-design-icons/lib/Table';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -70,7 +67,7 @@ function BodyCall({ call }) {
               <Button
                 type="primary"
                 size="small"
-                icon={<TableOutlined />}
+                icon={<TableIcon />}
                 onClick={goToReport}
                 ghost
               >
