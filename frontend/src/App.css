@@ -11,23 +11,22 @@
   line-height: 1;
   background: rgba(255, 255, 255, 1);
   margin: 0;
+  padding: 0 1em 0 0;
   float: left;
+  font-size: 1.75em;
+  font-weight: 800;
+  line-height: 64px;
+  background-color: #19284B;
+  color: #fff;
 }
 
-.logo-img, .logo {
+.logo {
   display: none;
 }
 
-@media screen and (min-width: 50em) {
-  .logo-img {
-    display: inline-block;
-    height: 100%;
-    vertical-align: top;
-  }
-}
 @media screen and (min-width: 35em) {
   .logo {
-    display: inline-block;
+    display: block;
   }
 }
 

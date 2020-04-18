@@ -4,8 +4,7 @@ import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 
 import { Layout, Menu } from 'antd';
 import { BarsOutlined, DiffFilled } from '@ant-design/icons';
-
-import logo from './logo.png';
+import AppIcon from '@2fd/ant-design-icons/lib/ShuffleVariant';
 
 import VcfList from './pages/VcfList';
 import Vcf from './pages/Vcf';
@@ -28,20 +27,7 @@ function App() {
     <Layout className="layout">
       <Header>
         <div className="logo">
-          <img className="logo-img" src={logo} alt="BIAS Lab logo" />
-          <div
-            style={{
-              padding: '0 1em',
-              display: 'inline-block',
-              fontSize: '1.75em',
-              fontWeight: 800,
-              lineHeight: '64px',
-              backgroundColor: '#19284B',
-              color: '#fff',
-            }}
-          >
-            MALVA
-          </div>
+          <AppIcon /> MALVIRUS
         </div>
         <Menu theme="dark" mode="horizontal" selectedKeys={[prefix]}>
           <Menu.Item key="/calls">
@@ -72,7 +58,7 @@ function App() {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        MALVA-Web ©2020 - BIAS Lab
+        MALVIRUS ©2020 - <a href="https://algolab.eu/">BIAS Lab</a>
       </Footer>
     </Layout>
   );
