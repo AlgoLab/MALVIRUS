@@ -1,10 +1,9 @@
 import React from 'react';
 
 function getColor(gq) {
-  const igq = +gq;
-  if (igq >= 100) return '#7bcd7b';
-  if (igq >= 95) return '#a2d3a2';
-  if (igq >= 70) return '#fae18b';
+  if (gq >= 100) return '#7bcd7b';
+  if (gq >= 95) return '#a2d3a2';
+  if (gq >= 70) return '#fae18b';
   return '#f29998';
 }
 
@@ -16,8 +15,8 @@ const cellStyle = {
 };
 
 function GenotypeCell({ value, record }) {
-  if (!value || value.indexOf(':') === -1) return value;
-  const [gt, gq] = value.split(':');
+  if (!value) return value;
+  const [gt, gq] = value;
   return (
     <div style={cellStyle}>
       <div
@@ -28,7 +27,7 @@ function GenotypeCell({ value, record }) {
         }}
       >
         <abbr title={value}>
-          {gt === '0' ? record.REF : <b>{record.ALT}</b>} ({gq})
+          {gt === 0 ? 0 : <b>1</b>} ({gq})
         </abbr>
       </div>
     </div>
