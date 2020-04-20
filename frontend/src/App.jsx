@@ -3,7 +3,11 @@ import React from 'react';
 import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 
 import { Layout, Menu } from 'antd';
-import { BarsOutlined, DiffFilled } from '@ant-design/icons';
+import {
+  BarsOutlined,
+  DiffFilled,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
 import AppIcon from '@2fd/ant-design-icons/lib/ShuffleVariant';
 
 import VcfList from './pages/VcfList';
@@ -14,10 +18,13 @@ import CallList from './pages/CallList';
 import Call from './pages/Call';
 import CallReport from './pages/CallReport';
 import CallNew from './pages/CallNew';
+import Help from './pages/Help';
 
 import './App.css';
 
 const { Header, Content, Footer } = Layout;
+
+const helpStyle = { float: 'right' };
 
 function App() {
   const { pathname } = useLocation();
@@ -40,6 +47,11 @@ function App() {
               <BarsOutlined /> Reference VCFs
             </Link>
           </Menu.Item>
+          <Menu.Item key="/help" style={helpStyle}>
+            <Link to="/help">
+              <QuestionCircleOutlined /> Help
+            </Link>
+          </Menu.Item>
         </Menu>
       </Header>
       <Content>
@@ -53,6 +65,7 @@ function App() {
             <Route path="calls/new" element={<CallNew />} />
             <Route path="calls/:id" element={<Call />} />
             <Route path="calls/:id/report" element={<CallReport />} />
+            <Route path="help/*" element={<Help />} />
             <Route path="*" element={<Navigate to="calls" />} />
           </Routes>
         </div>

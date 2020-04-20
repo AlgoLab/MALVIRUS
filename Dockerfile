@@ -5,6 +5,8 @@ COPY frontend/package.json ./
 COPY frontend/yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY frontend ./
+RUN rm public/help
+COPY help/ ./public/help
 RUN yarn run build
 
 

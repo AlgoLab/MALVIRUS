@@ -9,6 +9,7 @@
     "core-js": "^3.5.0",
     "dayjs": "1.8.24",
     "history": "^5.0.0-beta.7",
+    "markdown-to-jsx": "^6.11.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dom": "^16.13.1",
