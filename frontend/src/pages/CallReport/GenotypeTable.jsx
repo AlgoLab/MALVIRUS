@@ -46,6 +46,8 @@ function highlight_alt_rows(record) {
   return record._genotype && record._genotype[0] === 1 ? alternate : reference;
 }
 
+const tableScroll = { y: 400, x: '100%' };
+
 function GenotypeTable({ data, config }) {
   const filteredData = data.filter((locus) => {
     // Only ALT
@@ -70,7 +72,6 @@ function GenotypeTable({ data, config }) {
 
   const pagination = {
     pageSize: 100,
-    position: ['topRight', 'bottomRight'],
     showSizeChanger: false,
     showTotal: (total, range) =>
       `Showing ${range[0]}-${range[1]} of ${total} loci (${
@@ -88,6 +89,7 @@ function GenotypeTable({ data, config }) {
       pagination={pagination}
       bordered
       rowClassName={config.highlight_alt ? highlight_alt_rows : undefined}
+      scroll={tableScroll}
     />
   );
 }
