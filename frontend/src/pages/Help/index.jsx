@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import buildHelpPage from './buildHelpPage';
+import { basepath } from 'app-config';
 
 /**
  * To ADD a new PAGE:
@@ -20,7 +21,7 @@ import buildHelpPage from './buildHelpPage';
  */
 
 // List of pages
-const Help = buildHelpPage('/help/HELP.md');
+const Help = buildHelpPage(`${basepath}help/HELP.md`);
 // END: List of pages
 
 function HelpPage() {
