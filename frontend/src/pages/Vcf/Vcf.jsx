@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Descriptions, Tooltip } from 'antd';
 import { SyncOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
-import { api } from 'app-config';
+import { api, JOB_STATUSES } from 'app-config';
 
 import {
   ButtonPanel,
@@ -110,9 +110,8 @@ function Vcf({ id, vcf, reloadVcf }) {
     vcf.fulfilled &&
     vcf.value &&
     vcf.value.log &&
-    (vcf.value.log.status === 'Completed' ||
-      vcf.value.log.status === 'Uploaded' ||
-      vcf.value.log.status === 'Failed');
+    JOB_STATUSES[vcf.value.log.status] &&
+    JOB_STATUSES[vcf.value.log.status].final;
   return (
     <>
       <h1>

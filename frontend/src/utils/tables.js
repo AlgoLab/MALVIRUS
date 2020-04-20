@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { JOB_STATUSES } from 'app-config';
-import { keyBy } from 'utils';
 import { Empty } from 'antd';
 
+import { JOB_STATUSES } from 'app-config';
+
 export const jobStatusFilters = {
-  filters: Object.keys(keyBy(JOB_STATUSES, 'value')).map((status) => ({
+  filters: Object.keys(JOB_STATUSES).map((status) => ({
     text: status,
     value: status,
   })),

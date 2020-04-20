@@ -6,7 +6,7 @@ import TableIcon from '@2fd/ant-design-icons/lib/Table';
 
 import { useNavigate } from 'react-router-dom';
 
-import { api } from 'app-config';
+import { api, JOB_STATUSES } from 'app-config';
 
 import {
   ButtonPanel,
@@ -116,8 +116,8 @@ function Call({ id, call, reloadCall }) {
     call.fulfilled &&
     call.value &&
     call.value.log &&
-    (call.value.log.status === 'Completed' ||
-      call.value.log.status === 'Failed');
+    JOB_STATUSES[call.value.log.status] &&
+    JOB_STATUSES[call.value.log.status].final;
   return (
     <>
       <h1>

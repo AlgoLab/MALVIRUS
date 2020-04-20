@@ -24,10 +24,15 @@ export const defaultMalvaParams = {
   cores: 4,
 };
 
-export const JOB_STATUSES = [
-  { value: 'Completed', color: 'success' },
+const BASE_JOB_STATUSES = [
+  { value: 'Precomputed', color: '#237804', success: true, final: true },
+  { value: 'Completed', color: 'success', success: true, final: true },
   { value: 'Running', color: 'processing' },
-  { value: 'Failed', color: 'error' },
+  { value: 'Failed', color: 'error', final: true },
   { value: 'Pending', color: 'warning' },
-  { value: 'Uploaded', color: 'success' },
+  { value: 'Uploaded', color: 'success', success: true, final: true },
 ];
+
+export const JOB_STATUSES = Object.fromEntries(
+  BASE_JOB_STATUSES.map((job_status) => [job_status.value, job_status])
+);
