@@ -349,6 +349,9 @@ def post_malva():
         cores = request.form['cores']
         malvak = request.form['malvak']
 
+        if malvak > lenkmers:
+            abort(make_response(jsonify(message="Illegal value for malvak."), 400))
+
     except Exception as e:
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
 
