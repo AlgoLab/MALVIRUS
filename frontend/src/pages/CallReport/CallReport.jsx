@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { PromiseState } from 'react-refetch';
+import { DownloadOutlined } from '@ant-design/icons';
+
 import { Error, Loading } from 'components';
 
 import GenotypeTable from './GenotypeTable';
@@ -44,6 +46,7 @@ function AsyncBodyCallReport({ call, vcf }) {
 }
 
 function CallReport({ id, call, vcf }) {
+  const vcfUrl = vcf && vcf.meta && vcf.meta.request && vcf.meta.request.url;
   return (
     <>
       <h1>
@@ -52,6 +55,20 @@ function CallReport({ id, call, vcf }) {
           {(call && call.fulfilled && call.value && call.value.alias) || id}
         </b>
       </h1>
+      <p>
+        The table represents the genotype called on the given sample.
+        {vcfUrl && (
+          <>
+            {' '}
+            You can also download the results in{' '}
+            <a href={vcfUrl} target="_blank" rel="noopener noreferrer" download>
+              VCF format <DownloadOutlined />
+            </a>
+            .
+          </>
+        )}
+      </p>
+
       <AsyncBodyCallReport call={call} vcf={vcf} />
     </>
   );
