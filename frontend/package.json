@@ -23,9 +23,6 @@
     "build": "craco build"
   },
   "proxy": "http://localhost:56733",
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
