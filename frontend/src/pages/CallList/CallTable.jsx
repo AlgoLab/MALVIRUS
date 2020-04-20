@@ -1,15 +1,27 @@
-import React, { useCallback } from 'react';
-import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Table, Button, message, Modal } from 'antd';
+import React, { useCallback, useMemo } from 'react';
+import {
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  ZoomInOutlined,
+} from '@ant-design/icons';
+import TableIcon from '@2fd/ant-design-icons/lib/Table';
+import { Table, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { Error, StatusTag, showError } from 'components';
+import {
+  Error,
+  StatusTag,
+  showError,
+  TableButton,
+  TableLink,
+} from 'components';
 import { usePersistentState } from 'utils/hooks';
 import {
   jobStatusFilters,
   EmptyWithFilters,
   EmptyWoFilters,
 } from 'utils/tables';
+import { JOB_STATUSES } from 'app-config';
 
 const expandable = {
   expandedRowRender: (record) => (
@@ -24,63 +36,102 @@ const expandable = {
 function CallTable({ calls, deleteCall }) {
   const [state, setState] = usePersistentState('calljobtable', {});
 
-  const deleteJob = (evt) => {
-    const id = evt.currentTarget.id;
-    Modal.confirm({
-      title: 'Are you sure you want to delete this variant call job?',
-      icon: <ExclamationCircleOutlined />,
-      content: <p>The operation cannot be undone.</p>,
-      onOk() {
-        return new Promise((resolve, reject) =>
-          deleteCall(id, resolve, reject)
-        ).then(() => {
-          message.success('Variant call job successfully deleted!');
-          return;
-        }, showError);
-      },
-      onCancel() {},
-    });
-  };
+  const deleteJob = useCallback(
+    (evt) => {
+      const id = evt.currentTarget.name;
+      Modal.confirm({
+        title: 'Are you sure you want to delete this variant call job?',
+        icon: <ExclamationCircleOutlined />,
+        content: <p>The operation cannot be undone.</p>,
+        onOk() {
+          return new Promise((resolve, reject) =>
+            deleteCall(id, resolve, reject)
+          ).then(() => {
+            message.success('Variant call job successfully deleted!');
+            return;
+          }, showError);
+        },
+        onCancel() {},
+      });
+    },
+    [deleteCall]
+  );
+
   const data = calls.fulfilled ? calls.value.content : [];
-  const columns = [
-    {
-      title: 'Job alias',
-      dataIndex: 'alias',
-      render: (value, record) => <Link to={`${record.id}`}>{value}</Link>,
-      sorter: (a, b) => a.alias.localeCompare(b.alias),
-      defaultSortOrder:
-        state.sorter && state.sorter.field === 'alias'
-          ? state.sorter.order
-          : undefined,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (value) => <StatusTag status={value} />,
-      width: '12em',
-      defaultFilteredValue:
-        (state.filters && state.filters.status) || undefined,
-      ...jobStatusFilters,
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'id',
-      render: (value) => (
-        <Button
-          id={value}
-          ghost
-          type="danger"
-          size="small"
-          icon={<DeleteOutlined />}
-          onClick={deleteJob}
-        >
-          Delete
-        </Button>
-      ),
-      width: '10em',
-      align: 'center',
-    },
-  ];
+  const columns = useMemo(
+    () => [
+      {
+        title: 'Job alias',
+        dataIndex: 'alias',
+        render: (value, record) => <Link to={record.id}>{value}</Link>,
+        sorter: (a, b) => a.alias.localeCompare(b.alias),
+        defaultSortOrder:
+          state.sorter && state.sorter.field === 'alias'
+            ? state.sorter.order
+            : undefined,
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        render: (value) => <StatusTag status={value} />,
+        width: '10em',
+        defaultFilteredValue:
+          (state.filters && state.filters.status) || undefined,
+        ...jobStatusFilters,
+      },
+      {
+        title: 'Results',
+        key: 'results',
+        dataIndex: 'id',
+        render: (value, record) => {
+          const resEnabled =
+            record.status &&
+            JOB_STATUSES[record.status] &&
+            JOB_STATUSES[record.status].success;
+          return (
+            <>
+              <TableLink name={value} icon={<ZoomInOutlined />}>
+                Details
+              </TableLink>
+              <TableLink
+                name={`${value}/report`}
+                icon={<TableIcon />}
+                disabled={!resEnabled}
+                title={
+                  resEnabled
+                    ? 'Show results in tabular format'
+                    : 'Results are not available. See details.'
+                }
+              >
+                Results
+              </TableLink>
+            </>
+          );
+        },
+        width: '10em',
+        align: 'center',
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        dataIndex: 'id',
+        render: (value) => (
+          <TableButton
+            name={value}
+            type="danger"
+            ghost
+            icon={<DeleteOutlined />}
+            onClick={deleteJob}
+          >
+            Delete
+          </TableButton>
+        ),
+        width: '9em',
+        align: 'center',
+      },
+    ],
+    [state, deleteJob]
+  );
 
   const handleChange = useCallback(
     (pagination, filters, sorter) => setState({ pagination, filters, sorter }),
@@ -102,6 +153,7 @@ function CallTable({ calls, deleteCall }) {
             ? EmptyWithFilters
             : EmptyWoFilters,
       }}
+      showSorterTooltip={false}
     ></Table>
   );
 }

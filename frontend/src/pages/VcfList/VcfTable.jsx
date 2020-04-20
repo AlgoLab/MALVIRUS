@@ -1,9 +1,19 @@
 import React, { useCallback } from 'react';
-import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Table, Button, message, Modal } from 'antd';
+import {
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  ZoomInOutlined,
+} from '@ant-design/icons';
+import { Table, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { Error, StatusTag, showError } from 'components';
+import {
+  Error,
+  StatusTag,
+  showError,
+  TableButton,
+  TableLink,
+} from 'components';
 import { usePersistentState } from 'utils/hooks';
 import {
   jobStatusFilters,
@@ -66,27 +76,39 @@ function VcfTable({ vcfs, deleteVcf }) {
       title: 'Status',
       dataIndex: 'status',
       render: (value) => <StatusTag status={value} />,
-      width: '12em',
+      width: '10em',
       defaultFilteredValue:
         (state.filters && state.filters.status) || undefined,
       ...jobStatusFilters,
     },
     {
-      title: 'Actions',
+      title: 'Results',
+      key: 'results',
       dataIndex: 'id',
       render: (value) => (
-        <Button
-          id={value}
+        <TableLink name={value} icon={<ZoomInOutlined />}>
+          Details
+        </TableLink>
+      ),
+      width: '10em',
+      align: 'center',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      dataIndex: 'id',
+      render: (value) => (
+        <TableButton
+          name={value}
           ghost
           type="danger"
-          size="small"
           icon={<DeleteOutlined />}
           onClick={deleteJob}
         >
           Delete
-        </Button>
+        </TableButton>
       ),
-      width: '10em',
+      width: '9em',
       align: 'center',
     },
   ];
@@ -111,6 +133,7 @@ function VcfTable({ vcfs, deleteVcf }) {
             ? EmptyWithFilters
             : EmptyWoFilters,
       }}
+      showSorterTooltip={false}
     ></Table>
   );
 }

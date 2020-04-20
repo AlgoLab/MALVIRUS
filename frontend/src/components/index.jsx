@@ -5,3 +5,5 @@ export { default as JobParameters } from './JobParameters';
 export { default as Loading } from './Loading';
 export { default as SnakemakeLog } from './SnakemakeLog';
 export { default as StatusTag } from './StatusTag';
+export { default as TableButton } from './TableButton';
+export { default as TableLink } from './TableLink';

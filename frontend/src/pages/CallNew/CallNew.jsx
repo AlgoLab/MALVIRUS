@@ -16,7 +16,7 @@ import {
 
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { defaultMalvaParams } from 'app-config';
+import { defaultMalvaParams, JOB_STATUSES } from 'app-config';
 import { ButtonPanel, Error, Loading, showError } from 'components';
 import { normFile, getFalse } from 'utils';
 import params from 'utils/call-params';
@@ -82,7 +82,7 @@ function CallNew({ createCall, vcfs }) {
     return <Loading />;
   }
   const okVcfs = vcfs.value.content.filter(
-    ({ status }) => status === 'Completed' || status === 'Uploaded'
+    ({ status }) => JOB_STATUSES[status] && JOB_STATUSES[status].success
   );
   if (okVcfs.length === 0) {
     return (
@@ -163,8 +163,8 @@ function CallNew({ createCall, vcfs }) {
           ]}
           extra={
             <>
-              {params.vcf.extra} Use the buttons below to build or upload a new
-              reference VCF.
+              {params.vcf.extra} Select a reference VCF above <b>or</b> use the
+              buttons below to build or upload a new reference VCF.
               <ButtonPanel alignment="left">
                 <Button icon={<PlusOutlined />} onClick={onClickNew}>
                   Build a new reference VCF from genomes
