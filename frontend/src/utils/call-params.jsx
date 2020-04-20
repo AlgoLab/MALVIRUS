@@ -25,12 +25,31 @@ const params = {
   },
   lenkmers: {
     label: (
+      <span>
+        Context <i>k</i>-mer length
+      </span>
+    ),
+    extra: (
       <>
-        <i>k</i>-mer length
+        Length of the <i>k</i>-mers used to discern between real signatures and
+        repetitions. A higher value will help to discern better between small
+        repeated regions but will lower the occurrences of each <i>k</i>-mer.
       </>
     ),
-    extra:
-      'Length of the kmers that will be used by the tools.  A higher value will help to discern better between small repeated regions but will lower the occurrences of each kmer.',
+  },
+  malvak: {
+    label: (
+      <span>
+        Signature <i>k</i>-mer length
+      </span>
+    ),
+    extra: (
+      <>
+        Length of the <i>k</i>-mers used to characterize each allele. A higher
+        value will help to discern better between small repeated regions but
+        will lower the occurrences of each <i>k</i>-mer.
+      </>
+    ),
   },
   maxmem: {
     label: 'Maximum amount of memory used by KMC [GB]',

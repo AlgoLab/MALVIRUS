@@ -21,6 +21,32 @@ import { ButtonPanel, Error, Loading, showError } from 'components';
 import { normFile, getFalse } from 'utils';
 import params from 'utils/call-params';
 
+const malvakValidator = ({ getFieldValue }) => ({
+  validator(rule, value) {
+    if (!value || getFieldValue('lenkmers') >= value) {
+      return Promise.resolve();
+    }
+    return Promise.reject(
+      <>
+        {params.malvak.label} cannot be greater than {params.lenkmers.label}
+      </>
+    );
+  },
+});
+
+const maxoccValidator = ({ getFieldValue }) => ({
+  validator(rule, value) {
+    if (!value || getFieldValue('minocc') <= value) {
+      return Promise.resolve();
+    }
+    return Promise.reject(
+      <>
+        {params.maxocc.label} cannot be smaller than {params.minocc.label}
+      </>
+    );
+  },
+});
+
 function CallNew({ createCall, vcfs }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -165,6 +191,7 @@ function CallNew({ createCall, vcfs }) {
           rules={[
             {
               required: true,
+              type: 'integer',
               message: 'Please provide a valid number!',
             },
           ]}
@@ -181,22 +208,26 @@ function CallNew({ createCall, vcfs }) {
               rules={[
                 {
                   required: true,
+                  type: 'integer',
                   message: 'Please provide a valid number!',
                 },
               ]}
               extra={params.minocc.extra}
             >
-              <InputNumber min={10} type="number" />
+              <InputNumber min={1} type="number" />
             </Form.Item>
 
             <Form.Item
               label={params.maxocc.label}
               name="maxocc"
+              dependencies={['minocc']}
               rules={[
                 {
                   required: true,
+                  type: 'integer',
                   message: 'Please provide a valid number!',
                 },
+                maxoccValidator,
               ]}
               extra={params.maxocc.extra}
             >
@@ -209,6 +240,7 @@ function CallNew({ createCall, vcfs }) {
               rules={[
                 {
                   required: true,
+                  type: 'integer',
                   message: 'Please provide a valid number!',
                 },
               ]}
@@ -218,11 +250,28 @@ function CallNew({ createCall, vcfs }) {
             </Form.Item>
 
             <Form.Item
+              label={params.malvak.label}
+              name="malvak"
+              dependencies={['lenkmers']}
+              rules={[
+                {
+                  required: true,
+                  type: 'integer',
+                  message: 'Please provide a valid number!',
+                },
+                malvakValidator,
+              ]}
+              extra={params.malvak.extra}
+            >
+              <InputNumber min={1} type="number" />
+            </Form.Item>
+            <Form.Item
               label={params.maxmem.label}
               name="maxmem"
               rules={[
                 {
                   required: true,
+                  type: 'integer',
                   message: 'Please provide a valid number!',
                 },
               ]}
