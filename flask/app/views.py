@@ -198,14 +198,13 @@ def post_vcf():
         config = pjoin(workdir, 'config.vcf.yaml')
         reference = info["reference"]
         gtf = info["gtf"]
-        n_cores = info['params']["cores"]
         with open(config, 'w+') as conf:
             conf.write(
                 f'workdir: {workdir}\n' +
                 f'multifa: {multifa}\n' +
                 f'reference: {reference}\n' +
                 f'gtf: {gtf}\n' +
-                f'n_cores: {n_cores}'
+                f'cores: {cores}\n'
             )
 
         # Create a status.json with status "Pending"
@@ -220,7 +219,7 @@ def post_vcf():
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} --cores {cores} -d {workdir}'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir}'
             ],
             cwd=app.config["SK_CWD"],
             stdout=open('/dev/null', 'w'),
@@ -348,6 +347,7 @@ def post_malva():
         lenkmers = request.form['lenkmers']
         maxmem = request.form['maxmem']
         cores = request.form['cores']
+        malvak = request.form['malvak']
 
     except Exception as e:
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
@@ -406,13 +406,15 @@ def post_malva():
             'maxocc': maxocc,
             'lenkmers': lenkmers,
             'maxmem': maxmem,
-            'cores': cores
+            'cores': cores,
+            'malvak': malvak
         },
         "description": str(request.form.get('description')),
         "alias": alias,
         "input": {
             "vcf": vcfpath,
-            "reference": reference
+            "reference": reference,
+            "gtf": gtf
         }
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
@@ -428,8 +430,10 @@ def post_malva():
             f'minocc: {minocc}\n' +
             f'maxocc: {maxocc}\n' +
             f'lenkmers: {lenkmers}\n' +
+            f'malvak: {malvak}\n' +
             f'maxmem: {maxmem}\n' +
-            f'gtf: {gtf}\n'
+            f'gtf: {gtf}\n' +
+            f'cores: {cores}\n'
         )
 
     status = {
@@ -443,7 +447,7 @@ def post_malva():
         [
             "nohup",
             "/bin/bash", "-c", "-l",
-            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} --cores {cores} -d {workdir}'
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir}'
         ],
         cwd=app.config["SK_CWD"],
         stdout=open('/dev/null', 'w'),

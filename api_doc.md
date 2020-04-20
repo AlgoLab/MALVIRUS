@@ -524,6 +524,7 @@ curl -i \
 -F 'lenkmers=35' \
 -F 'maxmem=4' \
 -F 'cores=4' \
+-F 'malvak=30' \
 -F 'alias=job-malva' \
 http://localhost:56733/api/malva
 
@@ -536,6 +537,7 @@ curl -i \
 -F 'lenkmers=35' \
 -F 'maxmem=4' \
 -F 'cores=4' \
+-F 'malvak=30' \
 -F 'alias=job-malva-upload' \
 -F 'description=this will fail' \
 http://localhost:56733/api/malva
