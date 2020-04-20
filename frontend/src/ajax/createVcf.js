@@ -9,7 +9,8 @@ const ajaxCreateVcf = connect(() => ({
       if (files[key] != null) body.append(key, files[key][0].originFileObj);
     });
     Object.keys(params).forEach((key) => {
-      if (params[key] != null) body.append(key, params[key]);
+      if (params[key] != null && params[key] !== '')
+        body.append(key, params[key]);
     });
     return {
       vcf: {
