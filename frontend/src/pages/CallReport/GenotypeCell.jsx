@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cell, cellText, cellBar } from './GenotypeCell.module.css';
+
 function getColor(gq) {
   if (gq >= 100) return '#7bcd7b';
   if (gq >= 95) return '#a2d3a2';
@@ -7,29 +9,23 @@ function getColor(gq) {
   return '#f29998';
 }
 
-const margin = 8;
-const cellStyle = {
-  width: `calc(100% + ${2 * margin}px)`,
-  margin: -margin,
-  backgroundColor: '#fff',
-};
-
 function GenotypeCell({ value, record }) {
   if (!value) return value;
   const [gt, gq] = value;
   return (
-    <div style={cellStyle}>
-      <div
-        style={{
-          width: `${gq}%`,
-          backgroundColor: getColor(gq),
-          padding: margin,
-        }}
-      >
+    <div className={cell}>
+      <div className={cellText}>
         <abbr title={value}>
           {gt === 0 ? 0 : <b>1</b>} ({gq})
         </abbr>
       </div>
+      <div
+        className={cellBar}
+        style={{
+          width: `${gq}%`,
+          backgroundColor: getColor(gq),
+        }}
+      ></div>
     </div>
   );
 }

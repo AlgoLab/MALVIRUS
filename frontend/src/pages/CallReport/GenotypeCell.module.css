@@ -1,0 +1,25 @@
+:root {
+  --margin: 8px;
+}
+
+.cell {
+  width: calc(2 * var(--margin) + 100%);
+  margin: calc(-1 * var(--margin));
+  background-color: #fff;
+}
+
+.cellText {
+  position: relative;
+  width: 100%;
+  padding: var(--margin);
+  z-index: 1;
+}
+
+.cellBar {
+  position: absolute;
+  padding: var(--margin);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+}
