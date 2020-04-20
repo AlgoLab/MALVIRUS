@@ -56,7 +56,7 @@ function GenotypeTable({ data, config }) {
     // Gene
     if (
       config.gene != null &&
-      config.gene !== '' &&
+      config.gene.length > 0 &&
       !config.gene.includes(locus._gene)
     )
       return false;
