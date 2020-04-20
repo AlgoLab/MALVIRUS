@@ -363,7 +363,7 @@ def post_malva():
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf, 'info.json'), 'r') as f:
         info = json.load(f)
 
-    if status['status'] == 'Uploaded':
+    if status['status'] in ['Uploaded', 'Precomputed']:
         vcfpath = status['output']['vcf']
     else:
         vcfpath = pjoin(
@@ -467,3 +467,14 @@ def post_malva():
     info['status'] = status['status']
 
     return jsonify(info)
+
+
+@app.route('/update', methods=['GET'])
+def update_precomputed():
+
+    ret = {
+        'status': 'Completed',
+        'Downloaded': ''
+    }
+
+    return jsonify(ret)
