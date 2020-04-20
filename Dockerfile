@@ -23,7 +23,9 @@ RUN git clone --depth 1 https://github.com/ldenti/snp-sites.git && \
 
 RUN apt-get update && apt-get install -y --no-install-recommends cmake
 
-RUN git clone --recursive --depth 1 --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git
+RUN git clone --recursive --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git
+
+RUN cd malva && git pull && git checkout 7f45bedd74e530d34199cf7317b2fa8f911213f4
 
 RUN cd malva/sdsl-lite && \
     ./install.sh /software
