@@ -15,6 +15,7 @@ from time import sleep
 import datetime
 import glob
 import shutil
+import gzip
 
 
 def mkdirp(path):
@@ -166,10 +167,24 @@ def post_vcf():
     # Download file
     dfile = pjoin(workdir, secure_filename(rfile.filename))
     rfile.save(dfile)
+    if dfile.endswith('.gz'):
+        nfile = dfile.replace('.gz', '')
+        with gzip.open(dfile, 'rb') as f_in:
+            with open(nfile, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        os.remove(dfile)
+        dfile = nfile
 
     # Download reference
     refpath = pjoin(workdir, secure_filename(reffile.filename))
     reffile.save(refpath)
+    if refpath.endswith('.gz'):
+        nfile = refpath.replace('.gz', '')
+        with gzip.open(refpath, 'rb') as f_in:
+            with open(nfile, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        os.remove(refpath)
+        refpath = nfile
 
     # Download GTF (optional)
     if 'gtf' not in request.files:
@@ -471,6 +486,13 @@ def post_malva():
 
 @app.route('/update', methods=['GET'])
 def update_precomputed():
+
+    # p = subprocess.run(
+    #     ["/bin/bash", "-c", "-l", "git pull"],
+    #     capture_output=True,
+    #     text=True
+    # )
+    # ret = p.stdout
 
     ret = {
         'status': 'Completed',
