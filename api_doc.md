@@ -629,3 +629,19 @@ Bad:
    "message": "ID not found"
 }
 ```
+
+# Endpoint /update
+
+## GET /update
+
+Download the newest precomputed Reference and Reference VCF
+
+### Request example
+```bash
+curl -i http://localhost:56733/api/update
+```
+### Return example
+```json
+
+```
+
