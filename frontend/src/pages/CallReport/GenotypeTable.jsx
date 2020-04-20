@@ -4,7 +4,12 @@ import { Table, Form, Checkbox, Col, InputNumber, Select, Button } from 'antd';
 
 import GenotypeCell from './GenotypeCell';
 
-import { reference, alternate, form } from './GenotypeTable.module.css';
+import {
+  reference,
+  alternate,
+  form,
+  tableXS,
+} from './GenotypeTable.module.css';
 import { usePersistentState } from 'utils/hooks';
 
 const columns = [
@@ -75,6 +80,7 @@ function GenotypeTable({ data, config }) {
 
   return (
     <Table
+      className={tableXS}
       rowKey="_key"
       dataSource={filteredData}
       columns={columns}

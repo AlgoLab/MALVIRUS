@@ -21,3 +21,12 @@
 .form :global(.ant-form-item-control-wrapper) {
   flex: 1;
 }
+
+.tableXS :global .ant-table.ant-table-small .ant-table-title,
+.tableXS :global .ant-table.ant-table-small .ant-table-footer,
+.tableXS :global .ant-table.ant-table-small .ant-table-thead > tr > th,
+.tableXS :global .ant-table.ant-table-small .ant-table-tbody > tr > td,
+.tableXS :global .ant-table.ant-table-small tfoot > tr > th,
+.tableXS :global .ant-table.ant-table-small tfoot > tr > td {
+  padding: 4px;
+}
