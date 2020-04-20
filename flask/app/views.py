@@ -219,7 +219,7 @@ def post_vcf():
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir}'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir} --cores {cores}'
             ],
             cwd=app.config["SK_CWD"],
             stdout=open('/dev/null', 'w'),
@@ -447,7 +447,7 @@ def post_malva():
         [
             "nohup",
             "/bin/bash", "-c", "-l",
-            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir}'
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores}'
         ],
         cwd=app.config["SK_CWD"],
         stdout=open('/dev/null', 'w'),
