@@ -235,21 +235,6 @@ function CallNew({ createCall, vcfs }) {
             </Form.Item>
 
             <Form.Item
-              label={params.lenkmers.label}
-              name="lenkmers"
-              rules={[
-                {
-                  required: true,
-                  type: 'integer',
-                  message: 'Please provide a valid number!',
-                },
-              ]}
-              extra={params.lenkmers.extra}
-            >
-              <InputNumber min={1} type="number" />
-            </Form.Item>
-
-            <Form.Item
               label={params.malvak.label}
               name="malvak"
               dependencies={['lenkmers']}
@@ -265,6 +250,21 @@ function CallNew({ createCall, vcfs }) {
             >
               <InputNumber min={1} type="number" />
             </Form.Item>
+            <Form.Item
+              label={params.lenkmers.label}
+              name="lenkmers"
+              rules={[
+                {
+                  required: true,
+                  type: 'integer',
+                  message: 'Please provide a valid number!',
+                },
+              ]}
+              extra={params.lenkmers.extra}
+            >
+              <InputNumber min={1} type="number" />
+            </Form.Item>
+
             <Form.Item
               label={params.maxmem.label}
               name="maxmem"
