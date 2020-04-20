@@ -64,7 +64,9 @@ function GenotypeTable({ data, config }) {
   });
 
   const pagination = {
-    pageSize: 300,
+    pageSize: 100,
+    position: ['topRight', 'bottomRight'],
+    showSizeChanger: false,
     showTotal: (total, range) =>
       `Showing ${range[0]}-${range[1]} of ${total} loci (${
         data.length - total
@@ -90,7 +92,7 @@ function normFields(fields) {
 
 const defaultConfig = {
   only_alt: true,
-  mingq: undefined,
+  mingq: 0,
 };
 
 function GenotypeTableWithForm({ data }) {
