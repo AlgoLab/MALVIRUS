@@ -1,0 +1,4 @@
+.pwm :global(.ant-modal-header),
+.pwm :global(.ant-modal-footer) {
+  display: none;
+}

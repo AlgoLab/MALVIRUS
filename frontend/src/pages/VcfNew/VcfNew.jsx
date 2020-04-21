@@ -6,8 +6,8 @@ import { Form, Input, Button, Upload, message, InputNumber } from 'antd';
 
 import { UploadOutlined } from '@ant-design/icons';
 
+import { ButtonPanel, PleaseWaitModal, showError } from 'components';
 import { normFile, getFalse } from 'utils';
-import { ButtonPanel, showError } from 'components';
 import params from 'utils/vcf-params';
 
 function VcfNew({ createVcf }) {
@@ -41,6 +41,7 @@ function VcfNew({ createVcf }) {
   return (
     <>
       <h1>Create a new reference VCF from genomic sequences</h1>
+      <PleaseWaitModal loading={loading} />
       <Form
         initialValues={{ cores: 4 }}
         layout="vertical"

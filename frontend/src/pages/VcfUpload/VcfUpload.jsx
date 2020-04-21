@@ -6,7 +6,7 @@ import { Form, Input, Button, Upload, message } from 'antd';
 
 import { UploadOutlined } from '@ant-design/icons';
 
-import { ButtonPanel, showError } from 'components';
+import { ButtonPanel, PleaseWaitModal, showError } from 'components';
 import { normFile, getFalse } from 'utils';
 
 function VcfUpload({ createVcf }) {
@@ -40,6 +40,7 @@ function VcfUpload({ createVcf }) {
   return (
     <>
       <h1>Upload a new reference VCF</h1>
+      <PleaseWaitModal loading={loading} />
       <Form layout="vertical" name="uploadvcf" onFinish={onFinish}>
         <Form.Item
           label="Alias"

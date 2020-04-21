@@ -17,9 +17,16 @@ import {
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { defaultMalvaParams, JOB_STATUSES } from 'app-config';
-import { ButtonPanel, Error, Loading, showError } from 'components';
+import {
+  ButtonPanel,
+  Error,
+  Loading,
+  PleaseWaitModal,
+  showError,
+} from 'components';
 import { normFile, getFalse } from 'utils';
 import params from 'utils/call-params';
+import { submissionTimeSorter } from 'utils/tables';
 
 const malvakValidator = ({ getFieldValue }) => ({
   validator(rule, value) {
@@ -46,6 +53,8 @@ const maxoccValidator = ({ getFieldValue }) => ({
     );
   },
 });
+
+const vcfsSorter = (a, b) => submissionTimeSorter(b, a);
 
 function CallNew({ createCall, vcfs }) {
   const [loading, setLoading] = useState(false);
@@ -104,9 +113,11 @@ function CallNew({ createCall, vcfs }) {
       </>
     );
   }
+  okVcfs.sort(vcfsSorter);
   return (
     <>
       <h1>Perform a new variant call</h1>
+      <PleaseWaitModal loading={loading} />
       <Form
         initialValues={defaultMalvaParams}
         layout="vertical"
