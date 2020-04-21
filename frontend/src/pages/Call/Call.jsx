@@ -19,6 +19,7 @@ import {
 } from 'components';
 import PARAMS from 'utils/call-params';
 import { useCallback } from 'react';
+import { submissionTimeRender } from 'utils/tables';
 
 function BodyCall({ call }) {
   const navigate = useNavigate();
@@ -45,6 +46,9 @@ function BodyCall({ call }) {
         </Descriptions.Item>
         <Descriptions.Item label="Status:" span={2}>
           <StatusTag status={value.log.status} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Submission time:" span={2}>
+          {submissionTimeRender(value.submission_time)}
         </Descriptions.Item>
         <Descriptions.Item label="Last modified time:" span={2}>
           {value.log.last_time}

@@ -20,6 +20,8 @@ import {
   jobStatusFilters,
   EmptyWithFilters,
   EmptyWoFilters,
+  submissionTimeRender,
+  submissionTimeSorter,
 } from 'utils/tables';
 import { JOB_STATUSES } from 'app-config';
 
@@ -34,7 +36,9 @@ const expandable = {
 };
 
 function CallTable({ calls, deleteCall }) {
-  const [state, setState] = usePersistentState('calljobtable', {});
+  const [state, setState] = usePersistentState('calljobtable', {
+    sorter: { field: 'submission_time', order: 'descend' },
+  });
 
   const deleteJob = useCallback(
     (evt) => {
@@ -69,6 +73,17 @@ function CallTable({ calls, deleteCall }) {
           state.sorter && state.sorter.field === 'alias'
             ? state.sorter.order
             : undefined,
+      },
+      {
+        title: 'Submission time',
+        dataIndex: 'submission_time',
+        render: submissionTimeRender,
+        sorter: submissionTimeSorter,
+        defaultSortOrder:
+          state.sorter && state.sorter.field === 'submission_time'
+            ? state.sorter.order
+            : undefined,
+        width: '11em',
       },
       {
         title: 'Status',

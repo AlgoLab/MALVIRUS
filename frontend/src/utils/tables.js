@@ -3,6 +3,7 @@ import React from 'react';
 import { Empty } from 'antd';
 
 import { JOB_STATUSES } from 'app-config';
+import dayjs from 'dayjs';
 
 export const jobStatusFilters = {
   filters: Object.keys(JOB_STATUSES).map((status) => ({
@@ -11,6 +12,12 @@ export const jobStatusFilters = {
   })),
   onFilter: (value, record) => record.status === value,
 };
+
+export const submissionTimeRender = (value) =>
+  value != null ? dayjs.unix(value).format('YYYY-MM-DD HH:mm') : <i>n.a.</i>;
+
+export const submissionTimeSorter = (a, b) =>
+  (a.submission_time || 0) - (b.submission_time || 0);
 
 export const EmptyWithFilters = (
   <Empty

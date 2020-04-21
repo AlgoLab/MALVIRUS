@@ -19,6 +19,8 @@ import {
   jobStatusFilters,
   EmptyWithFilters,
   EmptyWoFilters,
+  submissionTimeRender,
+  submissionTimeSorter,
 } from 'utils/tables';
 
 const expandable = {
@@ -32,7 +34,9 @@ const expandable = {
 };
 
 function VcfTable({ vcfs, deleteVcf }) {
-  const [state, setState] = usePersistentState('vcfjobtable', {});
+  const [state, setState] = usePersistentState('vcfjobtable', {
+    sorter: { field: 'submission_time', order: 'descend' },
+  });
 
   const deleteJob = (evt) => {
     const id = evt.currentTarget.name;
@@ -71,6 +75,17 @@ function VcfTable({ vcfs, deleteVcf }) {
         state.sorter && state.sorter.field === 'alias'
           ? state.sorter.order
           : undefined,
+    },
+    {
+      title: 'Submission time',
+      dataIndex: 'submission_time',
+      render: submissionTimeRender,
+      sorter: submissionTimeSorter,
+      defaultSortOrder:
+        state.sorter && state.sorter.field === 'submission_time'
+          ? state.sorter.order
+          : undefined,
+      width: '11em',
     },
     {
       title: 'Status',

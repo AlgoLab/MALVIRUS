@@ -15,6 +15,7 @@ import {
   SnakemakeLog,
 } from 'components';
 import PARAMS from 'utils/vcf-params';
+import { submissionTimeRender } from 'utils/tables';
 
 function BodyVcf({ vcf }) {
   if (vcf.pending) return <Loading />;
@@ -39,6 +40,9 @@ function BodyVcf({ vcf }) {
         </Descriptions.Item>
         <Descriptions.Item label="Status" span={2}>
           <StatusTag status={value.log.status} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Submission time:" span={2}>
+          {submissionTimeRender(value.submission_time)}
         </Descriptions.Item>
         <Descriptions.Item label="Last modified time" span={2}>
           {value.log.last_time}
