@@ -35,7 +35,7 @@ function VcfTable({ vcfs, deleteVcf }) {
   const [state, setState] = usePersistentState('vcfjobtable', {});
 
   const deleteJob = (evt) => {
-    const id = evt.currentTarget.id;
+    const id = evt.currentTarget.name;
     Modal.confirm({
       title: 'Are you sure you want to delete this reference VCF?',
       icon: <ExclamationCircleOutlined />,
