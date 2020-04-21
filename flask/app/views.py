@@ -74,17 +74,25 @@ def get_vcf(vcf_id):
             info = json.load(f)
         info['log'] = status
 
-        sklog = pjoin(app.config['JOB_DIR'], 'vcf',
-                      vcf_id, '.snakemake', 'log', '*')
+        smklog_p = pjoin(app.config['JOB_DIR'], 'vcf',
+                         vcf_id, 'smk.log')
+        if os.path.isfile(smklog_p):
+            with open(smklog_p, 'r') as f_in:
+                smklog = f_in.read()
 
-        p = subprocess.run(
-            ["/bin/bash", "-c", "-l",
-             f'tail -v {sklog}'],
-            capture_output=True,
-            text=True
-        )
+        else:
+            sklog = pjoin(app.config['JOB_DIR'], 'vcf',
+                          vcf_id, '.snakemake', 'log', '*')
 
-        info['snakemake'] = p.stdout
+            p = subprocess.run(
+                ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True
+            )
+
+            smklog = p.stdout
+
+        info['snakemake'] = smklog
 
         return jsonify(info)
     except OSError:
@@ -231,11 +239,13 @@ def post_vcf():
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
             json.dump(status, f)
 
+        smklog = pjoin(workdir, 'smk.log')
+
         p = Popen(
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir} --cores {cores}'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir} --cores {cores} >{smklog} 2>&1'
             ],
             cwd=app.config["SK_CWD"],
             stdout=open('/dev/null', 'w'),
@@ -304,16 +314,25 @@ def get_malva(malva_id):
             info = json.load(f)
         info['log'] = status
 
-        sklog = pjoin(app.config['JOB_DIR'], 'malva',
-                      malva_id, '.snakemake', 'log', '*')
+        smklog_p = pjoin(app.config['JOB_DIR'], 'malva',
+                         malva_id, 'smk.log')
+        if os.path.isfile(smklog_p):
+            with open(smklog_p, 'r') as f_in:
+                smklog = f_in.read()
 
-        p = subprocess.run(
-            ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            text=True
-        )
+        else:
+            sklog = pjoin(app.config['JOB_DIR'], 'malva',
+                          malva_id, '.snakemake', 'log', '*')
 
-        info['snakemake'] = p.stdout
+            p = subprocess.run(
+                ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True
+            )
+
+            smklog = p.stdout
+
+        info['snakemake'] = smklog
 
         return jsonify(info)
     except OSError:
@@ -462,11 +481,13 @@ def post_malva():
     with open(pjoin(workdir, 'status.json'), 'w+') as f:
         json.dump(status, f)
 
+    smklog = pjoin(workdir, 'smk.log')
+
     p = Popen(
         [
             "nohup",
             "/bin/bash", "-c", "-l",
-            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores}'
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores} >{smklog} 2>&1'
         ],
         cwd=app.config["SK_CWD"],
         stdout=open('/dev/null', 'w'),
