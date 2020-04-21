@@ -307,9 +307,8 @@ def get_malva(malva_id):
                       malva_id, '.snakemake', 'log', '*')
 
         p = subprocess.run(
-            ["/bin/bash", "-c", "-l",
-             f'tail -v {sklog}'],
-            capture_output=True,
+            ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             text=True
         )
 
