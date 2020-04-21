@@ -24,6 +24,11 @@ export const defaultMalvaParams = {
   cores: 4,
 };
 
+export const defaultReportConfig = {
+  only_alt: true,
+  mingq: 0,
+};
+
 const BASE_JOB_STATUSES = [
   { value: 'Precomputed', color: '#237804', success: true, final: true },
   { value: 'Completed', color: 'success', success: true, final: true },

@@ -5,7 +5,7 @@ import { Table } from 'antd';
 import { VariableSizeGrid as Grid } from 'react-window';
 import ResizeObserver from 'rc-resize-observer';
 
-import { vg, vtC, vtCMid } from './VirtualTable.module.css';
+import { vt, vg, vtC, vtCMid } from './VirtualTable.module.css';
 
 function VirtualTable(props) {
   const { columns, scroll } = props;
@@ -91,6 +91,7 @@ function VirtualTable(props) {
     >
       <Table
         {...props}
+        className={vt}
         columns={mergedColumns}
         pagination={false}
         components={{

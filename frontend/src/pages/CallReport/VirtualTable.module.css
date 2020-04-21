@@ -1,3 +1,12 @@
+.vt :global .ant-table.ant-table-small .ant-table-title,
+.vt :global .ant-table.ant-table-small .ant-table-footer,
+.vt :global .ant-table.ant-table-small .ant-table-thead > tr > th,
+.vt :global .ant-table.ant-table-small .ant-table-tbody > tr > td,
+.vt :global .ant-table.ant-table-small tfoot > tr > th,
+.vt :global .ant-table.ant-table-small tfoot > tr > td {
+  padding: 4px;
+}
+
 .vg {
   border-right: 1px solid #cfcfcf;
   border-bottom: 1px solid #cfcfcf;
@@ -14,3 +23,4 @@
   composes: vtC;
   border-left: 1px solid #e8e8e8;
 }
+
