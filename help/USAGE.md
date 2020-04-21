@@ -79,15 +79,5 @@ You can access it by heading to the _Variant calls_ tab and searching your job i
 Click on the alias of the job you want to analyze and you'll be presented with a table reporting various information of the job.
 
 If the status is <span style="color:#237804">Completed</span>, then you can access and download the output VCF that will be in the _Output files_ row.
-By clicking the name of the output file (usually `malva.vcf`) you'll download the vcf, whereas by clicking on the <span style="color:#2a3957">_Show in tabular form_</style> button you'll be redirected to another page that present the VCF and that highlights the differences between the reference genome and the individual under analysis.
+By clicking the name of the output file (usually `malva.vcf`) you'll download the vcf, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that present the VCF and that highlights the differences between the reference genome and the individual under analysis.
 In this page, the rows related to the variants that were genotyped differently than the reference are highlighted in blue and the last column is color coded based on the quality of the call.
-
-# References
-
-<a id="mafft7">[1]</a> Katoh, Kazutaka, and Daron M. Standley. 2013. “MAFFT Multiple Sequence Alignment Software Version 7: Improvements in Performance and Usability.” Molecular Biology and Evolution 30 (4): 772–80. doi:10.1093/molbev/mst010.
-
-<a id="snp-sites">[2]</a> Page, Andrew J., Ben Taylor, Aidan J. Delaney, Jorge Soares, Torsten Seemann, Jacqueline A. Keane, and Simon R. Harris. 2016. “SNP-Sites: Rapid Efficient Extraction of Snps from Multi-Fasta Alignments.” Journal Article. Microbial Genomics 2 (4). Microbiology Society. doi:https://doi.org/10.1099/mgen.0.000056.
-
-<a id="kmc">[3]</a> Kokot, Marek, Maciej Dlugosz, and Sebastian Deorowicz. 2017. “KMC 3: counting and manipulating k-mer statistics.” Bioinformatics 33 (17): 2759–61. doi:10.1093/bioinformatics/btx304.
-
-<a id="malva">[4]</a> Denti, Luca, Marco Previtali, Giulia Bernardini, Alexander Schönhuth, and Paola Bonizzoni. 2019. “MALVA: Genotyping by Mapping-Free Allele Detection of Known Variants.” iScience 18: 20–27. doi:https://doi.org/10.1016/j.isci.2019.07.011.
