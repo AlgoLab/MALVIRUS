@@ -1,5 +1,7 @@
+import React from 'react';
+
 import ajaxCreateVcf from 'ajax/createVcf';
 
-import VcfNew from './VcfNew';
+const VcfNew = React.lazy(() => import('./VcfNew'));
 
 export default ajaxCreateVcf(VcfNew);

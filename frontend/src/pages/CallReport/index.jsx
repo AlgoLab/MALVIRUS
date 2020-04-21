@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ajaxCall from 'ajax/callReport';
 
-import CallReport from './CallReport';
+const CallReport = React.lazy(() => import('./CallReport'));
 
 const AjaxCallReport = ajaxCall(CallReport);
 

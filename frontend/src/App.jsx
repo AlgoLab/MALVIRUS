@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import AppIcon from '@2fd/ant-design-icons/lib/ShuffleVariant';
 
+import Loading from './components/Loading';
 import VcfList from './pages/VcfList';
 import Vcf from './pages/Vcf';
 import VcfNew from 'pages/VcfNew';
@@ -56,18 +57,20 @@ function App() {
       </Header>
       <Content>
         <div className="site-layout-content">
-          <Routes>
-            <Route path="vcf" element={<VcfList />} />
-            <Route path="vcf/new" element={<VcfNew />} />
-            <Route path="vcf/upload" element={<VcfUpload />} />
-            <Route path="vcf/:id" element={<Vcf />} />
-            <Route path="calls" element={<CallList />} />
-            <Route path="calls/new" element={<CallNew />} />
-            <Route path="calls/:id" element={<Call />} />
-            <Route path="calls/:id/report" element={<CallReport />} />
-            <Route path="help/*" element={<Help />} />
-            <Route path="*" element={<Navigate to="calls" />} />
-          </Routes>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="vcf" element={<VcfList />} />
+              <Route path="vcf/new" element={<VcfNew />} />
+              <Route path="vcf/upload" element={<VcfUpload />} />
+              <Route path="vcf/:id" element={<Vcf />} />
+              <Route path="calls" element={<CallList />} />
+              <Route path="calls/new" element={<CallNew />} />
+              <Route path="calls/:id" element={<Call />} />
+              <Route path="calls/:id/report" element={<CallReport />} />
+              <Route path="help/*" element={<Help />} />
+              <Route path="*" element={<Navigate to="calls" />} />
+            </Routes>
+          </Suspense>
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>

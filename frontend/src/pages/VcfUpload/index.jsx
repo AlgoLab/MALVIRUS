@@ -1,5 +1,7 @@
+import React from 'react';
+
 import ajaxCreateVcf from 'ajax/createVcf';
 
-import VcfUpload from './VcfUpload';
+const VcfUpload = React.lazy(() => import('./VcfUpload'));
 
 export default ajaxCreateVcf(VcfUpload);

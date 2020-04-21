@@ -1,6 +1,8 @@
+import React from 'react';
+
 import ajaxVcfs from 'ajax/vcfs';
 import ajaxCreateCall from 'ajax/createCall';
 
-import CallNew from './CallNew';
+const CallNew = React.lazy(() => import('./CallNew'));
 
 export default ajaxVcfs(ajaxCreateCall(CallNew));
