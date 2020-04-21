@@ -1,3 +1,7 @@
 .malvirus-help {
-    display: block;
+  display: block;
+}
+
+.active-menu-link {
+  font-weight: bold;
 }

@@ -1,8 +1,11 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
+
+import { Row, Col } from 'antd';
+
+import { basepath } from 'app-config';
 
 import buildHelpPage from './buildHelpPage';
-import { basepath } from 'app-config';
 
 /**
  * To ADD a new PAGE:
@@ -21,17 +24,57 @@ import { basepath } from 'app-config';
  */
 
 // List of pages
-const Help = buildHelpPage(`${basepath}help/HELP.md`);
+const Help = buildHelpPage(`${basepath}help/README.md`);
+const HelpInstall = buildHelpPage(`${basepath}help/INSTALL.md`);
+const HelpUsage = buildHelpPage(`${basepath}help/USAGE.md`);
+const HelpTutorial = buildHelpPage(`${basepath}help/TUTORIAL.md`);
 // END: List of pages
+
+const gutter = { xs: 8, sm: 16, md: 24, lg: 32 };
+const indexSpan = { sm: 8, md: 6, lg: 4 };
+const pageSpan = { sm: 16, md: 18, lg: 20 };
+
+function MyLink({ className, ...props }) {
+  return (
+    <li className={className}>
+      <a {...props} />
+    </li>
+  );
+}
+
+function MenuLink({ to, children }) {
+  return (
+    <NavLink activeClassName="active-menu-link" as={MyLink} to={to}>
+      {children}
+    </NavLink>
+  );
+}
 
 function HelpPage() {
   return (
-    <Routes>
-      {/* List of routes */}
-      <Route path="/" element={<Help />} />
-      {/* END: List of routes */}
-      <Route path="*" element={<Help />} />
-    </Routes>
+    <Row gutter={gutter}>
+      <Col {...indexSpan}>
+        <h1>Help</h1>
+        <ul style={{ paddingLeft: 20 }}>
+          <MenuLink to="HELP">Home</MenuLink>
+          <MenuLink to="INSTALL">Installation instructions</MenuLink>
+          <MenuLink to="USAGE">Usage</MenuLink>
+          <MenuLink to="TUTORIAL">Tutorial</MenuLink>
+        </ul>
+      </Col>
+      <Col {...pageSpan}>
+        <Routes>
+          {/* List of routes */}
+          <Route path="/" element={<Help />} />
+          <Route path="/HELP" element={<Help />} />
+          <Route path="/INSTALL" element={<HelpInstall />} />
+          <Route path="/USAGE" element={<HelpUsage />} />
+          <Route path="/TUTORIAL" element={<HelpTutorial />} />
+          {/* END: List of routes */}
+          <Route path="*" element={<Help />} />
+        </Routes>
+      </Col>
+    </Row>
   );
 }
 

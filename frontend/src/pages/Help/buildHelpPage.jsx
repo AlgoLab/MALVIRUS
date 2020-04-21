@@ -23,9 +23,9 @@ const connect = baseConnect.defaults({
 function MyA({ href, ...props }) {
   if (href && href.startsWith('./')) {
     const inthref = href.endsWith('.md')
-      ? href.slice(0, href.length - 3)
-      : href;
-    return <Link to={inthref} {...props} />;
+      ? href.slice(2, href.length - 3)
+      : href.slice(2);
+    return <Link to={`/help/${inthref}`} {...props} />;
   }
   // eslint-disable-next-line jsx-a11y/anchor-has-content
   return <a href={href} {...props} />;
