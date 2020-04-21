@@ -13,14 +13,6 @@ RUN yarn run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7 as build-software
 WORKDIR /software-build
 
-# Clone and install snps-site
-RUN git clone --depth 1 https://github.com/ldenti/snp-sites.git && \
-    cd snp-sites && \
-    autoreconf -i -f && \
-    ./configure --prefix=/software && \
-    make -j4 && \
-    make install
-
 RUN apt-get update && apt-get install -y --no-install-recommends cmake
 
 RUN git clone --recursive --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git

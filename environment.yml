@@ -10,4 +10,5 @@ dependencies:
     - samtools
     - pysam
     - gffutils
+    - snp-sites
     # - malva
