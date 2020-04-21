@@ -4,11 +4,11 @@ channels:
     - bioconda
     - conda-forge
 dependencies:
-    - snakemake-minimal
-    - mafft
-    - kmc
-    - samtools
-    - pysam
-    - gffutils
-    - snp-sites
+    - snakemake-minimal=5.14.0
+    - mafft=7.463
+    - kmc=3.1.2rc1
+    - samtools=1.10
+    - pysam=0.15.3
+    - gffutils=0.10.1
+    - snp-sites=2.5.1
     # - malva
