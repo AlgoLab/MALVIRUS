@@ -11,7 +11,7 @@ import os
 
 from uuid import uuid4
 import json
-from time import sleep
+from time import sleep, time
 import datetime
 import glob
 import shutil
@@ -200,7 +200,8 @@ def post_vcf():
         "description": str(request.form.get('description')),
         "alias": alias,
         "reference": refpath,
-        "gtf": gtfpath
+        "gtf": gtfpath,
+        "submission_time": int(round(time()))
     }
     if filetype == 'fasta':
         info['params'] = {"cores": cores}
@@ -432,7 +433,8 @@ def post_malva():
             "vcf": vcfpath,
             "reference": reference,
             "gtf": gtf
-        }
+        },
+        "submission_time": int(round(time()))
     }
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
