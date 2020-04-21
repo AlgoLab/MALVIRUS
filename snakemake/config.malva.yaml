@@ -1,10 +1,11 @@
 workdir: example/2nd_jobid
-reference: example/1st_jobid/snpsites/run.pseudoreference.fa
+reference: example/NC_045512.2.fa
 vcf: example/1st_jobid/vcf/run.cleaned.vcf
 sample: example/sample.fq
-minocc: 5
-maxocc: 750
+minocc: 100
+maxocc: 10000
 lenkmers: 43
 malvak: 35
-cores: 4
 maxmem: 4
+gtf: example/GCF_009858895.2_ASM985889v3_genomic.gff
+cores: 2
