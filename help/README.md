@@ -10,7 +10,7 @@ The index can be built once and reused for genotyping multiple individuals.
 
 Please see the following documents for additional details:
 
-* [Installation](./INSTALLATION.md)
+* [Installation](./INSTALL.md)
 * [Usage](./USAGE.md)
 * [Tutorial](.TUTORIAL.md)
 
