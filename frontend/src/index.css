@@ -4,6 +4,7 @@ textarea {
 
 body {
   background-color: #f0f2f5 !important;
+  overflow-y: scroll;
 }
 
 .sr-only {

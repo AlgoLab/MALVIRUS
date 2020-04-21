@@ -34,9 +34,12 @@ function App() {
   return (
     <Layout className="layout">
       <Header>
-        <div className="logo">
-          <AppIcon /> MALVIRUS
-        </div>
+        <Link to="/">
+          <div className="logo">
+            <AppIcon />
+            <span className="appname">MALVIRUS</span>
+          </div>
+        </Link>
         <Menu theme="dark" mode="horizontal" selectedKeys={[prefix]}>
           <Menu.Item key="/calls">
             <Link to="/calls">

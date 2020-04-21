@@ -7,26 +7,46 @@
 }
 
 .logo {
+  float: left;
   height: 100%;
   line-height: 1;
   background: rgba(255, 255, 255, 1);
   margin: 0;
   padding: 0 1em 0 0;
-  float: left;
   font-size: 1.75em;
   font-weight: 800;
   line-height: 64px;
-  background-color: #19284B;
+  background-color: #19284b;
   color: #fff;
 }
 
-.logo {
+.appname {
+  padding-left: 0.5em;
+}
+
+.logo,
+.appname {
   display: none;
 }
 
-@media screen and (min-width: 35em) {
+.ant-layout-header {
+  padding: 0 24px;
+}
+
+@media screen and (min-width: 32em) {
   .logo {
     display: block;
   }
 }
 
+@media screen and (min-width: 38em) {
+  .ant-layout-header {
+    padding: 0 50px;
+  }
+}
+
+@media screen and (min-width: 44em) {
+  .appname {
+    display: inline-block;
+  }
+}
