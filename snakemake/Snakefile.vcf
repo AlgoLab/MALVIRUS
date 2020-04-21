@@ -116,7 +116,6 @@ rule vcf_build:
     input:
         msa = pjoin(mafft_dir, "multi_alignment.msa")
     output:
-        ref = pjoin(snpsites_dir, "run.pseudoreference.fa"),
         snps = pjoin(snpsites_dir, "run.vcf")
     params:
         prefix = pjoin(snpsites_dir, "run")
