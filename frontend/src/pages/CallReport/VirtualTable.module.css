@@ -1,0 +1,16 @@
+.vg {
+  border-right: 1px solid #cfcfcf;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.vtC {
+  box-sizing: border-box;
+  padding: 4px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.vtCMid {
+  composes: vtC;
+  border-left: 1px solid #e8e8e8;
+}

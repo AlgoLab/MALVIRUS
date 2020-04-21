@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { PromiseState } from 'react-refetch';
 import { DownloadOutlined } from '@ant-design/icons';
@@ -7,13 +7,13 @@ import { Error, Loading } from 'components';
 
 import GenotypeTable from './GenotypeTable';
 
-function BodyCallReport({ call: value, vcf }) {
-  const [pheader, ...bdata] = vcf
+function vcf2data(vcf) {
+  const [pheader, ...data] = vcf
     .split('\n')
     .filter(Boolean)
     .filter((line) => !line.startsWith('##'));
   const header = pheader.slice(1).split('\t');
-  const data = bdata
+  return data
     .map((line) =>
       line
         .split('\t')
@@ -31,18 +31,25 @@ function BodyCallReport({ call: value, vcf }) {
           ? variant.INFO.slice(5)
           : undefined,
     }));
-  return <GenotypeTable data={data} />;
 }
 
 function AsyncBodyCallReport({ call, vcf }) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    if (!vcf || vcf.pending || vcf.rejected) return;
+    setLoading(true);
+    setData(vcf2data(vcf.value));
+    setLoading(false);
+  }, [vcf]);
   if (call.pending) return <Loading />;
   if (call.rejected) return <Error reason={call.reason} />;
   if (!vcf) return <Loading />;
   const all = PromiseState.all([call, vcf]);
   if (all.pending) return <Loading />;
   if (all.rejected) return <Error reason={all.reason} />;
-  const [callValue, vcfValue] = all.value;
-  return <BodyCallReport call={callValue} vcf={vcfValue} />;
+  if (loading) return <Loading />;
+  return <GenotypeTable data={data} />;
 }
 
 function CallReport({ id, call, vcf }) {
