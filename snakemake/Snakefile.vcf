@@ -1,14 +1,14 @@
+import re
+import json
+import subprocess
+import datetime
+import os
 configfile: "config.vcf.yaml"
 
-import os
-import datetime
-import subprocess
-import json
-import re
 
 pjoin = os.path.join
 
-reference_path = config["reference"] # single sequence to be used as reference
+reference_path = config["reference"]  # single sequence to be used as reference
 references_path = config["multifa"]  # all other sequences
 
 root_dir = config["workdir"]
@@ -21,7 +21,8 @@ cores_config = config["cores"] if "cores" in config else 4
 
 status_json_fn = pjoin(root_dir, "status.json")
 
-def update_status(new_status, step_name = None, new_json = None, last_step = False):
+
+def update_status(new_status, step_name=None, new_json=None, last_step=False):
     # Load JSON
     try:
         with open(status_json_fn) as json_file:
@@ -48,7 +49,8 @@ def update_status(new_status, step_name = None, new_json = None, last_step = Fal
 def nowf():
     return str(datetime.datetime.today().replace(microsecond=0))
 
-def format_dict(cmd, result, returncode, inp, out, parameters = None):
+
+def format_dict(cmd, result, returncode, inp, out, log, parameters=None):
     configs = config
     d = {}
     d['command'] = cmd
@@ -56,6 +58,7 @@ def format_dict(cmd, result, returncode, inp, out, parameters = None):
     d['return_code'] = returncode
     d['config'] = configs
     d['input'] = {}
+    d['log'] = log
     for name, value in inp.items():
         d['input'][name] = value
     d['output'] = {}
@@ -68,15 +71,17 @@ def format_dict(cmd, result, returncode, inp, out, parameters = None):
     d['time'] = nowf()
     return d
 
-def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, par=None, last_step = False):
-    json_dict = format_dict(cmdstr, result, returncode, inp, out, par)
+
+def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, returncode, inp, out, log, par=None, last_step=False):
+    json_dict = format_dict(cmdstr, result, returncode, inp, out, log, par)
     json.dump(json_dict, json_file)
     update_status(status, step_name, json_dict, last_step)
+
 
 rule run:
     input:
         pjoin(clean_vcf_dir, "run.cleaned.vcf")
-        
+
 # Multi alignment with mafft
 rule multi_align:
     input:
@@ -95,10 +100,15 @@ rule multi_align:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(
+                    jf, "Running", step_name, cmdstr, "Success", 0, input, output, log_out, None)
             except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
-                                              input, output, None)
+                                              input, output, log_out, None)
                 raise e
 
 # Create vcf from multi alignment
@@ -120,10 +130,15 @@ rule vcf_build:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, params)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(
+                    jf, "Running", step_name, cmdstr, "Success", 0, input, output, log_out, params)
             except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
-                                              input, output, params)
+                                              input, output, log_out, params)
                 raise e
 
 # Clean VCF header fixing repeated sample ids (maybe useless. But it was common with GISAID)
@@ -142,10 +157,15 @@ rule vcf_clean_header:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(
+                    jf, "Running", step_name, cmdstr, "Success", 0, input, output, log_out, None)
             except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
-                                              input, output, None)
+                                              input, output, log_out, None)
                 raise e
 
 # Index input reference
@@ -164,10 +184,15 @@ rule index_reference:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
-                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0, input, output, None)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(
+                    jf, "Running", step_name, cmdstr, "Success", 0, input, output, log_out, None)
             except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
-                                              input, output, None)
+                                              input, output, log_out, None)
                 raise e
 
 # Computes a priori frequencies
@@ -187,9 +212,13 @@ rule vcf_add_freqs:
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
-                                              input, output, None, True)
+                                              input, output, log_out, None, True)
             except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
-                                              input, output, None)
+                                              input, output, log_out, None)
                 raise e
