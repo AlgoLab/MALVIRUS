@@ -32,3 +32,17 @@ export const EmptyWithFilters = (
 );
 
 export const EmptyWoFilters = <Empty description="No job found!" />;
+
+export const NoDataWithFilters = (
+  <Empty
+    description={
+      <>
+        No Data!
+        <br />
+        Some filters are active: disable them to see the full list.
+      </>
+    }
+  />
+);
+
+export const NoDataWoFilters = <Empty description="No Data!" />;

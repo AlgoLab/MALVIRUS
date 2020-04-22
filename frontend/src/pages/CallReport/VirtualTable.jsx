@@ -37,6 +37,7 @@ function VirtualTable(props) {
   });
 
   const resetVirtualGrid = () => {
+    if (!gridRef.current) return;
     gridRef.current.resetAfterIndices({
       columnIndex: 0,
       shouldForceUpdate: true,

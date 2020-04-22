@@ -2,6 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 
 import { defaultReportConfig } from 'app-config';
 import { usePersistentState } from 'utils/hooks';
+import { NoDataWithFilters, NoDataWoFilters } from 'utils/tables';
 
 import GenotypeCell from './GenotypeCell';
 import VirtualTable from './VirtualTable';
@@ -84,6 +85,12 @@ function GenotypeTable({ data, config }) {
       bordered
       scroll={tableScroll}
       title={title}
+      locale={{
+        emptyText:
+          data.length > 0 && filteredData.length === 0
+            ? NoDataWithFilters
+            : NoDataWoFilters,
+      }}
     />
   );
 }
