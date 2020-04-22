@@ -9,14 +9,14 @@ function getColor(gq) {
   return '#f29998';
 }
 
-function GenotypeCell({ value, record }) {
+function GenotypeCell({ value }) {
   if (!value) return value;
   const [gt, gq] = value;
   return (
     <div className={cell}>
       <div className={cellText}>
         <abbr title={value}>
-          {gt === 0 ? 0 : <b>1</b>} ({gq})
+          {gt === 0 ? 0 : <b>{gt}</b>} ({gq})
         </abbr>
       </div>
       <div
