@@ -100,9 +100,10 @@ function GenotypeTableWithForm({ data }) {
     'filtergenotable',
     defaultReportConfig
   );
-  const genes = useMemo(() => [...new Set(data.map(({ _gene }) => _gene))], [
-    data,
-  ]);
+  const genes = useMemo(
+    () => [...new Set(data.map(({ _gene }) => _gene))].filter(Boolean),
+    [data]
+  );
   return (
     <>
       <TableForm state={state} setState={setState} genes={genes} />

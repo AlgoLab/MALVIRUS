@@ -17,6 +17,7 @@ function TableForm({ state, setState, genes }) {
     setFormkey(formkey + 1);
   }, [formkey, setState]);
 
+  const noGenes = !genes || genes.length === 0;
   return (
     <Form
       key={formkey}
@@ -30,8 +31,15 @@ function TableForm({ state, setState, genes }) {
       className={form}
     >
       <Col span={12}>
-        <Form.Item label="Gene" name="gene">
-          <Select mode="multiple">
+        <Form.Item
+          label="Genes"
+          name="gene"
+          extra={noGenes && 'No genes are available.'}
+        >
+          <Select
+            mode="multiple"
+            disabled={noGenes && (!state.gene || state.gene.length === 0)}
+          >
             {genes.map((gene) => (
               <Select.Option key={gene} value={gene}>
                 {gene}
