@@ -15,9 +15,7 @@ function GenotypeCell({ value }) {
   return (
     <div className={cell}>
       <div className={cellText}>
-        <abbr title={value}>
-          {gt === 0 ? 0 : <b>{gt}</b>} ({gq})
-        </abbr>
+        {gt === 0 ? 0 : <b>{gt}</b>} ({gq})
       </div>
       <div
         className={cellBar}
