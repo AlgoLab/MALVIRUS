@@ -59,25 +59,30 @@ def get_vcf(vcf_id):
             info = json.load(f)
         info['log'] = status
 
-        smklog_p = pjoin(app.config['JOB_DIR'], 'vcf',
-                         vcf_id, 'smk.log')
-        if os.path.isfile(smklog_p):
-            with open(smklog_p, 'r') as f_in:
-                smklog = f_in.read()
+        if status['status'] in ['Uploaded', 'Precomputed']:
+            s = status['status'].lower()
+            info['snakemake'] = f'No log is available for {s} VCFs.'
 
         else:
-            sklog = pjoin(app.config['JOB_DIR'], 'vcf',
-                          vcf_id, '.snakemake', 'log', '*')
+            smklog_p = pjoin(app.config['JOB_DIR'], 'vcf',
+                             vcf_id, 'smk.log')
+            if os.path.isfile(smklog_p):
+                with open(smklog_p, 'r') as f_in:
+                    smklog = f_in.read()
 
-            p = subprocess.run(
-                ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True
-            )
+            else:
+                sklog = pjoin(app.config['JOB_DIR'], 'vcf',
+                              vcf_id, '.snakemake', 'log', '*')
 
-            smklog = p.stdout
+                p = subprocess.run(
+                    ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True
+                )
 
-        info['snakemake'] = smklog
+                smklog = p.stdout
+
+            info['snakemake'] = smklog
 
         return jsonify(info)
     except OSError:
