@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Button, Descriptions, Tooltip } from 'antd';
-import { SyncOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Descriptions } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
 
 import { api, JOB_STATUSES } from 'app-config';
 
@@ -85,17 +85,7 @@ function BodyVcf({ vcf }) {
           </Descriptions.Item>
         )}
         {value.snakemake && (
-          <Descriptions.Item
-            label={
-              <>
-                Job log:{' '}
-                <Tooltip title="Only the last lines are presented. Click on the filename for the full log.">
-                  <QuestionCircleOutlined />
-                </Tooltip>
-              </>
-            }
-            span={2}
-          >
+          <Descriptions.Item label="Job log:" span={2}>
             <SnakemakeLog log={value.snakemake} />
           </Descriptions.Item>
         )}
