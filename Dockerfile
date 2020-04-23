@@ -37,6 +37,9 @@ RUN cd malva && \
 COPY ./software/ /software/
 
 
+FROM tiangolo/uwsgi-nginx-flask:python3.7 as download-jobs
+WORKDIR /jobs
+RUN git clone https://github.com/AlgoLab/MALVIRUS-data.git .
 
 
 
@@ -70,7 +73,7 @@ RUN apt-get remove -y \
 RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
 COPY --from=build-frontend /app/build /static
 COPY --from=build-software /software /software
+COPY --from=download-jobs /jobs /jobs
 COPY flask /app
 COPY snakemake /snakemake
-RUN git clone https://github.com/AlgoLab/MALVIRUS-data.git /jobs
 VOLUME [ "/jobs" ]
