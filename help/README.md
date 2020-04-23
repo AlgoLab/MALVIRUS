@@ -12,7 +12,7 @@ Please see the following documents for additional details:
 
 * [Installation](./INSTALL.md)
 * [Usage](./USAGE.md)
-* [Tutorial](.TUTORIAL.md)
+* [Tutorial](./TUTORIAL.md)
 
 MALVIRUS is distributed as a docker image and is publicly available on [github](https://github.com/AlgoLab/malva_covid_service).
 The service was tested under Ubuntu GNU/Linux version 18.04 and requires docker installed on the system.
