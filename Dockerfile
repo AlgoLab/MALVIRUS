@@ -67,6 +67,10 @@ RUN apt-get remove -y \
    apt-get autoremove -y
 
 
+RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
 COPY --from=build-frontend /app/build /static
 COPY --from=build-software /software /software
-RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
+COPY flask /app
+COPY snakemake /snakemake
+RUN git clone https://github.com/AlgoLab/MALVIRUS-data.git /jobs
+VOLUME [ "/jobs" ]
