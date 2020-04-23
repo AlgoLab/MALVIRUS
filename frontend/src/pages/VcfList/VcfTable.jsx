@@ -8,6 +8,7 @@ import { Table, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 
 import {
+  Description,
   Error,
   StatusTag,
   showError,
@@ -25,11 +26,11 @@ import {
 
 const expandable = {
   expandedRowRender: (record) => (
-    <p style={{ margin: 0 }}>
+    <>
       <b>ID:</b> {record.id}
       <br />
-      <b>Description:</b> {record.description}
-    </p>
+      <Description header="Description:" description={record.description} />
+    </>
   ),
 };
 

@@ -7,6 +7,7 @@ import { api, JOB_STATUSES } from 'app-config';
 
 import {
   ButtonPanel,
+  Description,
   Error,
   FName,
   JobParameters,
@@ -36,7 +37,7 @@ function BodyVcf({ vcf }) {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="Description" span={2}>
-          {value.description}
+          <Description description={value.description} />
         </Descriptions.Item>
         <Descriptions.Item label="Status" span={2}>
           <StatusTag status={value.log.status} />

@@ -1,4 +1,5 @@
 export { default as ButtonPanel } from './ButtonPanel';
+export { default as Description } from './Description';
 export { default as Error, showError } from './Error';
 export { default as FName } from './FName';
 export { default as JobParameters } from './JobParameters';
