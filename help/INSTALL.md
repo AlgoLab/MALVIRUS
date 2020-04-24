@@ -7,11 +7,12 @@ On laptops, PCs and self-managed servers Docker Engine can be installed followin
 For the installation on a cloud infrastructure, please refer to the technical documentation of the platform is used.
 
 After Docker Engine has been installed, you can pull the container image and execute MALVIRUS with the following command:
-```bash
+
+```
 docker run -p 56733:80 --mount type=volume,source=malvirus_jobs,target=/jobs algolab/malvirus
 ```
 
-where `56733` is port available on your sysem.
+where `56733` is a port available on your sysem.
 
 During the first execution, Docker downloads the container image, thus the process may be quite long (depending on your network connection), and then starts MALVIRUS.
 After the first setup, booting up MALVIRUS requires few seconds.
