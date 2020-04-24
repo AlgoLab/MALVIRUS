@@ -1,22 +1,22 @@
 # Tutorial
 
 # Table of contents
-1. [Introducion](#introduction)
+1. [Introduction](#introduction)
 2. [Download the data](#download-the-data)
 3. [Create an index from the data](#create-an-index-from-the-data)
 4. [Genotype imputation](#genotype-imputation)
 
 ## Introduction
 
-This quick tutorial will guide you through your first use of MALVIRUS, showing you how to create an index of known variants and how to call variants for an individual directly from the sequencing dataset.
+This quick tutorial will guide you through your first use of MALVIRUS, showing you how to create an index of known variants and how to call variants for an individual, directly from the sequencing dataset.
 
-First, we will need the reference genome of the specie we want to analyze, additional assemblies that differ from the reference genome, and some data to analyze.
+First, we will need the reference genome of the species we want to analyze, some additional assemblies that differ from the reference genome, and some data to analyze.
 
 ## Download the data
 
 We will use data from SARS-CoV-2.
 
-Most of the data you will need for this tutorial is conveniently available at [this git repo](https://github.com/algolab/MALVIRUS-tutorial-data); either clone the repository using git or download the contens of the directory on your PC.
+Most of the data you will need for this tutorial is conveniently available at [this git repo](https://github.com/algolab/MALVIRUS-tutorial-data); either clone the repository using git or download the contents of the directory on your PC.
 
 ```bash
 git clone https://github.com/algolab/MALVIRUS-tutorial-data
@@ -86,7 +86,7 @@ Once the status is "Completed", congratulations! You just completed your first g
 
 ## Accessing the results
 
-To access the results head back to the "Variant calls" tab where you will find the list of jobs submitted to MALVIRUS.
+To access the results, head back to the "Variant calls" tab where you will find the list of jobs submitted to MALVIRUS.
 You will be presented with a table containing a single entry (`SRR11514750`).
 
 <img src="geno_table.png" width="500px"/>
