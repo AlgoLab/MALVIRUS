@@ -13,27 +13,6 @@ RUN yarn run build
 FROM tiangolo/uwsgi-nginx-flask:python3.7 as build-software
 WORKDIR /software-build
 
-RUN apt-get update && apt-get install -y --no-install-recommends cmake
-
-RUN git clone --recursive --branch malvirus --shallow-submodules https://github.com/AlgoLab/malva.git
-
-RUN cd malva && git pull && git checkout 7f45bedd74e530d34199cf7317b2fa8f911213f4
-
-RUN cd malva/sdsl-lite && \
-    ./install.sh /software
-RUN cd malva/KMC && \
-    make -j4
-RUN cd malva/htslib && \
-    autoreconf -i -f && \
-    ./configure --disable-libcurl --disable-lzma --disable-bz2 --prefix=/software && \
-    make -j4 && \
-    make install
-
-COPY ./patches/malva/ /software-build/malva/
-RUN cd malva && \
-    make && \
-    cp malva-geno /software/bin
-
 COPY ./software/ /software/
 
 
