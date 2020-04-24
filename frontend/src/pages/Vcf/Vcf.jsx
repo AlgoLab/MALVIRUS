@@ -22,6 +22,9 @@ function BodyVcf({ vcf }) {
   if (vcf.pending) return <Loading />;
   if (vcf.rejected) return <Error reason={vcf.reason} />;
   const { value } = vcf;
+  const isUploadOrPrecomp =
+    value.log &&
+    (value.log.status === 'Uploaded' || value.log.status === 'Precomputed');
   return (
     <>
       <Descriptions bordered column={2}>
@@ -48,7 +51,10 @@ function BodyVcf({ vcf }) {
         <Descriptions.Item label="Last modified time" span={2}>
           {value.log.last_time}
         </Descriptions.Item>
-        <Descriptions.Item label="Input files:" span={2}>
+        <Descriptions.Item
+          label={isUploadOrPrecomp ? 'Data:' : 'Input files:'}
+          span={2}
+        >
           <b className="sb">Reference genomic sequence:</b>{' '}
           <FName href={value.reference} />
           <br />
@@ -67,24 +73,26 @@ function BodyVcf({ vcf }) {
             </>
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="Output files:" span={2}>
-          {value.log.output ? (
-            Object.keys(value.log.output).map((key) => (
-              <React.Fragment key={key}>
-                <FName href={value.log.output[key]} />
-                <br />
-              </React.Fragment>
-            ))
-          ) : (
-            <i>No output files available</i>
-          )}
-        </Descriptions.Item>
+        {!isUploadOrPrecomp && (
+          <Descriptions.Item label="Output files:" span={2}>
+            {value.log.output ? (
+              Object.keys(value.log.output).map((key) => (
+                <React.Fragment key={key}>
+                  <FName href={value.log.output[key]} />
+                  <br />
+                </React.Fragment>
+              ))
+            ) : (
+              <i>No output files available</i>
+            )}
+          </Descriptions.Item>
+        )}
         {value.params && (
           <Descriptions.Item label="Parameters:" span={2}>
             <JobParameters params={value.params} PARAMS={PARAMS} />
           </Descriptions.Item>
         )}
-        {value.snakemake && (
+        {!isUploadOrPrecomp && value.snakemake && (
           <Descriptions.Item label="Job log:" span={2}>
             <SnakemakeLog log={value.snakemake} />
           </Descriptions.Item>
