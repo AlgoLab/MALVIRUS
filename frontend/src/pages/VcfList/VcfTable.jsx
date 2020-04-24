@@ -113,13 +113,19 @@ function VcfTable({ vcfs, deleteVcf }) {
       title: 'Actions',
       key: 'actions',
       dataIndex: 'id',
-      render: (value) => (
+      render: (value, record) => (
         <TableButton
           name={value}
           ghost
           type="danger"
           icon={<DeleteOutlined />}
           onClick={deleteJob}
+          disabled={record.status === 'Precomputed'}
+          title={
+            record.status === 'Precomputed'
+              ? 'You cannot delete precomputed jobs.'
+              : undefined
+          }
         >
           Delete
         </TableButton>
