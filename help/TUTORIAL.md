@@ -16,7 +16,7 @@ First, we will need the reference genome of the species we want to analyze, some
 
 We will use data from SARS-CoV-2.
 
-Most of the data you will need for this tutorial is conveniently available at [this git repo](https://github.com/algolab/MALVIRUS-tutorial-data); either clone the repository using git or download the contents of the directory on your PC.
+Most of the data you will need for this tutorial is conveniently available at [this git repo](https://github.com/algolab/MALVIRUS-tutorial-data); either [download the data as a ZIP file](https://github.com/AlgoLab/MALVIRUS-tutorial-data/archive/master.zip) on your PC  or clone the repository using git:
 
 ```bash
 git clone https://github.com/algolab/MALVIRUS-tutorial-data
