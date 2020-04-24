@@ -498,17 +498,23 @@ def post_malva():
 
 @app.route('/update', methods=['GET'])
 def update_precomputed():
+    p = subprocess.run(
+        ["/bin/bash", "-c",
+         "git pull"],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        cwd=app.config["GIT_DIR"],
+        text=True
+    )
 
-    # p = subprocess.run(
-    #     ["/bin/bash", "-c", "-l", "git pull"],
-    #     capture_output=True,
-    #     text=True
-    # )
-    # ret = p.stdout
+    status = 'Completed'
+    if p.returncode != 0:
+        status = 'Error'
+
+    gitlog = p.stdout
 
     ret = {
-        'status': 'Completed',
-        'Downloaded': ''
+        'status': status,
+        'log': gitlog
     }
 
     return jsonify(ret)
