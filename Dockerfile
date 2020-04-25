@@ -11,7 +11,7 @@ RUN yarn run build
 
 FROM tiangolo/uwsgi-nginx-flask:python3.7 as download-jobs
 WORKDIR /jobs
-RUN git clone https://github.com/AlgoLab/MALVIRUS-data.git .
+RUN git clone --depth 1 https://github.com/AlgoLab/MALVIRUS-data.git .
 
 
 
