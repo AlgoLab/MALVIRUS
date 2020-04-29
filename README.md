@@ -1,107 +1,24 @@
-# malva_covid
+# MALVIRUS
 
-Step:
-1. creazione del multiallineamento dai references `.fa`
-2. creazione del VCF dal multiallineamento
-3. pulitura del VCF
-4. kmer counting con KMC
-5. genotipizzazione con MALVA
+MALVIRUS is a fast and accurate tool for genotyping haploid individuals that does not require to assemble the read nor mapping them to a reference genome.
+It is tailored to work with virological data and can genotype an individual directly from sequencing data in minutes.
 
-## Container Docker per flask+conda
+MALVIRUS is divided into two logically distinct steps: the creation of the index representing the knowledge base of the species under investigation and the genotype imputation.
+The first step is based on mafft [[1]](#mafft7) and snp-sites [[2]](#snp-sites), whereas the second step is based on KMC [[3]](#kmc) and MALVA [[4]](#malva).
 
-### Prerequisiti
+The index can be built once and reused for genotyping multiple individuals.
 
-* **Docker**  
-  Installazione su Ubuntu
-```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-# Opzionale: Per usare Docker senza essere root
-# (ATTENZIONE: utenti nel gruppo docker hanno essenzialmente le capabilities di root!!!)
-sudo usermod -aG docker $USER
-newgrp docker  # o logout+login
-# Fine parte opzionale
+Please see the [help directory](./help) for additional details.
 
-docker run hello-world
-```
+MALVIRUS is distributed as a Docker image and is publicly available on [GitHub](https://github.com/AlgoLab/MALVIRUS) and [Docker Hub](https://hub.docker.com/r/algolab/malvirus) under the terms of the GNU General Public License version 3 or later.
+The service was tested under Ubuntu GNU/Linux version 18.04 and requires docker installed on the system.
 
-### Esecuzione del backend
-```
-./run-backend.sh
-```
-Il backend è accessibile a `http://localhost:56733/`
+# References
 
-### Struttura delle directory
+<a id="mafft7">[1]</a> Katoh, Kazutaka, and Daron M. Standley. 2013. “MAFFT Multiple Sequence Alignment Software Version 7: Improvements in Performance and Usability.” Molecular Biology and Evolution 30 (4): 772–80. doi:[10.1093/molbev/mst010](https://doi.org/10.1093/molbev/mst010).
 
-```
-.
-├── flask         # Applicazione flask. Montata su /app nel container
-│   ├── app
-│   │   ├── templates
-│   │   │   └── home.html
-│   │   ├── __init__.py
-│   │   └── views.py
-│   ├── main.py
-│   └── uwsgi.ini
-├── snakemake     # Directory per snakemake. Montata su /snakemake nel container
-│   ├── example
-│   │   ├── references.fa
-│   │   └── sample.fq
-│   ├── config.yaml
-│   └── Snakefile
-├── static        # Directory per asset statici. Montata su /app/static nel container.
-│   │             # Accessibile con /static nel webserver
-│   └── index.html
-├── api_doc.md
-├── Dockerfile
-├── environment.yml       # Dipendenze dell'environment conda. Dopo modifiche a questo file si deve `docker rm backend + ./run-backend.sh`
-├── README.md             # This file ;-)
-├── autoreload-flask.sh   # Esegue il reload dell'applicazione flask quando un file viene aggiunto/modificato/cancellato nella cartella flask
-└── run-backend.sh        # Mette in esecuzione in backend tramite Docker.
-```
+<a id="snp-sites">[2]</a> Page, Andrew J., Ben Taylor, Aidan J. Delaney, Jorge Soares, Torsten Seemann, Jacqueline A. Keane, and Simon R. Harris. 2016. “SNP-Sites: Rapid Efficient Extraction of Snps from Multi-Fasta Alignments.” Microbial Genomics 2 (4). doi:[10.1099/mgen.0.000056](https://doi.org/10.1099/mgen.0.000056).
 
+<a id="kmc">[3]</a> Kokot, Marek, Maciej Dlugosz, and Sebastian Deorowicz. 2017. “KMC 3: counting and manipulating k-mer statistics.” Bioinformatics 33 (17): 2759–61. doi:[10.1093/bioinformatics/btx304](https://doi.org/10.1093/bioinformatics/btx304).
 
-## Snakefile
-#### HowTo
-Le pipeline è divisa in due snakefile: `Snakefile.vcf` per la creazione del vcf e dello pseudo reference e `Snakefile.malva` per lanciare KMC e malva.
-
-Ogni snakefile ha il suo file di configurazione.
-
-Prima di lanciare `Snakefile.vcf` settare in `config.vcf.yaml` le seguenti variabili:
-* `workdir`: directory dove si vogliono tutti i file.  Idealmente questo valore è il jobid, quindi dovrebbe essere univoco per ogni run.
-* `reference`: sequenza reference in formato fasta.
-* `multifa`: sequenze da allineare al reference e da cui creare il vcf.
-
-Prima di lanciare `Snakefile.malva` settare in `config.malva.yaml` le seguenti variabili:
-* `workdir`: directory dove si vogliono tutti i file.  Anche questo valore dovrebbe essere univoco su tutte le run.
-* `reference`: path allo pseudoreference da usare in malva.
-* `vcf`: path al vcf da usare in malva.
-* `sample`: path al file contenente le read da usare.
-I seguenti campi di `config.malva.yaml` sono opzionali:
-* `minocc`: numero minimo di occorrenze dei kmer da usare in KMC. Default 5.
-* `maxocc`: numero massimo di occorrenze dei kmer da usare in KMC. Default 750.
-* `lenkmers`: lunghezza dei kmer da usare in KMC. Viene usato anche da malva come valore di `-r`. Default 43.
-* `malvak`: lunghezza dei kmer da usare in malva. Default 35.
-* `cores`: numero di thread da usare in KMC. Default 4.
-* `maxmem`: memoria massima usata da KMC in GB. Default 4.
-* `gtf`: path al gtf contenente le annotazioni del reference.
-
-
-Una volta settate le variabili si può lanciare la pipeline che si vuole con
-```bash
-snakemake --snakefile=<nome_snakefile>
-
-# Se non fosse chiaro, per lanciare la creazione di ref e vcf usare
-snakemake --snakefile=Snakefile.vcf
-
-# Mentre per lanciare kmc e malva usare
-snakemake --snakefile=Snakfile.malva
-
-```
-
-Ho caricato dei file di esempio.
+<a id="malva">[4]</a> Denti, Luca, Marco Previtali, Giulia Bernardini, Alexander Schönhuth, and Paola Bonizzoni. 2019. “MALVA: Genotyping by Mapping-Free Allele Detection of Known Variants.” iScience 18: 20–27. doi:[10.1016/j.isci.2019.07.011](https://doi.org/10.1016/j.isci.2019.07.011).
