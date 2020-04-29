@@ -22,7 +22,7 @@ The data you will need for this tutorial is conveniently available at [this GitH
 git clone https://github.com/algolab/MALVIRUS-tutorial-data
 ```
 
-The data include the complete genome of SARS-CoV-2 isolate Wuhan-Hu-1 (accession id: `NC_045512.2`) in file `reference.fasta`, its annotation in file `sars-cov-2.gff`, a set of SARS-CoV-2 complete genomes in file seqs.fasta, and an Illumina sequencing dataset of SARS-CoV-2 Malaysia using the ARTIC v1 protocol (SRA accession id: `SRR11514750`) in file `SRR11514750.fastq.gz`.
+The data include the complete genome of SARS-CoV-2 isolate Wuhan-Hu-1 (accession id: `NC_045512.2`) in file `reference.fasta`, its annotation in file `sars-cov-2.gff`, a set of SARS-CoV-2 complete genomes in file `seqs.fasta`, and an Illumina sequencing dataset of SARS-CoV-2 Malaysia using the ARTIC v1 protocol (SRA accession id: `SRR11514750`) in file `SRR11514750.fastq.gz`.
 
 ## Create an index from the data
 
