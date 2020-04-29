@@ -25,6 +25,8 @@ malvak_config = config["malvak"] if "malvak" in config else 35
 cores_config = config["cores"] if "cores" in config else 4
 maxmem_config = config["maxmem"] if "maxmem" in config else 4
 
+malva_bf_size = max(1,int(maxmem_config/3))
+
 status_json_fn = pjoin(root_dir, "status.json")
 
 
@@ -136,7 +138,8 @@ rule malva:
         kmc_prefix = pjoin(kmc_dir, "kmers"),
         k = malvak_config,
         r = lenkmers_config,
-        c = maxocc_config
+        c = maxocc_config,
+        bfsize = malva_bf_size
     output:
         vcf = pjoin(malva_dir, "malva.non_tagged.vcf")
     threads: 1
@@ -145,7 +148,7 @@ rule malva:
         json = pjoin(malva_dir, "malva.json")
     run:
         step_name = "malva"
-        cmdstr = f"malva-geno -1 -k {params.k} -r {params.r} -c {params.c} -b 1 {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        cmdstr = f"malva-geno -1 -k {params.k} -r {params.r} -c {params.c} -b {params.bfsize} {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
