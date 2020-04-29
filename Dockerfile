@@ -36,6 +36,9 @@ RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda clean -afy
 
+COPY ./software/ /software/
+RUN gcc -O3 -o /software/bin/fill_msa /software/fill_msa.c -lz
+
 # Remove unused packages
 RUN apt-get remove -y \
      tcl x11-common g++ gcc gcc-6 cpp cpp-6 subversion mysql-common && \
@@ -45,7 +48,6 @@ RUN apt-get remove -y \
 RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
 COPY --from=build-frontend /app/build /static
 COPY help/ /static/help
-COPY ./software/ /software/
 COPY --from=download-jobs /jobs /jobs
 COPY flask /app
 COPY snakemake /snakemake
