@@ -88,7 +88,7 @@ rule multi_align:
         fa = reference_path,
         mfa = references_path
     output:
-        msa = pjoin(mafft_dir, "multi_alignment.msa")
+        msa = pjoin(mafft_dir, "multi_alignment.unfilled.msa")
     threads: int(cores_config)
     log:
         out = pjoin(mafft_dir, "mafft.log"),
@@ -97,6 +97,34 @@ rule multi_align:
         update_status("Running")
         step_name = "mafft"
         cmdstr = f"mafft --thread {threads} --auto --keeplength --addfragments {input.mfa} {input.fa} > {output.msa} 2> {log.out}"
+        with open(log.json, "w") as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(
+                    jf, "Running", step_name, cmdstr, "Success", 0, input, output, log_out, None)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out, None)
+                raise e
+
+# Multi alignment filling
+rule fill_msa:
+    input:
+        pjoin(mafft_dir, "multi_alignment.unfilled.msa")
+    output:
+        pjoin(mafft_dir, "multi_alignment.msa")
+    threads: int(cores_config)
+    log:
+        out = pjoin(mafft_dir, "fill_mafft.log"),
+        json = pjoin(mafft_dir, "fill_mafft.json")
+    run:
+        update_status("Running")
+        step_name = "fill_mafft"
+        cmdstr = f"fill_msa {input} > {output} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)
