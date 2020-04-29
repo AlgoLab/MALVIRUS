@@ -28,6 +28,20 @@ const ajaxVcfs = connect(() => ({
       force: true,
     },
   }),
+  updateVcfs: (resolve, reject) => ({
+    updatedVcfs: {
+      url: api.update,
+      andThen: (res) => ({
+        vcfs: {
+          ...vcfs,
+          then: () => resolve(res),
+          catch: reject,
+        },
+      }),
+      catch: reject,
+      force: true,
+    },
+  }),
 }));
 
 export default ajaxVcfs;

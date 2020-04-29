@@ -24,7 +24,8 @@ export function stringifyError(error) {
   if (error.message != null) {
     return error.message;
   }
-  if (error.toString != null) return error.toString();
+  if (error.toString != null && error.toString() !== '[object Object]')
+    return error.toString();
   return JSON.stringify(error, null, 2);
 }
 
