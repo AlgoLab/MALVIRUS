@@ -16,18 +16,13 @@ First, we will need the reference genome of the species we want to analyze, some
 
 We will use data from SARS-CoV-2.
 
-Most of the data you will need for this tutorial is conveniently available at [this GitHub repo](https://github.com/algolab/MALVIRUS-tutorial-data); either [download the data as a ZIP file](https://github.com/AlgoLab/MALVIRUS-tutorial-data/archive/master.zip) on your PC or clone the repository using git:
+The data you will need for this tutorial is conveniently available at [this GitHub repo](https://github.com/algolab/MALVIRUS-tutorial-data); either [download the data as a ZIP file](https://github.com/AlgoLab/MALVIRUS-tutorial-data/archive/master.zip) on your PC or clone the repository using git:
 
 ```bash
 git clone https://github.com/algolab/MALVIRUS-tutorial-data
 ```
 
-The last piece of data we are missing is a dataset of sequencing data; for the purpose of this tutorial we will use an Illumina dataset available on SRA (accession id: `SRR11514750`).
-Let's download it using `fastq-dump`
-
-```bash
-fastq-dump SRR11514750
-```
+The data include the complete genome of SARS-CoV-2 isolate Wuhan-Hu-1 (accession id: `NC_045512.2`) in file `reference.fasta`, its annotation in file `sars-cov-2.gff`, a set of SARS-CoV-2 complete genomes in file seqs.fasta, and an Illumina sequencing dataset of SARS-CoV-2 Malaysia using the ARTIC v1 protocol (SRA accession id: `SRR11514750`) in file `SRR11514750.fastq.gz`.
 
 ## Create an index from the data
 
@@ -70,9 +65,9 @@ Fill in the information as follows:
 
 * **Alias**: SRR11514750
 * **Description**: variant genotyping of individual SRR11514750
-* **Sample sequences (FASTA/Q)**: click on the _Select file_ button and select the `SRR11514750.fasta` file we downloaded using `fastq-dump`
-* **Reference VCF**: click on the bar and select the "SARS-CoV-2 reference from NCBI v1" entry.
-* **Number of cores**: set this value based on how many cores are available on your machine; setting this value to 4 is usually enough.
+* **Sample sequences (FASTA/Q)**: click on the _Select file_ button and select the `SRR11514750.fastq.gz` file
+* **Reference VCF**: click on the bar and select the "SARS-CoV-2 reference from NCBI v1" entry
+* **Number of cores**: set this value based on how many cores are available on your machine; setting this value to 4 is usually enough
 
 Other parameters are available in the "Advanced parameters" section.
 We will use the default values and will not change them for now.
