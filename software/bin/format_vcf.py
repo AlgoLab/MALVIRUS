@@ -17,6 +17,8 @@ def add_freqs():
     print('\n'.join(str(vcf.header).split('\n')[:-1]))
 
     for record in vcf:
+        if record.pos <= 50 or record.pos >= 29860:
+            continue
         tot_alleles = len(record.alleles)
         n_gts = {}
         tot_samples = len(record.samples)
