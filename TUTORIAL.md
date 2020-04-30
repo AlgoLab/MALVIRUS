@@ -1,8 +1,3 @@
----
-title: Tutorial
-nav_order: 4
-permalink: /TUTORIAL
----
 # Tutorial
 
 # Table of contents
@@ -37,7 +32,9 @@ Head to the "Reference VCF" tab and click on the "Build a new Reference VCF from
 
 You will be presented with a submission form similar to the following
 
+<a href="vcf_submission_form.png" target="_blank">
 <img src="vcf_submission_form.png" width="500px"/>
+</a>
 
 Fill in the information as follows:
 
@@ -51,7 +48,9 @@ Fill in the information as follows:
 Once you filled in all the field with the data, click on the _Submit_ button at the bottom of the page.
 You will be redirected to a page reporting the status of the job requested.
 
+<a href="vcf_submission_report.png" target="_blank">
 <img src="vcf_submission_report.png" width="500px"/>
+</a>
 
 To update the status, click on the _Refresh_ button at the bottom of the page.
 The status will change from "Pending" to "Running" to "Completed".
@@ -64,7 +63,9 @@ Head to the "Variant calls" tab and click on the "Perform a new variant call" bu
 
 You will be presented with a submission form similar to the following
 
+<a href="geno_submission_form.png" target="_blank">
 <img src="geno_submission_form.png" width="500px"/>
+</a>
 
 Fill in the information as follows:
 
@@ -89,16 +90,22 @@ Once the status is "Completed", congratulations! You just completed your first g
 To access the results, head back to the "Variant calls" tab where you will find the list of jobs submitted to MALVIRUS.
 You will be presented with a table containing a single entry (`SRR11514750`).
 
+<a href="geno_table.png" target="_blank">
 <img src="geno_table.png" width="500px"/>
+</a>
 
 By clicking on the job alias you will be redirected to the job status page.
 
+<a href="geno_results.png" target="_blank">
 <img src="geno_results.png" width="500px"/>
+</a>
 
 In this page you will be able to access the results by clicking on the _Show in tabular form_ button in the "Output files" row.
 
 By default the table in this view will only show the variants genotyped as wild type, by deselecting the "Show only loci with alt. allele" filter you will be able to analyze all the variants genotyped in this run.
 
+<a href="geno_wild.png" target="_blank">
 <img src="geno_wild.png" width="500px"/>
+</a>
 
 Finally, you can download the data both as VCF and in Excel format by clicking the links at the top of the page.
