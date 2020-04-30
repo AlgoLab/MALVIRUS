@@ -1,0 +1,26 @@
+title: MALVIRUS
+description: >-
+  A fast and accurate tool for genotyping haploid individuals (esp., virological data such as SARS-CoV-2).
+baseurl: "/MALVIRUS" # the subpath of your site, e.g. /blog
+url: "https://algolab.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+remote_theme: pmarsceill/just-the-docs
+logo: "logo.png"
+
+search_enabled: false
+
+footer_content: 'Copyright &copy; 2020 - <a href="http://algolab.eu" target="_blank" rel="noopener noreferrer">BIAS Lab</a>'
+
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
