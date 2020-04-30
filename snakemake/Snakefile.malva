@@ -25,7 +25,7 @@ malvak_config = config["malvak"] if "malvak" in config else 35
 cores_config = config["cores"] if "cores" in config else 4
 maxmem_config = config["maxmem"] if "maxmem" in config else 4
 
-malva_bf_size = max(1,int(maxmem_config/3))
+malva_bf_size = 1 # max(1,int(maxmem_config/3))
 
 status_json_fn = pjoin(root_dir, "status.json")
 
