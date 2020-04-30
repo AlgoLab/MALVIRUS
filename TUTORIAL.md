@@ -1,3 +1,8 @@
+---
+title: Tutorial
+nav_order: 4
+permalink: /TUTORIAL
+---
 # Tutorial
 
 # Table of contents
