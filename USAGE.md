@@ -4,19 +4,18 @@ nav_order: 3
 permalink: /USAGE
 ---
 # Usage
-1. [Creating the index](#creating-the-index)
-  - [Building the index from a population of genomes](#building-the-index-from-a-population-of-genomes)
-  - [Uploading the index using a precomputed VCF](#uploading-the-index-using-a-precomputed-VCF)
-2. [Genotype imputation](#genotype-imputation)
+1. [Creating the variant catalog](#creating-the-variant-catalog)
+  - [Building the catalog from a population of genomes](#building-the-catalog-from-a-population-of-genomes)
+  - [Uploading the catalog using a precomputed VCF](#uploading-the-catalog-using-a-precomputed-vcf)
+2. [Genotype calling](#genotype-calling)
 3. [Retrieving the results](#retrieving-the-results)
-4. [References](#references)
 
-## Creating the index
+## Creating the variant catalog
 
 There are two main approaches to build an index of known variants.
 The first one is to build it from a reference genome and a set of genomic sequences of the same specie (i.e., a set of _assemblies_), whereas the second is to upload a reference genome and a VCF file.
 
-### Building the index from a population of genomes
+### Building the catalog from a population of genomes
 
 We will first show how to build the index from a reference genome and a set of genomic sequences.
 Note that, the reference genome must be in FASTA format, whereas the set of genomic sequences must be in multi-FASTA format.
@@ -38,7 +37,7 @@ Note that for datasets composed by thousands of viral assemblies this step might
 Clicking again on the _Reference VCFs_ tab at the top will present the list of indexes and the status of the job used to build it.
 Once the status is <span style="color:#237804">Completed</span> the index can be used to call variants.
 
-### Uploading the index using a precomputed VCF
+### Uploading the catalog using a precomputed VCF
 
 If the set of known variants is already available as a VCF, you can avoid computing the index and upload the reference genome and the VCF instead.
 
@@ -52,7 +51,7 @@ If you upload this information, then variant calls that will use this index will
 
 Finally, click on the _Submit_ button on the bottom to upload and create the new index.
 
-## Genotype imputation
+## Genotype calling
 
 The main goal of MALVIRUS is to genotype an individual directly from a sequencing dataset.
 
@@ -63,7 +62,7 @@ You will be presented with a form that you have to fill in with the required dat
 Set the _Alias_ and _Description_ fields to something meaningful, remember _Alias_ will be the name of the job you will submit.
 Then, upload the sequencing data in either FASTA of FASTQ format in the _Sample sequences_ field and chose an index to use while genotyping the data in the _Reference VCF_ field.
 
-If no reference VCF is available in the drop-down menu of the _Reference VCF_ field, you probably did not create an index yet; head to the [Creating the index](#creating-the-index) section of this document and follow the instructions.
+If no reference VCF is available, MALVIRUS asks you to first create a variant catalog; head to the [Creating the variant catalog](#creating-the-variant-catalog) section of this document and follow the instructions.
 
 After uploading the sample and selecting the index you are able to submit the job by clicking the _Submit_ button.
 
