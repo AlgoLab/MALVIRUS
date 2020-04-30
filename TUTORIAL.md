@@ -8,8 +8,8 @@ permalink: /TUTORIAL
 # Table of contents
 1. [Introduction](#introduction)
 2. [Download the data](#download-the-data)
-3. [Create an index from the data](#create-an-index-from-the-data)
-4. [Genotype imputation](#genotype-imputation)
+3. [Create a variant catalog from assemblies](#create-a-variant-catalog-from-assemblies)
+4. [Genotype calling](#genotype-calling)
 
 ## Introduction
 
@@ -29,17 +29,19 @@ git clone https://github.com/algolab/MALVIRUS-tutorial-data
 
 The data include the complete genome of SARS-CoV-2 isolate Wuhan-Hu-1 (accession id: `NC_045512.2`) in file `reference.fasta`, its annotation in file `sars-cov-2.gff`, a set of SARS-CoV-2 complete genomes in file `seqs.fasta`, and an Illumina sequencing dataset of SARS-CoV-2 Malaysia using the ARTIC v1 protocol (SRA accession id: `SRR11514750`) in file `SRR11514750.fastq.gz`.
 
-## Create an index from the data
+## Create a variant catalog from assemblies
 
-First we will create the index of known variants induced by the data we downloaded.
+First we will create a catalog of known variants induced by the assemblies we downloaded.
 
 Head to the "Reference VCF" tab and click on the "Build a new Reference VCF from genomes" button.
 
-You will be presented with a submission form similar to the following
+You will be presented with a submission form similar to the following:
 
+<p align="center">
 <a href="vcf_submission_form.png" target="_blank">
 <img src="vcf_submission_form.png" width="500px"/>
 </a>
+</p>
 
 Fill in the information as follows:
 
@@ -53,24 +55,28 @@ Fill in the information as follows:
 Once you filled in all the field with the data, click on the _Submit_ button at the bottom of the page.
 You will be redirected to a page reporting the status of the job requested.
 
+<p align="center">
 <a href="vcf_submission_report.png" target="_blank">
 <img src="vcf_submission_report.png" width="500px"/>
 </a>
+</p>
 
 To update the status, click on the _Refresh_ button at the bottom of the page.
 The status will change from "Pending" to "Running" to "Completed".
 Once the status is "Completed", congratulations! You just built your first MALVIRUS index.
 Let's now head to genotyping the individual by clicking on the "Variant calls" tab at the top of the page.
 
-## Genotype imputation
+## Genotype calling
 
 Head to the "Variant calls" tab and click on the "Perform a new variant call" button.
 
-You will be presented with a submission form similar to the following
+You will be presented with a submission form similar to the following:
 
+<p align="center">
 <a href="geno_submission_form.png" target="_blank">
 <img src="geno_submission_form.png" width="500px"/>
 </a>
+</p>
 
 Fill in the information as follows:
 
@@ -88,29 +94,35 @@ Finally, click the _Submit_ button at the bottom of the page.
 Similarly to the previous step, you will be redirected to a page reporting the status of the job requested.
 To update the status, click on the _Refresh_ button at the bottom of the page.
 The status will change from "Pending" to "Running" to "Completed".
-Once the status is "Completed", congratulations! You just completed your first genotype imputation using MALVIRUS.
+Once the status is "Completed", congratulations! You just completed your first genotype calling using MALVIRUS.
 
 ## Accessing the results
 
 To access the results, head back to the "Variant calls" tab where you will find the list of jobs submitted to MALVIRUS.
 You will be presented with a table containing a single entry (`SRR11514750`).
 
+<p align="center">
 <a href="geno_table.png" target="_blank">
 <img src="geno_table.png" width="500px"/>
 </a>
+</p>
 
 By clicking on the job alias you will be redirected to the job status page.
 
+<p align="center">
 <a href="geno_results.png" target="_blank">
 <img src="geno_results.png" width="500px"/>
 </a>
+</p>
 
 In this page you will be able to access the results by clicking on the _Show in tabular form_ button in the "Output files" row.
 
 By default the table in this view will only show the variants genotyped as wild type, by deselecting the "Show only loci with alt. allele" filter you will be able to analyze all the variants genotyped in this run.
 
+<p align="center">
 <a href="geno_wild.png" target="_blank">
 <img src="geno_wild.png" width="500px"/>
 </a>
+</p>
 
 Finally, you can download the data both as VCF and in Excel format by clicking the links at the top of the page.
