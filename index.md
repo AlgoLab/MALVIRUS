@@ -8,6 +8,8 @@ permalink: /
 MALVIRUS is a fast and accurate tool for genotyping haploid individuals that does not require to assemble the read nor mapping them to a reference genome.
 It is tailored to work with virological data and can genotype an individual directly from sequencing data in minutes.
 
+{% include gallery.html files="/geno_submission_form.png+/geno_table.png+/geno_results.png+/geno_wild.png" %}
+
 MALVIRUS is divided into two logically distinct steps: the creation of the index representing the knowledge base of the species under investigation and the genotype imputation.
 The first step is based on mafft [[1]](#mafft7) and snp-sites [[2]](#snp-sites), whereas the second step is based on KMC [[3]](#kmc) and MALVA [[4]](#malva).
 

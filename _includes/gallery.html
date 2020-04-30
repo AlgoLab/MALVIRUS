@@ -1,0 +1,23 @@
+<style>
+    .image-gallery {overflow: auto; text-align: center;}
+    .image-gallery div {display: inline-block; margin: 0 0 4px 4px; width: 340px;}
+    .image-gallery div a {text-decoration: none!important; color: #777;}
+    .image-gallery div a img {width: 100%; display: block;}
+</style>
+
+{% assign myfiles = include.files | split: "+" %}
+<div class="image-gallery">
+    {% for f in myfiles %}
+    {% for file in site.static_files %}
+    {% if f == file.path %}
+    {% assign filenameparts = file.path | split: "/" %}
+    {% assign filename = filenameparts | last | replace: file.extname,"" %}
+    <div>
+        <a href="{{ file.path | relative_url }}" target="_blank" rel="noopener noreferrer">
+            <img src="//images.weserv.nl/?url={{ site.url | replace: 'http://','' | replace: 'https://','' }}{{ file.path | relative_url }}&w=340&h=200&fit=cover&a=top" />
+        </a>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+</div>
