@@ -1,7 +1,7 @@
 # Usage
 1. [Creating the variant catalog](#creating-the-variant-catalog)
   - [Building the catalog from a population of genomes](#building-the-catalog-from-a-population-of-genomes)
-  - [Uploading the catalog using a precomputed VCF](#uploading-the-catalog-using-a-precomputed-VCF)
+  - [Uploading the catalog using a precomputed VCF](#uploading-the-catalog-using-a-precomputed-vcf)
   - [Using a precomputed catalog](#using-a-precomputed-catalog)
 2. [Genotype calling](#genotype-calling)
 3. [Retrieving the results](#retrieving-the-results)
