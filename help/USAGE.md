@@ -86,5 +86,6 @@ Click on the alias of the job you want to analyze and you'll be presented with a
 
 If the status is <span style="color:#237804">Completed</span>, then you can access and download the output VCF that will be in the _Output files_ row.
 By clicking the name of the output file (usually `malva.vcf`) you'll download the vcf, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that describes the VCF and that highlights the differences between the reference genome and the strain under analysis.
-In this page, the rows related to the variants that were genotyped differently than the reference are highlighted in blue and the last column is color coded based on the quality of the call.
+In this page, by default only the wild-type variants detected in the strain are shown, to see all the variants uncheck the _Show only loci with alt.~allele_ filter.
+Moreover, last column is color coded based on the quality of the call.
 For convenience, at the top of this page you can find two links to download the output in VCF or as a spreadsheet.
