@@ -23,7 +23,7 @@ If no other issue is similar to your case, go ahead and open a new issue. Please
 
 In any case, when filing an issue for reporting a bug, make sure to answer these five questions:
 
-1. What version of MALVIRUS and are you using?
+1. What version of MALVIRUS are you using?
 2. What operating system (and version) are you using?
 3. What version (and flavour) of Docker are you using?
 4. What did you do?
