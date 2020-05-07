@@ -6,7 +6,7 @@ permalink: /
 # MALVIRUS
 
 MALVIRUS is a fast and accurate tool for genotyping haploid individuals that does not require to assemble the read nor mapping them to a reference genome.
-It is tailored to work with virological data and can genotype an individual directly from sequencing data in minutes.
+It is tailored to work with virological data (including but not limited to SARS-CoV-2) and can genotype an individual directly from sequencing data in minutes.
 
 {% include gallery.html files="/geno_submission_form.png+/geno_table.png+/geno_results.png+/geno_wild.png" %}
 
@@ -24,7 +24,13 @@ Please see the following documents for additional details:
 MALVIRUS is distributed as a Docker image and is publicly available on [GitHub](https://github.com/AlgoLab/MALVIRUS) and [Docker Hub](https://hub.docker.com/r/algolab/malvirus) under the terms of the GNU General Public License version 3 or later.
 MALVIRUS was mainly developed and tested under Ubuntu GNU/Linux version 18.04 but works wherever Docker is available.
 
-# References
+## Citation
+
+_MALVIRUS: an integrated web application for viral variant calling_  
+Simone Ciccolella, Luca Denti, Paola Bonizzoni, Gianluca Della Vedova, Yuri Pirola, Marco Previtali  
+bioRxiv 2020.05.05.076992; doi: [10.1101/2020.05.05.076992](https://doi.org/10.1101/2020.05.05.076992)
+
+## References
 
 <a id="mafft7">[1]</a> Katoh, Kazutaka, and Daron M. Standley. 2013. “MAFFT Multiple Sequence Alignment Software Version 7: Improvements in Performance and Usability.” Molecular Biology and Evolution 30 (4): 772–80. doi:[10.1093/molbev/mst010](https://doi.org/10.1093/molbev/mst010).
 
