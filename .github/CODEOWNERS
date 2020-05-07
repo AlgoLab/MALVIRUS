@@ -1,1 +1,10 @@
 *  @AlgoLab/MALVIRUS
+/.github/ @yp
+/flask/  @sciccolella
+/frontend/  @yp
+/help/  @mpre
+/snakemake/ @ldenti @mpre @sciccolella
+/software/ @ldenti
+Dockerfile @yp
+environment.yml @ldenti
+run.sh @yp
