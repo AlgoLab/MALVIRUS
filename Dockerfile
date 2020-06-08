@@ -19,33 +19,24 @@ RUN git clone --depth 1 https://github.com/AlgoLab/MALVIRUS-data.git .
 FROM tiangolo/uwsgi-nginx-flask:python3.7-2020-06-08
 RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+COPY ./environment.yml environment.yml
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda clean -tipsy && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
+    echo "conda activate base" >> ~/.bashrc && \
+    /opt/conda/bin/conda env create -f environment.yml && \
+    find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    /opt/conda/bin/conda clean --all
 
 ENV PATH /opt/conda/bin:$PATH
 
-COPY ./environment.yml environment.yml
-RUN conda env create -f environment.yml
 RUN echo "conda activate malva-env" >> ~/.profile
-
-# Clean conda packages
-RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda clean -afy
 
 COPY ./software/ /software/
 RUN gcc -O3 -o /software/bin/fill_msa /software/fill_msa.c -lz
-
-# Remove unused packages
-RUN apt-get remove -y \
-     tcl x11-common g++ gcc gcc-6 cpp cpp-6 subversion mysql-common && \
-   apt-get autoremove -y
-
 
 RUN echo "PATH=/software/bin:$PATH" >> ~/.bashrc
 COPY --from=build-frontend /app/build /static
