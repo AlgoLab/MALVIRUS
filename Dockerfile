@@ -9,13 +9,15 @@ RUN rm public/help
 RUN yarn run build
 
 
-FROM tiangolo/uwsgi-nginx-flask:python3.7 as download-jobs
+FROM tiangolo/uwsgi-nginx-flask:python3.7-2020-06-08 as download-jobs
+RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /jobs
 RUN git clone --depth 1 https://github.com/AlgoLab/MALVIRUS-data.git .
 
 
 
-FROM tiangolo/uwsgi-nginx-flask:python3.7
+FROM tiangolo/uwsgi-nginx-flask:python3.7-2020-06-08
+RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
