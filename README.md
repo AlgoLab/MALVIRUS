@@ -1,3 +1,5 @@
+![Docker Hub Build](https://github.com/AlgoLab/MALVIRUS/workflows/Docker%20Hub%20Build/badge.svg)
+
 # MALVIRUS
 
 MALVIRUS is a fast and accurate tool for genotyping haploid individuals that does not require to assemble the read nor mapping them to a reference genome.
