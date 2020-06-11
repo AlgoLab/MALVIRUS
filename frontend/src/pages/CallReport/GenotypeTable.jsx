@@ -1,12 +1,15 @@
 import React, { useMemo, useCallback } from 'react';
 
+import { Table, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
 import { defaultReportConfig } from 'app-config';
 import { usePersistentState } from 'utils/hooks';
 import { NoDataWithFilters, NoDataWoFilters } from 'utils/tables';
 
 import GenotypeCell from './GenotypeCell';
-import VirtualTable from './VirtualTable';
 import TableForm from './TableForm';
+import EffectsText from './EffectsText';
 
 const columns = [
   {
@@ -27,15 +30,21 @@ const columns = [
   },
   {
     title: 'Gene',
-    dataIndex: 'INFO',
-    render: (value) =>
-	  value && value.startsWith('GENE=') ? value.split(';')[0].slice(5) : value.split(';')[0],
+    dataIndex: '_info',
+    render: (value) => value && value.GENE,
   },
   {
-      title: 'Effect',
-      dataIndex: 'INFO',
-      render: (value) =>
-	  value && value.split(';').length > 1 ? value.split(';')[1].split('|')[1] : "None",
+    title: (
+      <>
+        Effect{' '}
+        <Tooltip title="Click on the effect for full report">
+          <QuestionCircleOutlined />
+        </Tooltip>
+      </>
+    ),
+    dataIndex: '_info',
+    render: (value) =>
+      (value && value.ANN && <EffectsText effects={value.ANN} />) || 'None',
   },
   {
     title: 'Genotype',
@@ -44,7 +53,8 @@ const columns = [
   },
 ];
 
-const tableScroll = { y: 400, x: '100%' };
+const titleStyle = { margin: '0.5em' };
+const tableScroll = { x: '100%' };
 
 function GenotypeTable({ data, config }) {
   const filteredData = useMemo(
@@ -74,7 +84,7 @@ function GenotypeTable({ data, config }) {
 
   const title = useCallback(
     () => (
-      <p style={{ margin: '0.5em' }}>
+      <p style={titleStyle}>
         Showing {filteredData.length} loci ({data.length - filteredData.length}{' '}
         hidden by filters)
       </p>
@@ -83,7 +93,7 @@ function GenotypeTable({ data, config }) {
   );
 
   return (
-    <VirtualTable
+    <Table
       rowKey="_key"
       dataSource={filteredData}
       columns={columns}

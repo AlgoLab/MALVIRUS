@@ -7,6 +7,31 @@ import { Error, Loading } from 'components';
 
 import GenotypeTable from './GenotypeTable';
 import DownloadAsXlsx from './DownloadAsXlsx';
+import { ANN_FIELDS } from './utils';
+
+const customTranslation = {
+  ANN: function (effects) {
+    return effects.split(',').map((effect, idx) => ({
+      key: idx,
+      ...Object.fromEntries(
+        effect.split('|').map((v, i) => [ANN_FIELDS[i] || i, v])
+      ),
+    }));
+  },
+};
+
+function info2dict(info) {
+  if (!info) return {};
+  return Object.fromEntries(
+    info
+      .split(';')
+      .map((field) => field.split('=', 2))
+      .map(([key, value]) => [
+        key,
+        customTranslation[key] ? customTranslation[key](value) : value,
+      ])
+  );
+}
 
 function vcf2data(vcf) {
   const [pheader, ...data] = vcf
@@ -26,10 +51,11 @@ function vcf2data(vcf) {
         variant.DONOR && variant.DONOR.indexOf(':') !== -1
           ? variant.DONOR.split(':').map((x) => +x)
           : undefined,
-      _gene:
-        variant.INFO && variant.INFO.startsWith('GENE=')
-          ? variant.INFO.slice(5)
-          : undefined,
+      _info: info2dict(variant.INFO),
+      ...variant,
+    }))
+    .map((variant) => ({
+      _gene: variant._info && variant._info.GENE,
       ...variant,
     }));
 }
