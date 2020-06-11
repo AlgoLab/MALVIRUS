@@ -29,7 +29,13 @@ const columns = [
     title: 'Gene',
     dataIndex: 'INFO',
     render: (value) =>
-      value && value.startsWith('GENE=') ? value.slice(5) : value,
+	  value && value.startsWith('GENE=') ? value.split(';')[0].slice(5) : value.split(';')[0],
+  },
+  {
+      title: 'Effect',
+      dataIndex: 'INFO',
+      render: (value) =>
+	  value && value.split(';').length > 1 ? value.split(';')[1].split('|')[1] : "None",
   },
   {
     title: 'Genotype',
