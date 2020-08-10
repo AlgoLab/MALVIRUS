@@ -31,6 +31,21 @@ def not_found(route):
     return abort(make_response(jsonify(message='Route not found'), 404))
 
 
+def base_get_refs():
+    try:
+        with open(pjoin(app.config['JOB_DIR'], 'refs', 'refs.json'), 'r') as f:
+            refs = json.load(f)
+        return refs
+    except:
+        return None
+
+@app.route('/ref', methods=['GET'])
+def get_refs():
+    refs = base_get_refs()
+    if refs is None:
+        return jsonify([])
+    return jsonify(refs)
+
 @app.route('/vcf', methods=['GET'])
 def get_vcf_list():
     vcfs = list()
