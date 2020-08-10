@@ -4,7 +4,6 @@ from flask import render_template, jsonify, request, abort, make_response
 from app import app
 from werkzeug.utils import secure_filename
 
-from os.path import join as pjoin
 from pathlib import Path
 from os import getcwd
 import os
@@ -21,6 +20,11 @@ import gzip
 def mkdirp(path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
+def pjoin(basepath, *paths):
+    path = os.path.join(basepath, *paths)
+    if not os.path.abspath(path).startswith(os.path.abspath(basepath)):
+        raise Exception('Trying to access a non safe-path.')
+    return path
 
 @app.route('/<path:route>')
 def not_found(route):
