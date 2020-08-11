@@ -26,7 +26,7 @@ lenkmers_config = config["lenkmers"] if "lenkmers" in config else 43
 malvak_config = config["malvak"] if "malvak" in config else 35
 cores_config = config["cores"] if "cores" in config else 4
 maxmem_config = config["maxmem"] if "maxmem" in config else 4
-refname_config = config["refname"] if "refname" in config else "NC_045512.2"
+refname_config = config["refname"] if "refname" in config else None
 
 malva_bf_size = 1 # max(1,int(maxmem_config/3))
 
@@ -236,7 +236,10 @@ rule snpeff:
         json = pjoin(snpeff_dir, "snpeff.json")
     run:
         step_name = "snpeff"
-        cmdstr = f"snpEff -noLog -noStats -v {params.refname} {input.vcf} > {output.vcf} 2> {log.out}"
+        if params.refname is None:
+            cmdstr = f"cp {input.vcf} {output.vcf} 2> {log.out}"
+        else:
+            cmdstr = f"snpEff -noLog -noStats -v {params.refname} {input.vcf} > {output.vcf} 2> {log.out}"
         with open(log.json, 'w') as jf:
             try:
                 shell.check_output(cmdstr)
