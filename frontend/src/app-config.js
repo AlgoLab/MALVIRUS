@@ -10,6 +10,7 @@ export const api = {
     return `${wsBaseHref}/malva${isNotNull(idm)}`;
   },
   update: `${wsBaseHref}/update`,
+  ref: `${wsBaseHref}/ref`,
 };
 
 export const basepath = process.env.PUBLIC_URL
