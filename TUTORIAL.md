@@ -10,6 +10,8 @@ permalink: /TUTORIAL
 2. [Download the data](#download-the-data)
 3. [Create a variant catalog from assemblies](#create-a-variant-catalog-from-assemblies)
 4. [Genotype calling](#genotype-calling)
+5. [Accessing the results](#accessing-the-results)
+6. [Annotating variant effects with SnpEff](#annotating-variant-effects-with-snpeff)
 
 ## Introduction
 
@@ -31,6 +33,7 @@ The data include the complete genome of SARS-CoV-2 isolate Wuhan-Hu-1 (accession
 
 ## Create a variant catalog from assemblies
 
+**Notice:** _this step is for demonstration purposes only, as a SARS-CoV-2 catalog computed from GenBank assemblies is preloaded with MALVIRUS._
 First we will create a catalog of known variants induced by the assemblies we downloaded.
 
 Head to the "Reference VCF" tab and click on the "Build a new Reference VCF from genomes" button.
@@ -47,7 +50,8 @@ Fill in the information as follows:
 
 * **Alias**: SARS-CoV-2 reference from NCBI v1
 * **Description**: Sequences downloaded on April 23rd, 2020
-* **Reference**: click the _Select file_ button and select the `reference.fasta` file in the git repository we cloned previously
+* **Reference genome**: select the _Custom reference_ item
+* **Reference genomic sequence**: click the _Select file_ button and select the `reference.fasta` file in the git repository we cloned previously
 * **Gene annotation**: click on the _Select file_ button and select the `sars-cov-2.gff` file in the git repository we cloned previously
 * **Population genomic sequences**: click on the _Select file button_ and select the `seqs.fasta` file in the git repository we cloned previously
 * **Number of cores**: set this value based on how many cores are available on your machine; setting this value to 4 is usually enough.
@@ -126,3 +130,24 @@ By default the table in this view will only show the variants genotyped as wild 
 </p>
 
 Finally, you can download the data both as VCF and in Excel format by clicking the links at the top of the page.
+## Annotating variant effects with SnpEff
+
+MALVIRUS is able to annotate variant effects using SnpEff **if a preloaded reference is used**.
+So, you must re-create the variant catalog as described in [Create a variant catalog from assemblies](#create-a-variant-catalog-from-assemblies) but selecting the item "NC\_045512.2" in the _Reference genome_ box instead of "Custom reference" (beware, the _Alias_ must be different).
+This also saves us from uploading the reference genomic sequence in FASTA format and the related gene annotation.
+
+Then, if you genotype the individual SRR11514750 as described [above](#genotype-calling) but selecting the newly created catalog you will obtain a table similar to the following one.
+
+<p align="center">
+<a href="geno_wild_snpeff.png" target="_blank">
+<img src="geno_wild_snpeff.png" width="500px"/>
+</a>
+</p>
+
+By clicking on a variant effect, you'll see the full output of SnpEff for that variant in a tabular form.
+
+<p align="center">
+<a href="snpeff_annot.png" target="_blank">
+<img src="snpeff_annot.png" width="500px"/>
+</a>
+</p>
