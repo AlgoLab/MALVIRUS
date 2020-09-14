@@ -5,19 +5,18 @@
   "dependencies": {
     "@2fd/ant-design-icons": "2.1.0",
     "@ant-design/icons": "4.2.2",
-    "antd": "4.5.3",
+    "antd": "4.6.4",
     "core-js": "^3.5.0",
-    "dayjs": "1.8.33",
+    "dayjs": "1.8.35",
     "history": "5.0.0",
     "markdown-to-jsx": "6.11.4",
-    "rc-resize-observer": "0.2.3",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dom": "^16.13.1",
     "react-refetch": "^3.0.1",
     "react-router": "6.0.0-alpha.3",
     "react-router-dom": "6.0.0-alpha.3",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.3",
     "react-window": "^1.8.5",
     "xlsx": "^0.15.6"
   },
@@ -42,10 +41,10 @@
     "@craco/craco": "5.6.4",
     "antd-dayjs-webpack-plugin": "1.0.1",
     "babel-plugin-import": "1.13.0",
-    "craco-less": "1.16.0",
+    "craco-less": "1.17.0",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.4",
-    "prettier": "2.0.5"
+    "prettier": "2.1.1"
   }
 }

@@ -27,7 +27,7 @@ function EffectsText({ effects }) {
   const onClick = useCallback(
     () =>
       Modal.info({
-        title: 'Effects predicted by snpEff',
+        title: 'Effects predicted by SnpEff',
         content: <EffectTable effects={effects} />,
         width: '80%',
         icon: false,

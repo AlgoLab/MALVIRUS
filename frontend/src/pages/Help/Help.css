@@ -5,3 +5,8 @@
 .active-menu-link {
   font-weight: bold;
 }
+
+.malvirus-help img {
+  width: 100%;
+  max-width: 720px;
+}
