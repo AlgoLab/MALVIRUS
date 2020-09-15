@@ -4,7 +4,6 @@ from flask import render_template, jsonify, request, abort, make_response
 from app import app
 from werkzeug.utils import secure_filename
 
-from os.path import join as pjoin
 from pathlib import Path
 from os import getcwd
 import os
@@ -21,11 +20,31 @@ import gzip
 def mkdirp(path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
+def pjoin(basepath, *paths):
+    path = os.path.join(basepath, *paths)
+    if not os.path.abspath(path).startswith(os.path.abspath(basepath)):
+        raise Exception('Trying to access a non safe-path.')
+    return path
 
 @app.route('/<path:route>')
 def not_found(route):
     return abort(make_response(jsonify(message='Route not found'), 404))
 
+
+def base_get_refs():
+    try:
+        with open(pjoin(app.config['JOB_DIR'], 'refs', 'refs.json'), 'r') as f:
+            refs = json.load(f)
+        return refs
+    except:
+        return None
+
+@app.route('/ref', methods=['GET'])
+def get_refs():
+    refs = base_get_refs()
+    if refs is None:
+        return jsonify([])
+    return jsonify(refs)
 
 @app.route('/vcf', methods=['GET'])
 def get_vcf_list():
@@ -121,6 +140,9 @@ def rm_vcf(vcf_id):
 
     return jsonify(info)
 
+def first_true(iterable, default=None, pred=None):
+    return next(filter(pred, iterable), default)
+
 
 @app.route('/vcf', methods=['POST'])
 def post_vcf():
@@ -137,16 +159,25 @@ def post_vcf():
 
     if 'file' not in request.files:
         abort(make_response(jsonify(message="Missing file"), 400))
-    if 'reference' not in request.files:
+
+    custom_ref = ('refid' not in request.form or request.form['refid'] == '__custom__')
+    if custom_ref and 'reference' not in request.files:
         abort(make_response(jsonify(message="Missing file"), 400))
 
     rfile = request.files['file']
-    reffile = request.files['reference']
-
     if rfile.filename == '':
         abort(make_response(jsonify(message="Missing filename"), 400))
-    if reffile.filename == '':
-        abort(make_response(jsonify(message="Missing filename"), 400))
+
+    if custom_ref:
+        reffile = request.files['reference']
+        if reffile.filename == '':
+            abort(make_response(jsonify(message="Missing filename"), 400))
+    else:
+        refs = base_get_refs()
+        refid = request.form['refid']
+        ref = first_true(refs, None, lambda x: x['id'] == refid)
+        if ref is None:
+            abort(make_response(jsonify(message="Unknown ref"), 400))
 
     uuid = datetime.datetime.now().strftime('%Y%m%d-%H%M%S_') + str(uuid4())
 
@@ -173,24 +204,37 @@ def post_vcf():
         os.remove(dfile)
         dfile = nfile
 
-    # Download reference
-    refpath = pjoin(workdir, secure_filename(reffile.filename))
-    reffile.save(refpath)
-    if refpath.endswith('.gz'):
-        nfile = refpath.replace('.gz', '')
-        with gzip.open(refpath, 'rb') as f_in:
-            with open(nfile, 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-        os.remove(refpath)
-        refpath = nfile
+    if custom_ref:
+        # Download reference
+        refpath = pjoin(workdir, secure_filename(reffile.filename))
+        reffile.save(refpath)
+        if refpath.endswith('.gz'):
+            nfile = refpath.replace('.gz', '')
+            with gzip.open(refpath, 'rb') as f_in:
+                with open(nfile, 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+            os.remove(refpath)
+            refpath = nfile
 
-    # Download GTF (optional)
-    if 'gtf' not in request.files:
-        gtfpath = "NULL"
+        # Download GTF (optional)
+        if 'gtf' not in request.files:
+            gtfpath = "NULL"
+        else:
+            gtffile = request.files['gtf']
+            gtfpath = pjoin(workdir, secure_filename(gtffile.filename))
+            gtffile.save(gtfpath)
     else:
-        gtffile = request.files['gtf']
-        gtfpath = pjoin(workdir, secure_filename(gtffile.filename))
-        gtffile.save(gtfpath)
+        # Copy reference
+        sourcepath = pjoin(app.config['JOB_DIR'], 'refs', ref['reference']['file'])
+        refpath = pjoin(workdir, secure_filename(ref['reference']['file']))
+        shutil.copy2(sourcepath, refpath)
+
+        # Copy GTF
+        sourcepath = pjoin(app.config['JOB_DIR'], 'refs', ref['annotation']['file'])
+        gtfpath = pjoin(workdir, secure_filename(ref['annotation']['file']))
+        shutil.copy2(sourcepath, gtfpath)
+
+
 
     info = {
         "filename": dfile,
@@ -203,6 +247,8 @@ def post_vcf():
     }
     if filetype == 'fasta':
         info['params'] = {"cores": cores}
+    if not custom_ref:
+        info['internal_ref'] = ref
 
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
@@ -385,7 +431,7 @@ def post_malva():
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf, 'status.json'), 'r') as f:
         status = json.load(f)
     with open(pjoin(app.config['JOB_DIR'], 'vcf', vcf, 'info.json'), 'r') as f:
-        info = json.load(f)
+        binfo = json.load(f)
 
     if status['status'] in ['Uploaded', 'Precomputed']:
         vcfpath = status['output']['vcf']
@@ -396,8 +442,8 @@ def post_malva():
             vcf,
             'vcf', 'run.cleaned.vcf'
         )
-    reference = info['reference']
-    gtf = info['gtf']
+    reference = binfo['reference']
+    gtf = binfo['gtf']
 
     uuid = datetime.datetime.now().strftime('%Y%m%d-%H%M%S_') + str(uuid4())
     workdir = pjoin(
@@ -445,6 +491,11 @@ def post_malva():
         },
         "submission_time": int(round(time()))
     }
+
+    has_internal_ref = 'internal_ref' in binfo
+    if has_internal_ref:
+        info['internal_ref'] = binfo['internal_ref']
+
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
 
@@ -463,6 +514,10 @@ def post_malva():
             f'gtf: {gtf}\n' +
             f'cores: {cores}\n'
         )
+        if has_internal_ref and ('snpEff' in info['internal_ref']) and ('id' in info['internal_ref']['snpEff']):
+            conf.write(
+                f"refname: {info['internal_ref']['snpEff']['id']}\n"
+            )
 
     status = {
         "status": "Pending",

@@ -17,6 +17,8 @@ root_dir = config["workdir"]
 kmc_dir = pjoin(root_dir, "KMC")
 malva_dir = pjoin(root_dir, "malva")
 tagvcf_dir = pjoin(root_dir, "tagvcf")
+ease_dir = pjoin(root_dir, "easevcf")
+snpeff_dir = pjoin(root_dir, "snpeff")
 
 minocc_config = config["minocc"] if "minocc" in config else 5
 maxocc_config = config["maxocc"] if "maxocc" in config else 750
@@ -24,6 +26,7 @@ lenkmers_config = config["lenkmers"] if "lenkmers" in config else 43
 malvak_config = config["malvak"] if "malvak" in config else 35
 cores_config = config["cores"] if "cores" in config else 4
 maxmem_config = config["maxmem"] if "maxmem" in config else 4
+refname_config = config["refname"] if "refname" in config else None
 
 malva_bf_size = 1 # max(1,int(maxmem_config/3))
 
@@ -88,7 +91,7 @@ def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, 
 
 rule run:
     input:
-        pjoin(malva_dir, "malva.vcf")
+        pjoin(snpeff_dir, "snpeff.vcf")
 
 # Run KMC
 rule kmc:
@@ -184,10 +187,68 @@ rule tag_malva_vcf:
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
                 update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
-                                              input, output, log_out, params, True)
+                                              input, output, log_out, params)
             except subprocess.CalledProcessError as e:
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
                                               input, output, log_out, params)
                 raise e
+
+# Ease MALVA vcf
+rule ease_malva_vcf:
+    input:
+        vcf = pjoin(malva_dir, "malva.vcf")
+    output:
+        vcf = pjoin(ease_dir, "malva.ease.vcf")
+    threads: 1
+    log:
+        out = pjoin(ease_dir, "ease_vcf.log"),
+        json = pjoin(ease_dir, "ease_vcf.json")
+    run:
+        step_name = "easevcf"
+        cmdstr = f"ease_malva_vcf.py {input.vcf} > {output.vcf} 2> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                                              input, output, log_out)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out)
+
+# Run snpeff
+rule snpeff:
+    input:
+        vcf = pjoin(ease_dir, "malva.ease.vcf")
+    output:
+        vcf = pjoin(snpeff_dir, "snpeff.vcf")
+    params:
+        refname = refname_config
+    threads:
+        1
+    log:
+        out = pjoin(snpeff_dir, "snpeff.log"),
+        json = pjoin(snpeff_dir, "snpeff.json")
+    run:
+        step_name = "snpeff"
+        if params.refname is None:
+            cmdstr = f"cp {input.vcf} {output.vcf} 2> {log.out}"
+        else:
+            cmdstr = f"snpEff -noLog -noStats -v {params.refname} {input.vcf} > {output.vcf} 2> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                                              input, output, log_out, params, last_step = True)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out, params)

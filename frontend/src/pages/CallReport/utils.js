@@ -1,0 +1,18 @@
+export const ANN_FIELDS = [
+  'Allele',
+  'Annotation',
+  'Annotation Impact',
+  'Gene Name',
+  'Gene ID',
+  'Feature Type',
+  'Feature ID',
+  'Transcript BioType',
+  'Rank',
+  'HGVS.c',
+  'HGVS.p',
+  'cDNA.pos',
+  'CDS.pos',
+  'AA.pos',
+  'Distance',
+  'ERRORS',
+];

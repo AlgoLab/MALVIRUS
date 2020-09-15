@@ -17,10 +17,12 @@ Note that, the reference genome must be in FASTA format, whereas the set of geno
 
 To build the catalog, first head to the _Reference VCFs_ tab which is at the top of the MALVIRUS homepage and click on the _Build a reference VCF from genomes_ button that will redirect you to a submission form.
 First, fill in the _Alias_ and _Description_ fields as you please (Alias will be the name of the catalog so use some meaningful term).
-Then, upload your reference genome sequence in FASTA format in the _Reference genomic sequence_ field and the multi-FASTA of the set of genomic sequences in the _Population genomic sequences_ field.
-
+Then, in the _Reference genome_ field, you can either select a reference genome from the ones provided by MALVIRUS (_preloaded references_) or you can select _Custom reference_ and then upload your reference genome sequence in FASTA format in the _Reference genomic sequence_ field that will subsequently appear.
 If available, you can also upload the annotation of the reference genome in either GTF of GFF format in the _Gene Annotation_ field.
 If you upload this information, then variant calls that will use this catalog will be able to annotate variants using gene names.
+If you use a preloaded reference, then variant calls will be also annotated using [SnpEff](https://pcingola.github.io/SnpEff/).
+
+Finally, upload the multi-FASTA of the set of genomic sequences in the _Population genomic sequences_ field.
 
 Once every field is filled with the correct information, click on the _Submit_ button at the bottom of the page and the catalog will be built.
 After clicking on the submit button, you will be presented with the status page of the job; click the _Refresh_ button at the bottom to refresh the information in it.
@@ -28,20 +30,17 @@ After clicking on the submit button, you will be presented with the status page 
 The job will align the genomic sequences of the population to the reference genome using [mafft](https://mafft.cbrc.jp/alignment/software/) and will convert the MSA output of mafft to a VCF using [snp-sites](https://github.com/sanger-pathogens/snp-sites).
 This job should require less than 10 minutes to complete.
 
-Clicking again on the _Reference VCFs_ tab at the top will present the list of cataloges and the status of the job creating ig.
+Clicking again on the _Reference VCFs_ tab at the top will present the list of catalogs and the status of the job creating them.
 Once the status is <span style="color:#237804">Completed</span> the catalog can be used to call variants.
 
 ### Uploading the catalog using a precomputed VCF
 
-If the set of known variants is already available as a VCF, you can avoid computing the catalog and upload the reference genome and the VCF instead.
+If the set of known variants is already available as a VCF file, you can avoid computing the catalog and you can directly upload the reference genome and the VCF instead instead.
 
 To do so, head to the _Reference VCFs_ tab on top of the MALVIRUS website and click on the _Upload a new reference VCF_ button that will redirect you to the upload form.
 
 Fill in the _Alias_ and _Description_ fields as you please.
-Upload the reference genome in the _Reference genomic sequence_ field and the VCF file of the variants in the _Reference VCF_ field.
-
-If available, you can also upload the annotation of the reference genome in either GTF or GFF format in the _Gene Annotation_ field.
-If you upload this information, then variant calls that will use this catalog will be able to tag variants using gene names.
+Fill the _reference genome_ as explained in the section above and, finally, upload the VCF file of the variants in the _Reference VCF_ field.
 
 Finally, click on the _Submit_ button on the bottom to upload and create the new catalog.
 
@@ -62,15 +61,15 @@ To do so, head to the _Variant calls_ tab on the top of the homepage of MALVIRUS
 
 You will be presented with a submission form.
 First, set the _Alias_ and _Description_ fields to something meaningful. _Alias_ will be the name of the job you will submit.
-Then, upload the sequencing data in either FASTA of FASTQ format in the _Sample sequences_ field and chose a catalog to use while genotyping the data in the _Reference VCF_ field.
+Then, upload the sequencing data in either FASTA or FASTQ format (gzipped, possibly) in the _Sample sequences_ field and choose a catalog to use while genotyping the data in the _Reference VCF_ field.
 
 If no reference VCF is available, MALVIRUS asks you to first create a variant catalog; head to the [Creating the variant catalog](#creating-the-variant-catalog) section of this document and follow the instructions.
 
 After uploading the sample and selecting the catalog you are able to submit the job by clicking the _Submit_ button.
 
-Note that you can tune the parameters of the analysis by setting them in the _Advanced paramters_ box; the default parameters of the tool are tuned to work with high-coverage virological data (coverage higher than 100x).
+Note that you can tune the parameters of the analysis by setting them in the _Advanced parameters_ box; the default parameters of the tool are tuned to work with high-coverage virological data (coverage higher than 100x).
 
-This job will first extract the k-mers in the sample using [KMC](http://sun.aei.polsl.pl/REFRESH/index.php?page=projects&project=kmc&subpage=about) and will then use the k-mers call the variants using [MALVA](https://github.com/algolab/malva).
+This job will first extract the k-mers in the sample using [KMC](http://sun.aei.polsl.pl/kmc) and will then use the k-mers call the variants using [MALVA](https://github.com/algolab/malva).
 
 It is possible to track the status of the job by heading to the _Variant calls_ tab.
 Look for your job in the table and then look at the _Status_ column.
@@ -85,7 +84,9 @@ You can access it by heading to the _Variant calls_ tab and searching your job i
 Click on the alias of the job you want to analyze and you'll be presented with a table reporting various information of the job.
 
 If the status is <span style="color:#237804">Completed</span>, then you can access and download the output VCF that will be in the _Output files_ row.
-By clicking the name of the output file (usually `malva.vcf`) you'll download the vcf, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that describes the VCF and that highlights the differences between the reference genome and the strain under analysis.
+By clicking the name of the output file, you'll download the VCF file, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that describes the VCF and that highlights the differences between the reference genome and the strain under analysis.
 In this page, by default only the wild-type variants detected in the strain are shown, to see all the variants uncheck the _Show only loci with alt.~allele_ filter.
+If the variant catalog was built on a preloaded reference, then you can also view the (summarized) effect of each variant in the _Effect_ column. The full effects predicted by SnpEff for that variant can be accessed by clicking on the summarized effect.
 Moreover, last column is color coded based on the quality of the call.
+
 For convenience, at the top of this page you can find two links to download the output in VCF or as a spreadsheet.
