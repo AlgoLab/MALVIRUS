@@ -84,7 +84,7 @@ You can access it by heading to the _Variant calls_ tab and searching your job i
 Click on the alias of the job you want to analyze and you'll be presented with a table reporting various information of the job.
 
 If the status is <span style="color:#237804">Completed</span>, then you can access and download the output VCF that will be in the _Output files_ row.
-By clicking the name of the output file (usually `malva.vcf`) you'll download the VCF file, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that describes the VCF and that highlights the differences between the reference genome and the strain under analysis.
+By clicking the name of the output file, you'll download the VCF file, whereas by clicking on the _Show in tabular form_ button you'll be redirected to another page that describes the VCF and that highlights the differences between the reference genome and the strain under analysis.
 In this page, by default only the wild-type variants detected in the strain are shown, to see all the variants uncheck the _Show only loci with alt.~allele_ filter.
 If the variant catalog was built on a preloaded reference, then you can also view the (summarized) effect of each variant in the _Effect_ column. The full effects predicted by SnpEff for that variant can be accessed by clicking on the summarized effect.
 Moreover, last column is color coded based on the quality of the call.
