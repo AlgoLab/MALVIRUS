@@ -11,6 +11,7 @@ logo: "logo.png"
 search_enabled: false
 
 footer_content: 'Copyright &copy; 2020 - <a href="http://algolab.eu" target="_blank" rel="noopener noreferrer">BIAS Lab</a>'
+color_scheme: malvirus
 
 
 # Exclude from processing.
