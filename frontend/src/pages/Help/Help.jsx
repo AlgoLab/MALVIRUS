@@ -34,20 +34,13 @@ const gutter = { xs: 8, sm: 16, md: 24, lg: 32 };
 const indexSpan = { sm: 8, md: 6, lg: 4 };
 const pageSpan = { sm: 16, md: 18, lg: 20 };
 
-function MyLink({ className, ...props }) {
-  return (
-    <li className={className}>
-      {/* eslint-disable-next-line */}
-      <a {...props} />
-    </li>
-  );
-}
-
 function MenuLink({ to, children }) {
   return (
-    <NavLink activeClassName="active-menu-link" as={MyLink} to={to}>
-      {children}
-    </NavLink>
+    <li>
+      <NavLink activeClassName="active-menu-link" to={to}>
+        {children}
+      </NavLink>
+    </li>
   );
 }
 

@@ -1,13 +1,13 @@
 .cnt {
-    margin-top: 0.6em;
-    margin-bottom: 0.6em;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
 }
 
 .cnt > :global(button) + :global(button) {
-    margin-left: .6em;
+  margin-left: 0.6em;
 }
 
 .cnt > :global(button) {
-    margin-top: .4em;
-    margin-bottom: .4em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
 }
