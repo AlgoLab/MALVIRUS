@@ -3,7 +3,9 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY frontend/package.json ./
 COPY frontend/yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY frontend/.yarn ./.yarn
+COPY frontend/.yarnrc.yml ./
+RUN yarn set version berry && yarn install --immutable
 COPY frontend ./
 RUN rm public/help
 RUN yarn run build
