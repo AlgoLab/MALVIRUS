@@ -19,6 +19,7 @@ malva_dir = pjoin(root_dir, "malva")
 tagvcf_dir = pjoin(root_dir, "tagvcf")
 ease_dir = pjoin(root_dir, "easevcf")
 snpeff_dir = pjoin(root_dir, "snpeff")
+pangolin_dir = pjoin(root_dir, "pangolin")
 
 minocc_config = config["minocc"] if "minocc" in config else 5
 maxocc_config = config["maxocc"] if "maxocc" in config else 750
@@ -88,10 +89,6 @@ def update_local_and_global_jsons(json_file, status, step_name, cmdstr, result, 
     json.dump(json_dict, json_file)
     update_status(status, step_name, json_dict, last_step)
 
-
-rule run:
-    input:
-        pjoin(snpeff_dir, "snpeff.vcf")
 
 # Run KMC
 rule kmc:
@@ -252,3 +249,44 @@ rule snpeff:
                     log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
                                               input, output, log_out, params)
+
+# Compress and index the resulting VCF
+rule bcftools_gzip:
+    input:
+        vcf = pjoin(snpeff_dir, "snpeff.vcf"),
+    output:
+        vcf = temp(pjoin(pangolin_dir, "snpeff.vcf.gz")),
+        csi = temp(pjoin(pangolin_dir, "snpeff.vcf.gz.csi")),
+    threads: 1
+    shell:
+        "/opt/conda/bin/conda run --no-capture-output -n bcftools bgzip --threads {threads} -c {input.vcf} > {output.vcf} && /opt/conda/bin/conda run --no-capture-output -n bcftools bcftools index --threads {threads} {output.vcf}"
+
+
+# Translate the VCF into a FASTA file
+rule consensus:
+    input:
+        vcf = pjoin(pangolin_dir, "snpeff.vcf.gz"),
+        csi = pjoin(pangolin_dir, "snpeff.vcf.gz.csi"),
+    output:
+        consensus = temp(pjoin(pangolin_dir, "consensus.fa")),
+    params:
+        ref = ref_config,
+    threads: 1
+    log:
+        out = pjoin(pangolin_dir, "consensus.log"),
+    shell:
+        "/opt/conda/bin/conda run --no-capture-output -n bcftools bcftools consensus -H 1 -f {params.ref} {input.vcf} > {output.consensus} 2> {log.out}"
+
+# Assign the lineage of the full length genomic sequence
+rule pangolin:
+    input:
+        consensus = pjoin(pangolin_dir, "consensus.fa"),
+    output:
+        lineage = pjoin(pangolin_dir, "lineage.csv"),
+        global_lineage = pjoin(pangolin_dir, "global_lineage_information.csv"),
+    threads: 1
+    log:
+        out = pjoin(pangolin_dir, "pangolin.log"),
+    shadow: "minimal"
+    shell:
+        "/opt/conda/bin/conda run --no-capture-output -n pangolin pangolin --outfile {output.lineage} --panGUIlin --threads {threads} {input.consensus} &> {log.out} && mv global_lineage_information.csv {output.global_lineage}"

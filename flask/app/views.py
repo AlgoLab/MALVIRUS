@@ -526,20 +526,21 @@ def post_malva():
     with open(pjoin(workdir, 'status.json'), 'w+') as f:
         json.dump(status, f)
 
-    smklog = pjoin(workdir, 'smk.log')
+    rule = 'pangolin' if has_internal_ref and ('pangolin' in info['internal_ref']) and (info['internal_ref']['pangolin']) else 'snpeff'
 
-    p = Popen(
-        [
-            "nohup",
-            "/bin/bash", "-c", "-l",
-            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores} >{smklog} 2>&1'
-        ],
-        cwd=app.config["SK_CWD"],
-        stdout=open('/dev/null', 'w'),
-        stderr=open('/dev/null', 'w'),
-        # with this below p will also ignore SIGINT and SIGTERM
-        preexec_fn=os.setpgrp
-    )
+    with open(pjoin(workdir, 'smk.log'), 'w') as smklog:
+        p = Popen(
+            [
+                "nohup",
+                "/bin/bash", "-c", "-l",
+                f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores} --nocolor {rule}'
+            ],
+            cwd=app.config["SK_CWD"],
+            stdout=smklog,
+            stderr=subprocess.STDOUT,
+            # with this below p will also ignore SIGINT and SIGTERM
+            preexec_fn=os.setpgrp
+        )
 
     sleep(1)
 
