@@ -1,5 +1,4 @@
 import subprocess
-from subprocess import Popen
 from flask import render_template, jsonify, request, abort, make_response
 from app import app
 from werkzeug.utils import secure_filename
@@ -20,11 +19,28 @@ import gzip
 def mkdirp(path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
+
 def pjoin(basepath, *paths):
     path = os.path.join(basepath, *paths)
     if not os.path.abspath(path).startswith(os.path.abspath(basepath)):
         raise Exception('Trying to access a non safe-path.')
     return path
+
+
+def get_snakemake_log(dir):
+    sklog = pjoin(dir, '.snakemake', 'log', '*')
+
+    logs = []
+    try:
+        for f_name in glob.glob(sklog):
+            logs.append(f'==> {f_name} <==')
+            with open(f_name, 'r') as f_in:
+                logs.append(f_in.read())
+    except OSError:
+        pass
+
+    return "\n\n".join(logs)
+
 
 @app.route('/<path:route>')
 def not_found(route):
@@ -39,12 +55,14 @@ def base_get_refs():
     except:
         return None
 
+
 @app.route('/ref', methods=['GET'])
 def get_refs():
     refs = base_get_refs()
     if refs is None:
         return jsonify([])
     return jsonify(refs)
+
 
 @app.route('/vcf', methods=['GET'])
 def get_vcf_list():
@@ -83,25 +101,8 @@ def get_vcf(vcf_id):
             info['snakemake'] = f'No log is available for {s} VCFs.'
 
         else:
-            smklog_p = pjoin(app.config['JOB_DIR'], 'vcf',
-                             vcf_id, 'smk.log')
-            if os.path.isfile(smklog_p):
-                with open(smklog_p, 'r') as f_in:
-                    smklog = f_in.read()
-
-            else:
-                sklog = pjoin(app.config['JOB_DIR'], 'vcf',
-                              vcf_id, '.snakemake', 'log', '*')
-
-                p = subprocess.run(
-                    ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    text=True
-                )
-
-                smklog = p.stdout
-
-            info['snakemake'] = smklog
+            info['snakemake'] = get_snakemake_log(pjoin(app.config['JOB_DIR'], 'vcf',
+                                                        vcf_id))
 
         return jsonify(info)
     except OSError:
@@ -110,7 +111,7 @@ def get_vcf(vcf_id):
         abort(make_response(jsonify(message="ID not valid"), 404))
 
 
-@app.route('/vcf', methods=['DELETE'])
+@ app.route('/vcf', methods=['DELETE'])
 def rm_vcf_list():
     if not request.is_json:
         abort(make_response(
@@ -128,7 +129,7 @@ def rm_vcf_list():
     return jsonify(info)
 
 
-@app.route('/vcf/<vcf_id>', methods=['DELETE'])
+@ app.route('/vcf/<vcf_id>', methods=['DELETE'])
 def rm_vcf(vcf_id):
     if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'vcf', vcf_id)):
         abort(make_response(jsonify(message="ID not found"), 404))
@@ -140,11 +141,12 @@ def rm_vcf(vcf_id):
 
     return jsonify(info)
 
+
 def first_true(iterable, default=None, pred=None):
     return next(filter(pred, iterable), default)
 
 
-@app.route('/vcf', methods=['POST'])
+@ app.route('/vcf', methods=['POST'])
 def post_vcf():
     try:
         filetype = request.form['filetype']
@@ -160,7 +162,8 @@ def post_vcf():
     if 'file' not in request.files:
         abort(make_response(jsonify(message="Missing file"), 400))
 
-    custom_ref = ('refid' not in request.form or request.form['refid'] == '__custom__')
+    custom_ref = (
+        'refid' not in request.form or request.form['refid'] == '__custom__')
     if custom_ref and 'reference' not in request.files:
         abort(make_response(jsonify(message="Missing file"), 400))
 
@@ -225,16 +228,16 @@ def post_vcf():
             gtffile.save(gtfpath)
     else:
         # Copy reference
-        sourcepath = pjoin(app.config['JOB_DIR'], 'refs', ref['reference']['file'])
+        sourcepath = pjoin(app.config['JOB_DIR'],
+                           'refs', ref['reference']['file'])
         refpath = pjoin(workdir, secure_filename(ref['reference']['file']))
         shutil.copy2(sourcepath, refpath)
 
         # Copy GTF
-        sourcepath = pjoin(app.config['JOB_DIR'], 'refs', ref['annotation']['file'])
+        sourcepath = pjoin(app.config['JOB_DIR'],
+                           'refs', ref['annotation']['file'])
         gtfpath = pjoin(workdir, secure_filename(ref['annotation']['file']))
         shutil.copy2(sourcepath, gtfpath)
-
-
 
     info = {
         "filename": dfile,
@@ -277,27 +280,16 @@ def post_vcf():
 
         smklog = pjoin(workdir, 'smk.log')
 
-        p = Popen(
+        p = subprocess.Popen(
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir} --cores {cores} >{smklog} 2>&1'
+                f'snakemake -s {app.config["SK_VCF"]} --configfile {config} -d {workdir} --cores {cores} --nocolor --show-failed-logs'
             ],
             cwd=app.config["SK_CWD"],
-            stdout=open('/dev/null', 'w'),
-            stderr=open('/dev/null', 'w'),
-            # with this below p will also ignore SIGINT and SIGTERM
-            preexec_fn=os.setpgrp
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
-
-        sleep(1)
-
-        with open(pjoin(workdir, 'status.json'), 'r') as f:
-            status = json.load(f)
-
-        info['status'] = status['status']
-
-        return jsonify(info)
 
     elif filetype == 'vcf':
 
@@ -313,9 +305,7 @@ def post_vcf():
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
             json.dump(status, f)
 
-        info['status'] = status['status']
-
-        return jsonify(info)
+    return get_vcf(uuid)
 
 
 @app.route('/malva', methods=['GET'])
@@ -328,6 +318,13 @@ def get_malva_list():
             with open(pjoin(folder, 'info.json'), 'r') as f:
                 info = json.load(f)
             info['status'] = status['status']
+            try:
+                with open(pjoin(folder, 'pangolin.json'), 'r') as f:
+                    info['pangolin'] = json.load(f)
+            except OSError:
+                # do nothing. Pangolin is optional
+                pass
+
             malvas.append(info)
         except OSError:
             # one of those json doesn't exist so we remove the folder
@@ -350,25 +347,15 @@ def get_malva(malva_id):
             info = json.load(f)
         info['log'] = status
 
-        smklog_p = pjoin(app.config['JOB_DIR'], 'malva',
-                         malva_id, 'smk.log')
-        if os.path.isfile(smklog_p):
-            with open(smklog_p, 'r') as f_in:
-                smklog = f_in.read()
+        info['snakemake'] = get_snakemake_log(pjoin(app.config['JOB_DIR'], 'malva',
+                                                    malva_id))
 
-        else:
-            sklog = pjoin(app.config['JOB_DIR'], 'malva',
-                          malva_id, '.snakemake', 'log', '*')
-
-            p = subprocess.run(
-                ["/usr/bin/tail", "-v", f'{" ".join(glob.glob(sklog))}'],
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True
-            )
-
-            smklog = p.stdout
-
-        info['snakemake'] = smklog
+        try:
+            with open(pjoin(app.config['JOB_DIR'], 'malva', malva_id, 'pangolin.json'), 'r') as f:
+                info['pangolin'] = json.load(f)
+        except OSError:
+            # do nothing. Pangolin is optional
+            pass
 
         return jsonify(info)
     except OSError:
@@ -377,7 +364,7 @@ def get_malva(malva_id):
         abort(make_response(jsonify(message="ID not valid"), 404))
 
 
-@app.route('/malva/<malva_id>', methods=['DELETE'])
+@ app.route('/malva/<malva_id>', methods=['DELETE'])
 def rm_malva(malva_id):
     if not os.path.isdir(pjoin(app.config['JOB_DIR'], 'malva', malva_id)):
         abort(make_response(jsonify(message="ID not found"), 404))
@@ -390,7 +377,7 @@ def rm_malva(malva_id):
     return jsonify(info)
 
 
-@app.route('/malva', methods=['DELETE'])
+@ app.route('/malva', methods=['DELETE'])
 def rm_malva_list():
     if not request.is_json:
         abort(make_response(
@@ -408,7 +395,7 @@ def rm_malva_list():
     return jsonify(info)
 
 
-@app.route('/malva', methods=['POST'])
+@ app.route('/malva', methods=['POST'])
 def post_malva():
     try:
         vcf = request.form['vcf']
@@ -526,30 +513,21 @@ def post_malva():
     with open(pjoin(workdir, 'status.json'), 'w+') as f:
         json.dump(status, f)
 
-    rule = 'pangolin' if has_internal_ref and ('pangolin' in info['internal_ref']) and (info['internal_ref']['pangolin']) else 'snpeff'
+    rule = 'pangolin' if has_internal_ref and ('pangolin' in info['internal_ref']) and (
+        info['internal_ref']['pangolin']) else 'snpeff'
 
-    with open(pjoin(workdir, 'smk.log'), 'w') as smklog:
-        p = Popen(
-            [
-                "nohup",
-                "/bin/bash", "-c", "-l",
-                f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores} --nocolor {rule}'
-            ],
-            cwd=app.config["SK_CWD"],
-            stdout=smklog,
-            stderr=subprocess.STDOUT,
-            # with this below p will also ignore SIGINT and SIGTERM
-            preexec_fn=os.setpgrp
-        )
+    p = subprocess.Popen(
+        [
+            "nohup",
+            "/bin/bash", "-c", "-l",
+            f'snakemake -s {app.config["SK_MALVA"]} --configfile {config} -d {workdir} --cores {cores} --nocolor --show-failed-logs {rule}'
+        ],
+        cwd=app.config["SK_CWD"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
-    sleep(1)
-
-    with open(pjoin(workdir, 'status.json'), 'r') as f:
-        status = json.load(f)
-
-    info['status'] = status['status']
-
-    return jsonify(info)
+    return get_malva(uuid)
 
 
 @app.route('/update', methods=['GET'])

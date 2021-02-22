@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import {
   Description,
   Error,
+  PangolinOutputDescription,
   StatusTag,
   showError,
   TableButton,
@@ -32,6 +33,7 @@ const expandable = {
       <b>ID:</b> {record.id}
       <br />
       <Description header="Description:" description={record.description} />
+      {record.pangolin && <PangolinOutputDescription pred={record.pangolin} />}
     </>
   ),
 };
@@ -90,10 +92,26 @@ function CallTable({ calls, deleteCall }) {
         title: 'Status',
         dataIndex: 'status',
         render: (value) => <StatusTag status={value} />,
-        width: '10em',
+        width: '8em',
         defaultFilteredValue:
           (state.filters && state.filters.status) || undefined,
         ...jobStatusFilters,
+      },
+      {
+        title: (
+          <>
+            Pred. lineage <small>(only SARS-CoV-2)</small>
+          </>
+        ),
+        dataIndex: 'pangolin',
+        render: (value) =>
+          value && (
+            <>
+              <b>{value.lineage}</b> <i>(p={value.probability})</i>
+            </>
+          ),
+        width: '9em',
+        align: 'center',
       },
       {
         title: 'Results',
@@ -128,7 +146,7 @@ function CallTable({ calls, deleteCall }) {
         align: 'center',
       },
       {
-        title: 'Actions',
+        title: '',
         key: 'actions',
         dataIndex: 'id',
         render: (value) => (
@@ -138,11 +156,9 @@ function CallTable({ calls, deleteCall }) {
             ghost
             icon={<DeleteOutlined />}
             onClick={deleteJob}
-          >
-            Delete
-          </TableButton>
+          />
         ),
-        width: '9em',
+        width: '4em',
         align: 'center',
       },
     ],

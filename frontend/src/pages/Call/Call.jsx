@@ -15,6 +15,7 @@ import {
   FName,
   JobParameters,
   Loading,
+  PangolinOutputDescription,
   StatusTag,
   SnakemakeLog,
 } from 'components';
@@ -82,6 +83,14 @@ function BodyCall({ call }) {
             <i>No output files available</i>
           )}
         </Descriptions.Item>
+        {value.pangolin && (
+          <Descriptions.Item label="Lineage prediction:" span={2}>
+            <PangolinOutputDescription
+              labelClassName="sb"
+              pred={value.pangolin}
+            />
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="Parameters:" span={2}>
           <JobParameters params={value.params} PARAMS={PARAMS} />
         </Descriptions.Item>

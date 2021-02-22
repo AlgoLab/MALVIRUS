@@ -278,7 +278,7 @@ rule consensus:
         "/opt/conda/bin/conda run --no-capture-output -n bcftools bcftools consensus -H 1 -f {params.ref} {input.vcf} > {output.consensus} 2> {log.out}"
 
 # Assign the lineage of the full length genomic sequence
-rule pangolin:
+rule pangolin_pred:
     input:
         consensus = pjoin(pangolin_dir, "consensus.fa"),
     output:
@@ -290,3 +290,9 @@ rule pangolin:
     shadow: "minimal"
     shell:
         "/opt/conda/bin/conda run --no-capture-output -n pangolin pangolin --outfile {output.lineage} --panGUIlin --threads {threads} {input.consensus} &> {log.out} && mv global_lineage_information.csv {output.global_lineage}"
+
+rule pangolin:
+    input: rules.pangolin_pred.output
+    output: pjoin(root_dir, 'pangolin.json')
+    threads: 1
+    shell: "csvjoin {input} | csvjson --stream > {output}"

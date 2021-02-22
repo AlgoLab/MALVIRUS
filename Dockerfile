@@ -5,7 +5,7 @@ COPY frontend/package.json ./
 COPY frontend/yarn.lock ./
 COPY frontend/.yarn ./.yarn
 COPY frontend/.yarnrc.yml ./
-RUN yarn set version berry && yarn install --immutable
+RUN yarn install --immutable
 COPY frontend ./
 RUN rm public/help
 RUN yarn run build
