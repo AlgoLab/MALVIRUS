@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment, createElement } from 'react';
 import { Typography } from 'antd';
 
 const ellipsis = { rows: 5, expandable: true };
@@ -11,8 +11,8 @@ const styleWithHeader = {
 };
 
 function Description({ description, header, el }) {
-  const iel = el || (header ? 'div' : React.Fragment);
-  return React.createElement(
+  const iel = el || (header ? 'div' : Fragment);
+  return createElement(
     iel,
     null,
     header && (

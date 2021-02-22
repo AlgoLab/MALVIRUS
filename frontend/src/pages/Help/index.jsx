@@ -1,5 +1,5 @@
-import React from 'react';
+import { lazy } from 'react';
 
-const HelpPage = React.lazy(() => import('./Help'));
+const HelpPage = lazy(() => import('./Help'));
 
 export default HelpPage;

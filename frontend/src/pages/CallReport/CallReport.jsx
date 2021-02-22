@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { PromiseState } from 'react-refetch';
 import { DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';

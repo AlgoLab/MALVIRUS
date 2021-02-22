@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment, useCallback } from 'react';
 
 import { Button, Descriptions } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
@@ -19,7 +19,6 @@ import {
   SnakemakeLog,
 } from 'components';
 import PARAMS from 'utils/call-params';
-import { useCallback } from 'react';
 import { submissionTimeRender } from 'utils/tables';
 
 function BodyCall({ call }) {
@@ -65,9 +64,9 @@ function BodyCall({ call }) {
           {value.log.output ? (
             <>
               {Object.keys(value.log.output).map((key) => (
-                <React.Fragment key={key}>
+                <Fragment key={key}>
                   <FName href={value.log.output[key]} />{' '}
-                </React.Fragment>
+                </Fragment>
               ))}
               <Button
                 type="primary"

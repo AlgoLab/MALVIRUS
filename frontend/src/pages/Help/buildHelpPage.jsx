@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { connect as baseConnect } from 'react-refetch';
 
 import Markdown from 'markdown-to-jsx';

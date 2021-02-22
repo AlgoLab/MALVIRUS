@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { cell, cellText, cellBar } from './GenotypeCell.module.css';
 
 function getColor(gq) {

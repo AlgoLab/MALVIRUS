@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Modal, Spin } from 'antd';
 
 import { pwm } from './PleaseWaitModal.module.css';

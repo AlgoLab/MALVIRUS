@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 
 import { Button, Descriptions } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
@@ -77,10 +77,10 @@ function BodyVcf({ vcf }) {
           <Descriptions.Item label="Output files:" span={2}>
             {value.log.output ? (
               Object.keys(value.log.output).map((key) => (
-                <React.Fragment key={key}>
+                <Fragment key={key}>
                   <FName href={value.log.output[key]} />
                   <br />
-                </React.Fragment>
+                </Fragment>
               ))
             ) : (
               <i>No output files available</i>

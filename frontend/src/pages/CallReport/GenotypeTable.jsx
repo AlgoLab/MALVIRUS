@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 
 import { Table, Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';

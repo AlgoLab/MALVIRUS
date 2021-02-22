@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { cnt } from './ButtonPanel.module.css';
 
 function ButtonPanel({ children, alignment }) {

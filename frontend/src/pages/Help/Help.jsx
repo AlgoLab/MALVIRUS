@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, NavLink } from 'react-router-dom';
 
 import { Row, Col } from 'antd';

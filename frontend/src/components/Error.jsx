@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Modal } from 'antd';
 
 import { stringifyError } from 'utils';

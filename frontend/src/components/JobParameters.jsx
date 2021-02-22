@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { Tooltip } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -6,7 +6,7 @@ function JobParameters({ params, PARAMS }) {
   return (
     <>
       {Object.keys(params).map((key) => (
-        <React.Fragment key={key}>
+        <Fragment key={key}>
           <b className="sb">{(PARAMS[key] && PARAMS[key].label) || key}:</b>{' '}
           {(PARAMS[key] &&
             PARAMS[key].render &&
@@ -18,7 +18,7 @@ function JobParameters({ params, PARAMS }) {
             </Tooltip>
           )}
           <br />
-        </React.Fragment>
+        </Fragment>
       ))}
     </>
   );

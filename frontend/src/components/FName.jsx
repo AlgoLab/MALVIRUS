@@ -1,4 +1,3 @@
-import React from 'react';
 import { DownloadOutlined } from '@ant-design/icons';
 
 function FName({ href, hideIcon = false }) {

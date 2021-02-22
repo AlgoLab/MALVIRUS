@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { FName } from 'components';
 
 import { cnt, pre } from './SnakemakeLog.module.css';
@@ -9,7 +9,7 @@ function SnakemakeLog({ log }) {
     <div className={cnt}>
       <pre className={pre}>
         {lines.map((line, i) => (
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             {line.startsWith('==> /') ? (
               <b style={{ textDecoration: 'underline' }}>
                 ==&gt; <FName href={line.slice(4, line.length - 4)} hideIcon />{' '}
@@ -19,7 +19,7 @@ function SnakemakeLog({ log }) {
               line
             )}
             {'\n'}
-          </React.Fragment>
+          </Fragment>
         ))}
       </pre>
     </div>

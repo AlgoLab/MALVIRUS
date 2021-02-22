@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Button, Modal, Table } from 'antd';
 
 import { ANN_FIELDS } from './utils';
