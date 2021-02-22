@@ -77,7 +77,7 @@ function App() {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        MALVIRUS ©2020 - <a href="https://algolab.eu/">BIAS Lab</a>
+        MALVIRUS ©2020-2021 - <a href="https://algolab.eu/">BIAS Lab</a>
       </Footer>
     </Layout>
   );
