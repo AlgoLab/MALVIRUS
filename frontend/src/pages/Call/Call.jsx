@@ -80,9 +80,14 @@ function BodyCall({ call }) {
               </Button>
             </>
           ) : (
-            <i>No output files available</i>
+            <i>No output files available (yet)</i>
           )}
         </Descriptions.Item>
+        {value.internal_ref && value.internal_ref.pangolin && !value.pangolin && (
+          <Descriptions.Item label="Lineage prediction:" span={2}>
+            <i>Not performed (yet)</i>
+          </Descriptions.Item>
+        )}
         {value.pangolin && (
           <Descriptions.Item label="Lineage prediction:" span={2}>
             <PangolinOutputDescription

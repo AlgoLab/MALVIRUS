@@ -483,6 +483,8 @@ def post_malva():
     if has_internal_ref:
         info['internal_ref'] = binfo['internal_ref']
 
+    rule = 'pangolin' if has_internal_ref and ('pangolin' in info['internal_ref']) and (info['internal_ref']['pangolin']) else 'snpeff'
+
     with open(pjoin(workdir, 'info.json'), 'w+') as f:
         json.dump(info, f)
 
@@ -499,7 +501,8 @@ def post_malva():
             f'malvak: {malvak}\n' +
             f'maxmem: {maxmem}\n' +
             f'gtf: {gtf}\n' +
-            f'cores: {cores}\n'
+            f'cores: {cores}\n' +
+            f'target_rule: {rule}\n'
         )
         if has_internal_ref and ('snpEff' in info['internal_ref']) and ('id' in info['internal_ref']['snpEff']):
             conf.write(
@@ -512,9 +515,6 @@ def post_malva():
     }
     with open(pjoin(workdir, 'status.json'), 'w+') as f:
         json.dump(status, f)
-
-    rule = 'pangolin' if has_internal_ref and ('pangolin' in info['internal_ref']) and (
-        info['internal_ref']['pangolin']) else 'snpeff'
 
     p = subprocess.Popen(
         [

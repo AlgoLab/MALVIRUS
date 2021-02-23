@@ -183,7 +183,7 @@ rule tag_malva_vcf:
                 shell.check_output(cmdstr)
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
-                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0,
                                               input, output, log_out, params)
             except subprocess.CalledProcessError as e:
                 with open(log.out, 'r') as fin:
@@ -210,13 +210,14 @@ rule ease_malva_vcf:
                 shell.check_output(cmdstr)
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
-                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                update_local_and_global_jsons(jf, "Running", step_name, cmdstr, "Success", 0,
                                               input, output, log_out)
             except subprocess.CalledProcessError as e:
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
                 update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
                                               input, output, log_out)
+                raise e
 
 # Run snpeff
 rule snpeff:
@@ -232,23 +233,23 @@ rule snpeff:
         out = pjoin(snpeff_dir, "snpeff.log"),
         json = pjoin(snpeff_dir, "snpeff.json")
     run:
-        step_name = "snpeff"
         if params.refname is None:
             cmdstr = f"cp {input.vcf} {output.vcf} 2> {log.out}"
         else:
-            cmdstr = f"snpEff -noLog -noStats -v {params.refname} {input.vcf} > {output.vcf} 2> {log.out}"
+            cmdstr = f"snpEff -noLog -noStats -ud 0 -no-downstream -no-intergenic -no-upstream -no-utr -v {params.refname} {input.vcf} > {output.vcf} 2> {log.out}"
         with open(log.json, 'w') as jf:
             try:
                 shell.check_output(cmdstr)
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
-                update_local_and_global_jsons(jf, "Completed", step_name, cmdstr, "Success", 0,
+                update_local_and_global_jsons(jf, "Completed" if rule == config["target_rule"] else "Running", rule, cmdstr, "Success", 0,
                                               input, output, log_out, params, last_step = True)
             except subprocess.CalledProcessError as e:
                 with open(log.out, 'r') as fin:
                     log_out = fin.read()
-                update_local_and_global_jsons(jf, "Failed", step_name, cmdstr, "Failed", e.returncode,
+                update_local_and_global_jsons(jf, "Failed", rule, cmdstr, "Failed", e.returncode,
                                               input, output, log_out, params)
+                raise e
 
 # Compress and index the resulting VCF
 rule bcftools_gzip:
@@ -257,9 +258,25 @@ rule bcftools_gzip:
     output:
         vcf = temp(pjoin(pangolin_dir, "snpeff.vcf.gz")),
         csi = temp(pjoin(pangolin_dir, "snpeff.vcf.gz.csi")),
+    log:
+        out = pjoin(pangolin_dir, "bcftools_gzip.log"),
+        json = pjoin(pangolin_dir, "bcftools_gzip.json")
     threads: 1
-    shell:
-        "/opt/conda/bin/conda run --no-capture-output -n bcftools bgzip --threads {threads} -c {input.vcf} > {output.vcf} && /opt/conda/bin/conda run --no-capture-output -n bcftools bcftools index --threads {threads} {output.vcf}"
+    run:
+        cmdstr = f"/opt/conda/bin/conda run --no-capture-output -n bcftools bgzip --threads {threads} -c {input.vcf} > {output.vcf} 2> {log.out} && /opt/conda/bin/conda run --no-capture-output -n bcftools bcftools index --threads {threads} {output.vcf} 2>> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed" if rule == config["target_rule"] else "Running", rule, cmdstr, "Success", 0,
+                                              input, output, log_out, params)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", rule, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out, params)
+                raise e
 
 
 # Translate the VCF into a FASTA file
@@ -274,8 +291,24 @@ rule consensus:
     threads: 1
     log:
         out = pjoin(pangolin_dir, "consensus.log"),
-    shell:
-        "/opt/conda/bin/conda run --no-capture-output -n bcftools bcftools consensus -H 1 -f {params.ref} {input.vcf} > {output.consensus} 2> {log.out}"
+        json = pjoin(pangolin_dir, "consensus.json")
+    threads: 1
+    run:
+        cmdstr = f"/opt/conda/bin/conda run --no-capture-output -n bcftools bcftools consensus -H 1 -f {params.ref} {input.vcf} > {output.consensus} 2> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed" if rule == config["target_rule"] else "Running", rule, cmdstr, "Success", 0,
+                                              input, output, log_out, params)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", rule, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out, params)
+                raise e
+
 
 # Assign the lineage of the full length genomic sequence
 rule pangolin_pred:
@@ -286,13 +319,45 @@ rule pangolin_pred:
         global_lineage = pjoin(pangolin_dir, "global_lineage_information.csv"),
     threads: 1
     log:
-        out = pjoin(pangolin_dir, "pangolin.log"),
+        out = pjoin(pangolin_dir, "pangolin_pred.log"),
+        json = pjoin(pangolin_dir, "pangolin_pred.json")
     shadow: "minimal"
-    shell:
-        "/opt/conda/bin/conda run --no-capture-output -n pangolin pangolin --outfile {output.lineage} --panGUIlin --threads {threads} {input.consensus} &> {log.out} && mv global_lineage_information.csv {output.global_lineage}"
+    run:
+        cmdstr = f"/opt/conda/bin/conda run --no-capture-output -n pangolin pangolin --outfile {output.lineage} --panGUIlin --threads {threads} {input.consensus} &> {log.out} && mv global_lineage_information.csv {output.global_lineage} &>> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed" if rule == config["target_rule"] else "Running", rule, cmdstr, "Success", 0,
+                                              input, output, log_out, params)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", rule, cmdstr, "Failed", e.returncode,
+                                              input, output, log_out, params)
+                raise e
+
 
 rule pangolin:
     input: rules.pangolin_pred.output
     output: pjoin(root_dir, 'pangolin.json')
     threads: 1
-    shell: "csvjoin {input} | csvjson --stream > {output}"
+    log:
+        out = pjoin(pangolin_dir, "pangolin.log"),
+        json = pjoin(pangolin_dir, "pangolin.json")
+    run:
+        cmdstr = f"csvjoin {input} | csvjson --stream > {output} 2> {log.out}"
+        with open(log.json, 'w') as jf:
+            try:
+                shell.check_output(cmdstr)
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Completed" if rule == config["target_rule"] else "Running", rule, cmdstr, "Success", 0,
+                                                input, output, log_out, params)
+            except subprocess.CalledProcessError as e:
+                with open(log.out, 'r') as fin:
+                    log_out = fin.read()
+                update_local_and_global_jsons(jf, "Failed", rule, cmdstr, "Failed", e.returncode,
+                                                input, output, log_out, params)
+                raise e
