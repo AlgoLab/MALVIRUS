@@ -197,6 +197,20 @@ function CallNew({ createCall, vcfs }) {
         </Form.Item>
 
         <Form.Item
+          label={params.minocc.label}
+          name="minocc"
+          rules={[
+            {
+              required: true,
+              type: 'integer',
+              message: 'Please provide a valid number!',
+            },
+          ]}
+          extra={params.minocc.extra}
+        >
+          <InputNumber min={1} type="number" />
+        </Form.Item>
+        <Form.Item
           label={params.cores.label}
           name="cores"
           rules={[
@@ -213,21 +227,6 @@ function CallNew({ createCall, vcfs }) {
 
         <Collapse>
           <Collapse.Panel header="Advanced parameters" key="adv" forceRender>
-            <Form.Item
-              label={params.minocc.label}
-              name="minocc"
-              rules={[
-                {
-                  required: true,
-                  type: 'integer',
-                  message: 'Please provide a valid number!',
-                },
-              ]}
-              extra={params.minocc.extra}
-            >
-              <InputNumber min={1} type="number" />
-            </Form.Item>
-
             <Form.Item
               label={params.maxocc.label}
               name="maxocc"

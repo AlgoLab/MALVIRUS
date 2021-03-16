@@ -18,6 +18,13 @@ const params = {
         This is the lower threshold used to count <i>k</i>-mers. <i>k</i>-mers
         that appear less than this number of times will be removed from the
         input.
+        <br />
+        Larger values lead to more specific calls, while smaller values lead to
+        more sensitive results.
+        <br />
+        As rule of thumb, you set this value from the expected coverage with the
+        following formula: 10000 &times; <i>expected coverage</i> &#8725;{' '}
+        <i>genome length</i>.
       </>
     ),
   },
