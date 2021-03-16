@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 export function usePersistentState(keyname, initialState) {
   const restoreState = useCallback(() => {
     const state = window.sessionStorage.getItem(keyname);
-    if (state && state !== null) {
+    if (state !== null) {
       return JSON.parse(state);
     }
     return initialState;
