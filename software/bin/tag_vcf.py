@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, argparse
+import argparse
 import gffutils
 from pysam import VariantFile
 

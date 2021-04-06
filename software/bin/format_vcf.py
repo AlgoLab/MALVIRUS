@@ -28,7 +28,7 @@ def add_freqs():
         for gt in n_gts:
             n_gts[gt] /= tot_samples
             n_gts[gt] = round(n_gts[gt], 5)
-        freq_string = ','.join([str(n_gts[i]) for i in range(1,tot_alleles)])
+        # freq_string = ','.join([str(n_gts[i]) for i in range(1,tot_alleles)])
         alt_freqs = [n_gts[i] for i in range(1,tot_alleles)]
         record.chrom = ref_name
         record.info.__setitem__("AF", alt_freqs)

@@ -1,15 +1,14 @@
 import subprocess
-from flask import render_template, jsonify, request, abort, make_response
+from flask import jsonify, request, abort, make_response
 from app import app
 from werkzeug.utils import secure_filename
 
 from pathlib import Path
-from os import getcwd
 import os
 
 from uuid import uuid4
 import json
-from time import sleep, time
+from time import time
 import datetime
 import glob
 import shutil
@@ -278,9 +277,7 @@ def post_vcf():
         with open(pjoin(workdir, 'status.json'), 'w+') as f:
             json.dump(status, f)
 
-        smklog = pjoin(workdir, 'smk.log')
-
-        p = subprocess.Popen(
+        subprocess.Popen(
             [
                 "nohup",
                 "/bin/bash", "-c", "-l",
@@ -516,7 +513,7 @@ def post_malva():
     with open(pjoin(workdir, 'status.json'), 'w+') as f:
         json.dump(status, f)
 
-    p = subprocess.Popen(
+    subprocess.Popen(
         [
             "nohup",
             "/bin/bash", "-c", "-l",
