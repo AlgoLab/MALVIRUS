@@ -22,9 +22,8 @@ snpeff_dir = pjoin(root_dir, "snpeff")
 pangolin_dir = pjoin(root_dir, "pangolin")
 
 minocc_config = config["minocc"] if "minocc" in config else 5
-maxocc_config = config["maxocc"] if "maxocc" in config else 750
-lenkmers_config = config["lenkmers"] if "lenkmers" in config else 43
-malvak_config = config["malvak"] if "malvak" in config else 35
+maxocc_config = config["maxocc"] if "maxocc" in config else 50000
+malvak_config = config["malvak"] if "malvak" in config else 31
 cores_config = config["cores"] if "cores" in config else 4
 maxmem_config = config["maxmem"] if "maxmem" in config else 4
 refname_config = config["refname"] if "refname" in config else None
@@ -101,7 +100,7 @@ rule kmc:
         kmc_tmp = pjoin(kmc_dir, "tmp"),
         minocc = minocc_config,
         maxocc = maxocc_config,
-        lenkmers = lenkmers_config,
+        lenkmers = malvak_config,
         maxmem = maxmem_config
     threads: int(cores_config)
     log:
@@ -137,7 +136,6 @@ rule malva:
     params:
         kmc_prefix = pjoin(kmc_dir, "kmers"),
         k = malvak_config,
-        r = lenkmers_config,
         c = maxocc_config,
         bfsize = malva_bf_size
     output:
@@ -148,7 +146,7 @@ rule malva:
         json = pjoin(malva_dir, "malva.json")
     run:
         step_name = "malva"
-        cmdstr = f"malva-geno -1 -k {params.k} -r {params.r} -c {params.c} -b {params.bfsize} {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
+        cmdstr = f"/software/malva/malva-geno -1 -k {params.k} -c {params.c} -b {params.bfsize} {input.ref} {input.vcf} {params.kmc_prefix} > {output.vcf} 2> {log.out}"
         with open(log.json, "w") as jf:
             try:
                 shell.check_output(cmdstr)

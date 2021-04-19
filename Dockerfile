@@ -42,7 +42,6 @@ COPY ./environment-bcftools.yml environment-bcftools.yml
 RUN cd /app && \
     /opt/conda/bin/conda env create -f environment-malva.yml && \
     /opt/conda/bin/conda env create -f environment-bcftools.yml && \
-    find /opt/conda/ -follow -type f -name '*.a' -delete && \
     /opt/conda/bin/conda clean --all
 
 ENV PATH /opt/conda/bin:$PATH
@@ -51,6 +50,7 @@ RUN echo "conda activate malva-env" >> ~/.profile
 
 COPY ./software/ /software/
 RUN gcc -O3 -o /software/bin/fill_msa /software/fill_msa.c -lz
+RUN cd /software/malva && /opt/conda/bin/conda run --no-capture-output -n malva-env make && cp ./malva-geno /software/bin/
 
 RUN echo "PATH=/software/bin:/opt/conda/bin:$PATH" >> ~/.bashrc
 COPY --from=build-frontend /app/build /static

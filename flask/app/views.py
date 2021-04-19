@@ -398,13 +398,9 @@ def post_malva():
         vcf = request.form['vcf']
         minocc = request.form['minocc']
         maxocc = request.form['maxocc']
-        lenkmers = request.form['lenkmers']
         maxmem = request.form['maxmem']
         cores = request.form['cores']
         malvak = request.form['malvak']
-
-        if malvak > lenkmers:
-            abort(make_response(jsonify(message="Illegal value for malvak."), 400))
 
     except Exception as e:
         abort(make_response(jsonify(message="Illegal request: " + str(e)), 400))
@@ -461,7 +457,6 @@ def post_malva():
             'vcf': vcf,
             'minocc': minocc,
             'maxocc': maxocc,
-            'lenkmers': lenkmers,
             'maxmem': maxmem,
             'cores': cores,
             'malvak': malvak
@@ -494,7 +489,6 @@ def post_malva():
             f'sample: {dfile}\n'
             f'minocc: {minocc}\n' +
             f'maxocc: {maxocc}\n' +
-            f'lenkmers: {lenkmers}\n' +
             f'malvak: {malvak}\n' +
             f'maxmem: {maxmem}\n' +
             f'gtf: {gtf}\n' +

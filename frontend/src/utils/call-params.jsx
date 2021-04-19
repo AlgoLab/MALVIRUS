@@ -38,20 +38,6 @@ const params = {
       </>
     ),
   },
-  lenkmers: {
-    label: (
-      <span>
-        Context <i>k</i>-mer length
-      </span>
-    ),
-    extra: (
-      <>
-        Length of the <i>k</i>-mers used to discern between real signatures and
-        repetitions. A higher value will help to discern better between small
-        repeated regions but will lower the occurrences of each <i>k</i>-mer.
-      </>
-    ),
-  },
   malvak: {
     label: (
       <span>

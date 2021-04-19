@@ -19,8 +19,7 @@ export const basepath = process.env.PUBLIC_URL
 
 export const defaultMalvaParams = {
   minocc: 5,
-  maxocc: 20000,
-  lenkmers: 43,
+  maxocc: 50000,
   malvak: 31,
   maxmem: 4,
   cores: 4,

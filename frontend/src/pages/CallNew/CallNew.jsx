@@ -28,19 +28,6 @@ import { normFile, getFalse } from 'utils';
 import params from 'utils/call-params';
 import { submissionTimeSorter } from 'utils/tables';
 
-const malvakValidator = ({ getFieldValue }) => ({
-  validator(rule, value) {
-    if (!value || getFieldValue('lenkmers') >= value) {
-      return Promise.resolve();
-    }
-    return Promise.reject(
-      <>
-        {params.malvak.label} cannot be greater than {params.lenkmers.label}
-      </>
-    );
-  },
-});
-
 const maxoccValidator = ({ getFieldValue }) => ({
   validator(rule, value) {
     if (!value || getFieldValue('minocc') <= value) {
@@ -247,30 +234,14 @@ function CallNew({ createCall, vcfs }) {
             <Form.Item
               label={params.malvak.label}
               name="malvak"
-              dependencies={['lenkmers']}
               rules={[
                 {
                   required: true,
                   type: 'integer',
                   message: 'Please provide a valid number!',
                 },
-                malvakValidator,
               ]}
               extra={params.malvak.extra}
-            >
-              <InputNumber min={1} type="number" />
-            </Form.Item>
-            <Form.Item
-              label={params.lenkmers.label}
-              name="lenkmers"
-              rules={[
-                {
-                  required: true,
-                  type: 'integer',
-                  message: 'Please provide a valid number!',
-                },
-              ]}
-              extra={params.lenkmers.extra}
             >
               <InputNumber min={1} type="number" />
             </Form.Item>
