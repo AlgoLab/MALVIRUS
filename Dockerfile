@@ -29,10 +29,9 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux
     echo "conda activate base" >> ~/.bashrc
 
 
-RUN git clone --shallow-exclude v2.3.0 https://github.com/cov-lineages/pangolin.git /pangolin && \
+RUN git clone https://github.com/cov-lineages/pangolin.git /pangolin && \
     cd /pangolin && \
-    git fetch --deepen 1 && \
-    git checkout v2.3.0 && \
+    git checkout v2.3.8 && \
     /opt/conda/bin/conda env create -f environment.yml && \
     /opt/conda/bin/conda run --no-capture-output -n pangolin python setup.py install
 
