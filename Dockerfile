@@ -31,7 +31,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux
 
 RUN git clone https://github.com/cov-lineages/pangolin.git /pangolin && \
     cd /pangolin && \
-    git checkout v2.3.8 && \
+    git checkout v.2.4.2 && \
     /opt/conda/bin/conda env create -f environment.yml && \
     /opt/conda/bin/conda run --no-capture-output -n pangolin python setup.py install
 

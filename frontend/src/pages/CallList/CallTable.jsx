@@ -104,12 +104,7 @@ function CallTable({ calls, deleteCall }) {
           </>
         ),
         dataIndex: 'pangolin',
-        render: (value) =>
-          value && (
-            <>
-              <b>{value.lineage}</b> <i>(p={value.probability})</i>
-            </>
-          ),
+        render: (value) => value && <b>{value.lineage}</b>,
         width: '9em',
         align: 'center',
       },

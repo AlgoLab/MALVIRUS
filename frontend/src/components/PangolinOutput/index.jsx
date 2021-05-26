@@ -8,21 +8,24 @@ import { FIELDS } from './utils';
 function PangolinOutputDescription({ pred, labelClassName }) {
   return (
     <>
-      {FIELDS.map(({ name, label, extra, render }) => (
-        <Fragment key={name}>
-          <b className={labelClassName}>{label || name}:</b>{' '}
-          {render ? render(pred[name]) : pred[name]}{' '}
-          {extra && (
-            <>
-              {' '}
-              <Tooltip title={extra}>
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </>
-          )}
-          <br />
-        </Fragment>
-      ))}
+      {FIELDS.map(
+        ({ name, label, extra, render }) =>
+          pred[name] != null && (
+            <Fragment key={name}>
+              <b className={labelClassName}>{label || name}:</b>{' '}
+              {render ? render(pred[name], pred) : pred[name]}{' '}
+              {extra && (
+                <>
+                  {' '}
+                  <Tooltip title={extra}>
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </>
+              )}
+              <br />
+            </Fragment>
+          )
+      )}
       Lineage assignment is performed with PANGOLIN. See{' '}
       <a
         href="https://cov-lineages.org/"
