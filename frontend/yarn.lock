@@ -9685,6 +9685,7 @@ fsevents@^1.2.7:
     dayjs: 1.10.5
     eslint: ^7.27.0
     eslint-config-prettier: 8.3.0
+    eslint-config-react-app: ^6.0.0
     eslint-plugin-prettier: 3.4.0
     history: 5.0.0
     markdown-to-jsx: 7.1.3
