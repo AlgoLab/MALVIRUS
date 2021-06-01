@@ -5,8 +5,8 @@
   "dependencies": {
     "@2fd/ant-design-icons": "2.4.1",
     "@ant-design/icons": "4.6.2",
-    "antd": "4.16.0",
-    "core-js": "^3.13.0",
+    "antd": "4.16.1",
+    "core-js": "^3.13.1",
     "dayjs": "1.10.5",
     "eslint-config-react-app": "^6.0.0",
     "history": "5.0.0",
