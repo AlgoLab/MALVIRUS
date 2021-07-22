@@ -17,7 +17,7 @@
     "react-router-dom": "6.0.0-beta.0",
     "react-scripts": "4.0.3",
     "react-window": "1.8.6",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "craco start",
