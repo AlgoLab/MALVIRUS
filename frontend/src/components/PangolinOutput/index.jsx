@@ -28,11 +28,11 @@ function PangolinOutputDescription({ pred, labelClassName }) {
       )}
       Lineage assignment is performed with PANGOLIN. See{' '}
       <a
-        href="https://cov-lineages.org/"
+        href="https://cov-lineages.org/resources/pangolin/output.html"
         target="_blank"
         rel="noopener noreferrer"
       >
-        https://cov-lineages.org/
+        https://cov-lineages.org/resources/pangolin/output.html
       </a>{' '}
       for details.
     </>

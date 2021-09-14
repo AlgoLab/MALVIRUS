@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useEffect } from 'react';
 
 import { Button, Descriptions } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
@@ -126,6 +126,13 @@ function Call({ id, call, reloadCall }) {
     call.value.log &&
     JOB_STATUSES[call.value.log.status] &&
     JOB_STATUSES[call.value.log.status].final;
+  useEffect(() => {
+    if (noRefresh) return;
+    const interval = window.setInterval(() => {
+      reloadCall();
+    }, 5000);
+    return () => window.clearInterval(interval);
+  });
   return (
     <>
       <h1>

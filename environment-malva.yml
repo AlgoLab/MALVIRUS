@@ -2,10 +2,9 @@ name: malva-env
 channels:
     - conda-forge
     - bioconda
-    - defaults
 dependencies:
     - snakemake-minimal=5.32.2
-    - mafft=7.475
+    - mafft=7.487
     - htslib=1.10.2
     - sdsl-lite=2.1.1
     - kmc=3.1.2rc1

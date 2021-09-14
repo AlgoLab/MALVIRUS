@@ -11,19 +11,19 @@ RUN rm public/help
 RUN yarn run build
 
 
-FROM tiangolo/uwsgi-nginx-flask:python3.7-2020-06-08 as download-jobs
+FROM tiangolo/uwsgi-nginx-flask:python3.8-2020-12-19 as download-jobs
 RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /jobs
 RUN git clone --depth 1 https://github.com/AlgoLab/MALVIRUS-data.git .
 
 
 
-FROM tiangolo/uwsgi-nginx-flask:python3.7-2020-06-08
+FROM tiangolo/uwsgi-nginx-flask:python3.8-2020-12-19
 RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
-    rm ~/miniconda.sh && \
+RUN wget --quiet https://github.com/conda-forge/miniforge/releases/download/4.10.3-5/Mambaforge-4.10.3-5-Linux-x86_64.sh -O ~/mambaforge.sh && \
+    /bin/bash ~/mambaforge.sh -b -p /opt/conda && \
+    rm ~/mambaforge.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
@@ -31,17 +31,18 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.9.2-Linux
 
 RUN git clone https://github.com/cov-lineages/pangolin.git /pangolin && \
     cd /pangolin && \
-    git checkout v.2.4.2 && \
-    /opt/conda/bin/conda env create -f environment.yml && \
-    /opt/conda/bin/conda run --no-capture-output -n pangolin python setup.py install
+    git checkout v3.1.11 && \
+    /opt/conda/bin/mamba env create -f environment.yml && \
+    /opt/conda/bin/conda run --no-capture-output -n pangolin pip install . && \
+    /opt/conda/bin/mamba clean --all
 
 COPY ./environment-malva.yml environment-malva.yml
 COPY ./environment-bcftools.yml environment-bcftools.yml
 
 RUN cd /app && \
-    /opt/conda/bin/conda env create -f environment-malva.yml && \
-    /opt/conda/bin/conda env create -f environment-bcftools.yml && \
-    /opt/conda/bin/conda clean --all
+    /opt/conda/bin/mamba env create -f environment-malva.yml && \
+    /opt/conda/bin/mamba env create -f environment-bcftools.yml && \
+    /opt/conda/bin/mamba clean --all
 
 ENV PATH /opt/conda/bin:$PATH
 
