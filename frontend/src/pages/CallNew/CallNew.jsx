@@ -55,7 +55,7 @@ function CallNew({ createCall, vcfs }) {
         (call) => {
           setLoading(false);
           message.success('Job submission successful!');
-          navigate(`../${call.id}`);
+          navigate(`/calls/${call.id}`);
         },
         (error) => {
           setLoading(false);
