@@ -320,7 +320,7 @@ rule pangolin_pred:
         out = pjoin(pangolin_dir, "pangolin_pred.log"),
         json = pjoin(pangolin_dir, "pangolin_pred.json")
     run:
-        cmdstr = f"/opt/conda/bin/conda run --no-capture-output -n pangolin pangolin --no-temp --outdir {params.outdir} --threads {threads} --verbose {input.consensus} &> {log.out}"
+        cmdstr = f"pangolin --no-temp --outdir {params.outdir} --threads {threads} --verbose {input.consensus} &> {log.out}"
         with open(log.json, 'w') as jf:
             try:
                 shell.check_output(cmdstr)
