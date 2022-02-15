@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 import { FName } from 'components';
 
-import { cnt, pre } from './SnakemakeLog.module.css';
+import styles from './SnakemakeLog.module.css';
 
 function SnakemakeLog({ log }) {
   const lines = log.split('\n');
   return (
-    <div className={cnt}>
-      <pre className={pre}>
+    <div className={styles.cnt}>
+      <pre className={styles.pre}>
         {lines.map((line, i) => (
           <Fragment key={i}>
             {line.startsWith('==> /') ? (

@@ -1,4 +1,4 @@
-import { cell, cellText, cellBar } from './GenotypeCell.module.css';
+import styles from './GenotypeCell.module.css';
 
 function getColor(gq) {
   if (gq >= 100) return '#7bcd7b';
@@ -11,12 +11,12 @@ function GenotypeCell({ value }) {
   if (!value) return value;
   const [gt, gq] = value;
   return (
-    <div className={cell}>
-      <div className={cellText}>
+    <div className={styles.cell}>
+      <div className={styles.cellText}>
         {gt === 0 ? 0 : <b>{gt}</b>} ({gq})
       </div>
       <div
-        className={cellBar}
+        className={styles.cellBar}
         style={{
           width: `${gq}%`,
           backgroundColor: getColor(gq),

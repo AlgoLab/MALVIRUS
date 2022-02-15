@@ -1,11 +1,11 @@
 import { Button } from 'antd';
 
-import { btn } from './TableButton.module.css';
+import styles from './TableButton.module.css';
 
 const defaultProps = {
   size: 'small',
   block: true,
-  className: btn,
+  className: styles.btn,
 };
 
 function TableButton(props) {

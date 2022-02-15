@@ -1,6 +1,6 @@
 import { Modal, Spin } from 'antd';
 
-import { pwm } from './PleaseWaitModal.module.css';
+import styles from './PleaseWaitModal.module.css';
 
 const spinStyle = { width: '100%' };
 function PleaseWaitModal({ loading }) {
@@ -10,7 +10,7 @@ function PleaseWaitModal({ loading }) {
       visible={loading}
       closable={false}
       maskClosable={false}
-      wrapClassName={pwm}
+      wrapClassName={styles.pwm}
     >
       <Spin
         size="large"

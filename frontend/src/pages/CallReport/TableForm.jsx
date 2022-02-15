@@ -4,7 +4,7 @@ import { Form, Checkbox, Col, InputNumber, Select, Button } from 'antd';
 
 import { defaultReportConfig } from 'app-config';
 
-import { form, resetBtn } from './TableForm.module.css';
+import styles from './TableForm.module.css';
 
 function normFields(fields) {
   return Object.fromEntries(fields.map(({ name, value }) => [name[0], value]));
@@ -28,7 +28,7 @@ function TableForm({ state, setState, genes }) {
         if (changedFields.length === 0) return;
         setState(normFields(allFields));
       }}
-      className={form}
+      className={styles.form}
     >
       <Col span={12}>
         <Form.Item
@@ -58,7 +58,7 @@ function TableForm({ state, setState, genes }) {
           <Checkbox>Show only loci with alt. allele</Checkbox>
         </Form.Item>
       </Col>
-      <Col span={6} className={resetBtn}>
+      <Col span={6} className={styles.resetBtn}>
         <Button onClick={onReset} block>
           Reset filters
         </Button>
