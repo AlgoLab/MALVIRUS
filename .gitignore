@@ -3,3 +3,4 @@ snakemake/example/1st_jobid
 snakemake/example/2nd_jobid
 snakemake/.snakemake
 __pycache__/
+node_modules
