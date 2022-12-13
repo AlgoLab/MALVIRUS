@@ -21,7 +21,7 @@ RUN git clone --depth 1 https://github.com/AlgoLab/MALVIRUS-data.git .
 FROM tiangolo/uwsgi-nginx-flask:python3.9-2021-09-18
 RUN apt-get -y update && apt-get -y install ca-certificates && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget --quiet https://github.com/conda-forge/miniforge/releases/download/4.10.3-7/Mambaforge-4.10.3-7-Linux-x86_64.sh -O ~/mambaforge.sh && \
+RUN wget --quiet https://github.com/conda-forge/miniforge/releases/download/22.9.0-2/Mambaforge-22.9.0-2-Linux-x86_64.sh -O ~/mambaforge.sh && \
     /bin/bash ~/mambaforge.sh -b -p /opt/conda && \
     rm ~/mambaforge.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
@@ -31,10 +31,12 @@ RUN wget --quiet https://github.com/conda-forge/miniforge/releases/download/4.10
 
 COPY ./environment-malva.yml environment-malva.yml
 COPY ./environment-bcftools.yml environment-bcftools.yml
+COPY ./environment-pangolin.yml environment-pangolin.yml
 
 RUN cd /app && \
     /opt/conda/bin/mamba env create -f environment-malva.yml && \
     /opt/conda/bin/mamba env create -f environment-bcftools.yml && \
+    /opt/conda/bin/mamba env create -f environment-pangolin.yml && \
     /opt/conda/bin/mamba clean --all
 
 ENV PATH /opt/conda/bin:$PATH

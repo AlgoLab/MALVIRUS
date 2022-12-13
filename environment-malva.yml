@@ -3,15 +3,15 @@ channels:
     - conda-forge
     - bioconda
 dependencies:
-    - snakemake-minimal=5.32.2
-    - mafft=7.490
-    - htslib=1.10.2
-    - sdsl-lite=2.1.1
-    - kmc=3.1.2rc1
-    - samtools=1.10
-    - pysam=0.16.0.1
-    - gffutils=0.10.1
-    - snp-sites=2.5.1
-    - snpeff=5.0
-    - csvkit=1.0.5
-    - pangolin=3.1.16
+    - snakemake-minimal=7.19.0=pyhdfd78af_0
+    - mafft=7.490=hec16e2b_1
+    - htslib=1.15=h9753748_0
+    - sdsl-lite=2.1.1=h4bd325d_1002
+    - kmc=3.1.2rc1=h2d02072_0
+    - samtools=1.15=h1170115_1
+    - pysam=0.18.0=py39h5030a8b_2
+    - gffutils=0.10.1=pyh864c0ab_1
+    - snp-sites=2.5.1=h7132678_2
+    - snpeff=5.1=hdfd78af_1
+    - csvkit=1.0.7=pyhd8ed1ab_0
+    - cxx-compiler=1.4.1=h924138e_0
