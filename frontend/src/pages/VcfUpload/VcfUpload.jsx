@@ -31,7 +31,7 @@ function VcfUpload({ refs, createVcf }) {
         (vcf) => {
           setLoading(false);
           message.success('Upload successful!');
-          navigate(`../${vcf.id}`);
+          navigate(`/vcf/${vcf.id}`);
         },
         (error) => {
           setLoading(false);

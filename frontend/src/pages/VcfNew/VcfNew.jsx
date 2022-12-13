@@ -40,7 +40,7 @@ function VcfNew({ refs, createVcf }) {
         (vcf) => {
           setLoading(false);
           message.success('Job submission successful!');
-          navigate(`../${vcf.id}`);
+          navigate(`/vcf/${vcf.id}`);
         },
         (error) => {
           setLoading(false);
